@@ -1,0 +1,77 @@
+# 自定义组件配置文件
+# Custom Components Configuration
+
+# 组件注册表
+components:
+  # 天气组件
+  weather:
+    enable: true
+    name: "Weather Component"
+    description: "显示实时天气信息的组件"
+    css: "/custom_components/weather/weather.css"
+    js: "/custom_components/weather/weather.js"
+    priority: 1
+    dependencies: []
+
+  # 时钟组件
+  clock:
+    enable: true
+    name: "Clock Component"
+    description: "显示实时时间的组件"
+    css: "/custom_components/clock/clock.css"
+    js: "/custom_components/clock/clock.js"
+    priority: 2
+    dependencies: []
+
+  # 待办事项组件
+  todo:
+    enable: false
+    name: "Todo Component"
+    description: "管理个人待办事项的组件"
+    css: "/custom_components/todo/todo.css"
+    js: "/custom_components/todo/todo.js"
+    priority: 3
+    dependencies: []
+
+  # 数据分析组件
+  analytics:
+    enable: false
+    name: "Analytics Component"
+    description: "显示访问统计和数据分析的组件"
+    css: "/custom_components/analytics/analytics.css"
+    js: "/custom_components/analytics/analytics.js"
+    priority: 4
+    dependencies: []
+
+# 全局配置
+global:
+  # CSS 前缀 - 所有自定义组件样式将以此前缀开头
+  css_prefix: "cc-"
+
+  # JavaScript 命名空间
+  js_namespace: "CustomComponents"
+
+  # 是否在开发模式下显示调试信息
+  debug: false
+
+  # 组件加载方式
+  load_mode:
+    # eager: 立即加载所有组件
+    # lazy: 延迟加载（仅加载可见区域的组件）
+    # hybrid: 混合模式（关键组件立即加载，其他延迟加载）
+    strategy: "eager"
+
+# 主题适配
+theme_compatibility:
+  # 支持的主题版本
+  supported_themes:
+    - "butterfly"
+
+  # 主题版本要求
+  min_theme_version: "5.0.0"
+
+  # 自动适配深色模式
+  auto_dark_mode: true
+
+  # CSS 变量前缀
+  css_var_prefix: "--cc-"

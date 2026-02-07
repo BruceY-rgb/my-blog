@@ -1,0 +1,499 @@
+# 📐 模块化魔改体系架构设计
+
+## 🎯 设计目标
+
+本体系旨在为 Butterfly 主题提供一个**完全可逆**、**零修改**、**模块化**的魔改解决方案。
+
+### 核心理念
+
+1. **注入优先**: 所有功能通过 `inject` 配置项注入，不修改主题源码
+2. **模块化**: 每个组件独立开发、测试、部署
+3. **可配置**: 通过 YAML 配置文件管理所有组件
+4. **易维护**: 提供完整的管理脚本和文档
+5. **零风险**: 可随时启用/禁用，不影响主题升级
+
+---
+
+## 📁 目录结构
+
+```
+/Users/yangsmac/Desktop/my-blog/
+├── _config.yml                    # Hexo 主配置
+├── _config.butterfly.yml           # Butterfly 主题配置
+│   └── inject:                     # 注入点配置
+│       ├── head:                   # CSS 注入点
+│       └── bottom:                 # JavaScript 注入点
+│
+└── source/
+    ├── _posts/                     # 文章目录
+    │
+    └── custom_components/          # 自定义组件根目录
+        ├── README.md               # 总体说明文档
+        ├── QUICK_START.md          # 快速开始指南
+        ├── TROUBLESHOOTING.md      # 故障排除指南
+        ├── ARCHITECTURE.md         # 架构设计文档（本文件）
+        ├── components.config.yml   # 组件配置文件
+        ├── manage.js               # 组件管理脚本
+        │
+        ├── weather/                # 天气组件
+        │   ├── weather.css
+        │   └── weather.js
+        │
+        ├── clock/                  # 时钟组件
+        │   ├── clock.css
+        │   └── clock.js
+        │
+        ├── todo/                   # 待办事项组件
+        │   ├── todo.css
+        │   └── todo.js
+        │
+        └── analytics/              # 数据分析组件
+            ├── analytics.css
+            └── analytics.js
+```
+
+---
+
+## 🔄 组件生命周期
+
+### 1. 创建阶段
+```bash
+# 1. 创建组件目录
+mkdir source/custom_components/new_component
+
+# 2. 创建基础文件
+touch source/custom_components/new_component/new_component.css
+touch source/custom_components/new_component/new_component.js
+
+# 3. 编辑组件代码
+vim source/custom_components/new_component/new_component.css
+vim source/custom_components/new_component/new_component.js
+```
+
+### 2. 注册阶段
+```yaml
+# 编辑 components.config.yml
+components:
+  new_component:
+    enable: false
+    name: "New Component"
+    description: "新组件描述"
+    css: "/custom_components/new_component/new_component.css"
+    js: "/custom_components/new_component/new_component.js"
+    priority: 5
+```
+
+### 3. 启用阶段
+```bash
+# 方式一：使用管理脚本（推荐）
+node source/custom_components/manage.js enable new_component
+
+# 方式二：手动配置
+# 1. 编辑 _config.butterfly.yml
+# 2. 在 inject 部分取消注释
+# 3. 重新构建: hexo clean && hexo generate
+```
+
+### 4. 维护阶段
+```bash
+# 查看状态
+node source/custom_components/manage.js status
+
+# 禁用组件
+node source/custom_components/manage.js disable new_component
+
+# 更新组件
+# 直接编辑源文件，hexo 会自动重新加载
+```
+
+---
+
+## 🛠️ 组件开发规范
+
+### CSS 规范
+
+#### 1. 命名规范 (BEM)
+```css
+/* 组件根元素 */
+.cc-component
+
+/* 元素 */
+.cc-component__element
+
+/* 修饰器 */
+.cc-component--modifier
+
+/* 元素修饰器 */
+.cc-component__element--modifier
+```
+
+#### 2. CSS 变量
+```css
+:root {
+  --cc-component-primary: #4a90e2;
+  --cc-component-secondary: #52c41a;
+  --cc-component-text: #333;
+  --cc-component-bg: #fff;
+  --cc-component-border: #e8e8e8;
+}
+
+.cc-component {
+  color: var(--cc-component-text);
+  background: var(--cc-component-bg);
+}
+```
+
+#### 3. 响应式设计
+```css
+/* 移动优先 */
+.cc-component {
+  padding: 8px;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .cc-component {
+    padding: 16px;
+    font-size: 16px;
+  }
+}
+```
+
+### JavaScript 规范
+
+#### 1. IIFE 模式
+```javascript
+(function() {
+  'use strict';
+
+  // 组件配置
+  const CONFIG = {
+    // 配置项
+  };
+
+  // 初始化函数
+  function initComponent() {
+    // 初始化逻辑
+  }
+
+  // DOM 加载完成后初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initComponent);
+  } else {
+    initComponent();
+  }
+
+})();
+```
+
+#### 2. 错误处理
+```javascript
+try {
+  initComponent();
+} catch (error) {
+  console.error('[Component] 初始化失败:', error);
+}
+```
+
+#### 3. 事件监听
+```javascript
+// 正确
+element.addEventListener('click', handleClick);
+
+// 错误（避免全局污染）
+function handleClick() {} // 全局函数
+element.onclick = handleClick; // 内联事件
+```
+
+---
+
+## 🔌 主题集成
+
+### 注入点说明
+
+#### head 注入点
+```yaml
+inject:
+  head:
+    # 在 </head> 标签前注入
+    # 用于放置 CSS 文件
+    - <link rel="stylesheet" href="/custom_components/weather/weather.css">
+```
+
+#### bottom 注入点
+```yaml
+inject:
+  bottom:
+    # 在 </body> 标签前注入
+    # 用于放置 JavaScript 文件
+    - <script src="/custom_components/weather/weather.js"></script>
+```
+
+### 注入顺序
+```
+<head>
+  <!-- 主题自带 CSS -->
+  <link href="/css/theme.css">
+
+  <!-- 自定义组件 CSS（按 priority 排序）-->
+  <link href="/custom_components/clock/clock.css">
+  <link href="/custom_components/weather/weather.css">
+</head>
+
+<body>
+  <!-- 页面内容 -->
+
+  <!-- 自定义组件 JavaScript（按 priority 排序）-->
+  <script src="/custom_components/clock/clock.js">
+  <script src="/custom_components/weather/weather.js">
+</body>
+```
+
+---
+
+## ⚙️ 配置管理
+
+### 1. 组件配置文件 (components.config.yml)
+
+```yaml
+components:
+  weather:
+    enable: false
+    name: "Weather Component"
+    description: "显示实时天气信息"
+    css: "/custom_components/weather/weather.css"
+    js: "/custom_components/weather/weather.js"
+    priority: 1
+    dependencies: []
+```
+
+### 2. 主题配置文件 (_config.butterfly.yml)
+
+```yaml
+inject:
+  head:
+    - <link rel="stylesheet" href="/custom_components/weather/weather.css">
+  bottom:
+    - <script src="/custom_components/weather/weather.js"></script>
+```
+
+### 3. 管理脚本 (manage.js)
+
+```bash
+# 启用组件
+node source/custom_components/manage.js enable <component>
+
+# 禁用组件
+node source/custom_components/manage.js disable <component>
+
+# 查看状态
+node source/custom_components/manage.js status
+```
+
+---
+
+## 🔐 安全性
+
+### 1. 输入验证
+```javascript
+// 验证用户输入
+function setCity(city) {
+  if (typeof city !== 'string' || city.length > 50) {
+    throw new Error('无效的城市名称');
+  }
+  // 安全处理
+  return city.replace(/[<>'"]/g, '');
+}
+```
+
+### 2. XSS 防护
+```javascript
+// 使用 textContent 而非 innerHTML
+element.textContent = userInput;
+
+// 如果必须使用 innerHTML，进行转义
+element.innerHTML = escapeHtml(userInput);
+```
+
+### 3. CSP 兼容
+```javascript
+// 避免内联事件和脚本
+// 错误
+element.onclick = () => {};
+
+// 正确
+element.addEventListener('click', () => {});
+```
+
+---
+
+## 🚀 性能优化
+
+### 1. 懒加载
+```javascript
+// IntersectionObserver 实现懒加载
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      initComponent(entry.target);
+      observer.unobserve(entry.target);
+    }
+  });
+});
+
+document.querySelectorAll('.cc-component').forEach(el => {
+  observer.observe(el);
+});
+```
+
+### 2. 防抖
+```javascript
+// 搜索框防抖
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+```
+
+### 3. 缓存
+```javascript
+// 缓存 API 请求结果
+const cache = new Map();
+
+function fetchWeather(city) {
+  if (cache.has(city)) {
+    return cache.get(city);
+  }
+
+  const promise = fetch(`/api/weather/${city}`)
+    .then(res => res.json());
+
+  cache.set(city, promise);
+  return promise;
+}
+```
+
+---
+
+## 🎨 深色模式支持
+
+### 1. CSS 变量
+```css
+:root {
+  --cc-weather-text: #333;
+}
+
+.dark {
+  --cc-weather-text: #fff;
+}
+```
+
+### 2. JavaScript 监听
+```javascript
+// 监听主题变化
+const observer = new MutationObserver(checkDarkMode);
+
+observer.observe(document.body, {
+  attributes: true,
+  attributeFilter: ['class']
+});
+
+function checkDarkMode() {
+  const isDark = document.body.classList.contains('dark');
+  // 更新组件样式
+}
+```
+
+---
+
+## 📊 监控与日志
+
+### 1. 错误日志
+```javascript
+// 统一错误处理
+window.addEventListener('error', (event) => {
+  console.error('[Component] 全局错误:', {
+    message: event.message,
+    filename: event.filename,
+    lineno: event.lineno,
+    colno: event.colno,
+    error: event.error
+  });
+});
+```
+
+### 2. 性能监控
+```javascript
+// 性能监控
+function trackPerformance(name, fn) {
+  const start = performance.now();
+  const result = fn();
+  const end = performance.now();
+  console.log(`${name} 执行时间: ${end - start}ms`);
+  return result;
+}
+```
+
+### 3. 调试模式
+```javascript
+const CONFIG = {
+  debug: false
+};
+
+function log(...args) {
+  if (CONFIG.debug) {
+    console.log('[Component]', ...args);
+  }
+}
+```
+
+---
+
+## 🔄 升级与迁移
+
+### 1. 主题升级
+由于所有修改都在 `_config.butterfly.yml` 和 `source/` 目录下，升级 Butterfly 主题只需：
+
+```bash
+# 1. 备份自定义配置
+cp _config.butterfly.yml _config.butterfly.yml.backup
+cp -r source/custom_components source/custom_components.backup
+
+# 2. 升级主题
+npm update hexo-theme-butterfly
+
+# 3. 恢复配置
+# 重新应用 inject 配置
+```
+
+### 2. 组件迁移
+组件可以在不同项目间迁移：
+
+```bash
+# 1. 复制组件目录
+cp -r source/custom_components/weather /path/to/new-project/source/custom_components/
+
+# 2. 更新配置
+# 编辑 components.config.yml
+# 编辑 _config.butterfly.yml
+
+# 3. 测试
+hexo clean && hexo generate
+```
+
+---
+
+## 📚 参考资源
+
+- [BEM 命名规范](https://en.bem.info/methodology/naming-convention/)
+- [CSS 变量指南](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+- [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+- [JavaScript 错误处理最佳实践](https://javascript.info/try-catch)
+- [Web 性能优化指南](https://web.dev/performance/)

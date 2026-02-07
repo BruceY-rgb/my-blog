@@ -1,0 +1,316 @@
+# 🔧 故障排除指南
+
+## 常见问题及解决方案
+
+### 1. 组件不显示
+
+**症状**: 页面上没有显示组件内容
+
+**可能原因及解决方案**:
+
+#### A. 组件未启用
+```bash
+# 检查组件状态
+node source/custom_components/manage.js status
+
+# 启用组件
+node source/custom_components/manage.js enable <component-name>
+```
+
+#### B. HTML 容器不存在
+```html
+<!-- 确保页面中有对应的容器 -->
+<div class="cc-weather"></div>
+<div class="cc-clock"></div>
+```
+
+#### C. CSS/JS 文件未正确引入
+```bash
+# 检查文件是否存在
+ls -la source/custom_components/weather/weather.css
+ls -la source/custom_components/weather/weather.js
+```
+
+**解决方案**:
+1. 检查 `_config.butterfly.yml` 中的 `inject` 配置
+2. 确保 CSS 和 JS 文件路径正确
+3. 重新构建网站: `hexo clean && hexo generate`
+
+---
+
+### 2. 样式错乱
+
+**症状**: 组件样式不正确或与主题冲突
+
+**解决方案**:
+
+#### A. 检查 CSS 引入顺序
+```yaml
+# CSS 引入顺序很重要，确保主题样式在前
+inject:
+  head:
+    - <link rel="stylesheet" href="/css/theme.css">  # 主题样式
+    - <link rel="stylesheet" href="/custom_components/weather/weather.css">  # 自定义组件
+```
+
+#### B. 使用更具体的选择器
+```css
+/* 避免样式冲突 */
+.cc-weather .cc-weather__title {
+  /* 使用更具体的选择器 */
+}
+```
+
+#### C. 使用 !important（最后手段）
+```css
+.cc-weather {
+  color: #333 !important;
+}
+```
+
+---
+
+### 3. JavaScript 错误
+
+**症状**: 浏览器控制台显示 JavaScript 错误
+
+**解决方案**:
+
+#### A. 检查 API 配置
+```javascript
+// 确保 API Key 已正确配置
+const WEATHER_CONFIG = {
+  apiKey: 'YOUR_API_KEY_HERE', // 确保不为空
+  defaultCity: 'Beijing',
+};
+```
+
+#### B. 检查 DOM 元素是否存在
+```javascript
+// 在操作 DOM 前检查元素是否存在
+const container = document.querySelector('.cc-weather');
+if (!container) {
+  console.warn('容器元素未找到');
+  return;
+}
+```
+
+#### C. 检查事件监听器
+```javascript
+// 确保事件监听器正确绑定
+document.addEventListener('DOMContentLoaded', function() {
+  initWeather();
+});
+```
+
+---
+
+### 4. 主题不兼容
+
+**症状**: 组件在深色模式下显示异常
+
+**解决方案**:
+
+#### A. 使用 CSS 变量
+```css
+:root {
+  --cc-weather-text: #333;
+}
+
+.dark {
+  --cc-weather-text: #fff;
+}
+
+.cc-weather {
+  color: var(--cc-weather-text);
+}
+```
+
+#### B. 检测主题变化
+```javascript
+// 监听主题变化
+const observer = new MutationObserver(checkDarkMode);
+observer.observe(document.body, {
+  attributes: true,
+  attributeFilter: ['class']
+});
+```
+
+---
+
+### 5. 性能问题
+
+**症状**: 页面加载慢或卡顿
+
+**解决方案**:
+
+#### A. 使用懒加载
+```javascript
+// 只在元素可见时加载组件
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      initWeather();
+      observer.unobserve(entry.target);
+    }
+  });
+});
+
+observer.observe(document.querySelector('.cc-weather'));
+```
+
+#### B. 优化更新频率
+```javascript
+// 避免频繁更新
+const CLOCK_CONFIG = {
+  updateInterval: 1000, // 1秒更新一次，避免过于频繁
+};
+```
+
+---
+
+### 6. 移动端适配问题
+
+**症状**: 组件在移动设备上显示异常
+
+**解决方案**:
+
+#### A. 使用响应式设计
+```css
+/* 移动优先 */
+.cc-weather {
+  /* 移动端样式 */
+}
+
+@media (min-width: 768px) {
+  .cc-weather {
+    /* 桌面端样式 */
+  }
+}
+```
+
+#### B. 检查触摸事件
+```javascript
+// 确保触摸事件正确处理
+element.addEventListener('touchstart', handleTouch);
+```
+
+---
+
+## 🛠️ 调试工具
+
+### 1. 浏览器开发者工具
+
+#### Console 面板
+```javascript
+// 在控制台中测试组件
+console.log('测试天气组件');
+document.querySelector('.cc-weather');
+```
+
+#### Network 面板
+- 检查 CSS/JS 文件是否正确加载
+- 查看 API 请求是否成功
+
+#### Elements 面板
+- 检查 DOM 结构是否正确
+- 查看样式是否应用
+
+### 2. 日志输出
+
+#### 启用调试模式
+```javascript
+// 在组件配置中启用调试
+const CONFIG = {
+  debug: true,
+};
+
+if (CONFIG.debug) {
+  console.log('[Weather Component] 调试信息');
+}
+```
+
+### 3. 错误捕获
+
+```javascript
+try {
+  initWeather();
+} catch (error) {
+  console.error('[Weather Component] 初始化失败:', error);
+}
+```
+
+---
+
+## 📞 获取帮助
+
+### 1. 查看错误日志
+```bash
+# Hexo 错误日志
+hexo clean && hexo generate --debug
+
+# 浏览器控制台
+# F12 打开开发者工具
+```
+
+### 2. 检查配置文件
+```bash
+# 验证 YAML 语法
+yamllint _config.butterfly.yml
+yamllint source/custom_components/components.config.yml
+```
+
+### 3. 社区资源
+- [Butterfly 主题文档](https://butterfly.js.org/)
+- [GitHub Issues](https://github.com/jerryc127/hexo-theme-butterfly/issues)
+- [Hexo 官方文档](https://hexo.io/docs/)
+
+---
+
+## ✅ 检查清单
+
+在提交问题前，请检查以下项目：
+
+- [ ] 组件已正确启用 (`enable: true`)
+- [ ] HTML 容器存在且类名正确
+- [ ] CSS/JS 文件路径正确
+- [ ] `_config.butterfly.yml` 中的 `inject` 配置正确
+- [ ] 浏览器控制台无错误
+- [ ] 已重新构建网站 (`hexo clean && hexo generate`)
+- [ ] 尝试了清除浏览器缓存
+- [ ] 检查了移动端兼容性
+
+---
+
+## 📝 报告问题
+
+如果问题仍然存在，请提供以下信息：
+
+1. **错误信息**: 浏览器控制台的完整错误日志
+2. **配置文件**: `_config.butterfly.yml` 和 `components.config.yml` 的相关部分
+3. **HTML 结构**: 页面的实际 HTML 结构
+4. **环境信息**: Hexo 版本、主题版本、浏览器版本
+5. **复现步骤**: 详细的操作步骤
+
+格式化报告示例：
+
+```markdown
+### 问题描述
+简洁描述遇到的问题
+
+### 环境信息
+- Hexo 版本: 7.x.x
+- 主题版本: Butterfly 5.5.4
+- 浏览器: Chrome 120.x
+
+### 错误信息
+```
+完整的错误日志
+```
+
+### 复现步骤
+1. 启用组件 X
+2. 访问页面 Y
+3. 看到错误 Z
+```
+

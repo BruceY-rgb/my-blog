@@ -1,0 +1,235 @@
+# 🚀 快速启用自定义组件指南
+
+## 📋 启用组件的两种方式
+
+### 方式一：手动配置（推荐新手）
+
+1. **编辑配置文件**
+   ```bash
+   # 编辑组件配置文件
+   vim source/custom_components/components.config.yml
+   ```
+
+2. **启用组件**
+   ```yaml
+   components:
+     clock:
+       enable: true  # 从 false 改为 true
+   ```
+
+3. **编辑主题配置**
+   ```bash
+   # 编辑 _config.butterfly.yml
+   vim _config.butterfly.yml
+   ```
+
+4. **在 inject 部分取消注释**
+   ```yaml
+   inject:
+     head:
+       - <link rel="stylesheet" href="/custom_components/clock/clock.css">
+     bottom:
+       - <script src="/custom_components/clock/clock.js"></script>
+   ```
+
+5. **重新构建网站**
+   ```bash
+   hexo clean
+   hexo generate
+   ```
+
+---
+
+### 方式二：使用管理脚本（推荐）
+
+1. **运行管理脚本**
+   ```bash
+   # 启用时钟组件
+   node source/custom_components/manage.js enable clock
+
+   # 启用天气组件
+   node source/custom_components/manage.js enable weather
+
+   # 禁用组件
+   node source/custom_components/manage.js disable clock
+   ```
+
+2. **查看所有组件状态**
+   ```bash
+   node source/custom_components/manage.js status
+   ```
+
+---
+
+## 🎯 快速启用示例
+
+### 启用时钟组件
+
+**步骤 1：编辑 components.config.yml**
+```yaml
+clock:
+  enable: true
+  name: "Clock Component"
+  css: "/custom_components/clock/clock.css"
+  js: "/custom_components/clock/clock.js"
+```
+
+**步骤 2：编辑 _config.butterfly.yml**
+```yaml
+inject:
+  head:
+    - <link rel="stylesheet" href="/custom_components/clock/clock.css">
+  bottom:
+    - <script src="/custom_components/clock/clock.js"></script>
+```
+
+**步骤 3：在页面中添加容器**
+```html
+<!-- 在需要显示时钟的地方添加 -->
+<div class="cc-clock"></div>
+```
+
+**步骤 4：重新构建**
+```bash
+hexo clean && hexo generate
+```
+
+---
+
+### 启用天气组件
+
+**⚠️ 天气组件需要 API Key**
+
+**步骤 1：获取 API Key**
+1. 访问 [OpenWeatherMap](https://openweathermap.org/api)
+2. 注册账户并获取免费 API Key
+3. 编辑 `source/custom_components/weather/weather.js`
+
+**步骤 2：配置 API Key**
+```javascript
+const WEATHER_CONFIG = {
+  apiKey: 'YOUR_API_KEY_HERE', // 替换为你的 API Key
+  defaultCity: 'Beijing', // 设置默认城市
+};
+```
+
+**步骤 3：启用组件**
+按照时钟组件的步骤 1-4 进行操作
+
+---
+
+## 🔧 配置选项详解
+
+### components.config.yml 参数说明
+
+| 参数 | 类型 | 说明 | 示例 |
+|------|------|------|------|
+| `enable` | boolean | 是否启用组件 | `true` / `false` |
+| `name` | string | 组件名称 | `"Clock Component"` |
+| `description` | string | 组件描述 | `"显示实时时间的组件"` |
+| `css` | string | CSS 文件路径 | `"/custom_components/clock/clock.css"` |
+| `js` | string | JavaScript 文件路径 | `"/custom_components/clock/clock.js"` |
+| `priority` | number | 加载优先级（数字越大越先加载） | `1`, `2`, `3` |
+| `dependencies` | array | 依赖的组件列表 | `["analytics"]` |
+
+### _config.butterfly.yml inject 参数说明
+
+| 参数 | 说明 | 注意事项 |
+|------|------|----------|
+| `head` | 页面头部注入点 | 用于放置 CSS 文件 |
+| `bottom` | 页面底部注入点 | 用于放置 JavaScript 文件 |
+
+---
+
+## 🎨 组件放置位置
+
+### 1. 首页 (index)
+
+**方式一：通过布局文件**
+编辑 `themes/butterfly/layout/index.pug`（或其他模板引擎文件）
+
+**方式二：通过自定义页面**
+创建 `source/about/index.md`
+
+```markdown
+---
+title: "关于我"
+type: "page"
+---
+
+<div class="cc-clock"></div>
+<div class="cc-weather"></div>
+```
+
+**方式三：通过侧边栏**
+在 `_config.butterfly.yml` 的 `aside` 部分添加自定义 HTML
+
+```yaml
+card_custom_html:
+  enable: true
+  content: |
+    <div class="cc-clock"></div>
+```
+
+### 2. 所有页面
+
+**修改模板文件**
+编辑 `themes/butterfly/layout/_partial/footer.pug`
+
+```pug
+// 在合适位置添加
+#custom-components
+  .cc-clock
+```
+
+### 3. 文章页面
+
+**通过 Front-matter**
+```markdown
+---
+title: "我的文章"
+custom_components:
+  - clock
+  - weather
+---
+
+文章内容...
+```
+
+---
+
+## ⚠️ 常见问题
+
+### Q: 组件不显示？
+**A:**
+1. 检查 `enable` 是否为 `true`
+2. 检查 CSS/JS 路径是否正确
+3. 检查 HTML 容器是否存在
+4. 查看浏览器控制台是否有错误
+
+### Q: 样式错乱？
+**A:**
+1. 检查 CSS 文件是否正确引入
+2. 检查是否有样式冲突
+3. 检查 BEM 命名是否规范
+
+### Q: JavaScript 报错？
+**A:**
+1. 检查 API Key 是否正确配置
+2. 检查 DOM 元素是否存在
+3. 检查浏览器控制台错误信息
+
+### Q: 如何调试？
+**A:**
+1. 打开浏览器开发者工具
+2. 查看 Console 面板的错误信息
+3. 查看 Network 面板的资源加载状态
+4. 查看 Elements 面板的 DOM 结构
+
+---
+
+## 📚 更多资源
+
+- [Butterfly 主题文档](https://butterfly.js.org/)
+- [自定义组件示例](./README.md)
+- [组件配置参考](./components.config.yml)

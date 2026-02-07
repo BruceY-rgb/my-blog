@@ -1,0 +1,155 @@
+/*!
+ * Clock Component Styles
+ * 自定义时钟组件样式
+ */
+
+:root {
+  --cc-clock-primary: #722ed1;
+  --cc-clock-success: #52c41a;
+  --cc-clock-text: #333;
+  --cc-clock-bg: #fff;
+  --cc-clock-border: #e8e8e8;
+  --cc-clock-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --cc-clock-accent: #fadb14;
+}
+
+/* 时钟组件根元素 */
+.cc-clock {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  color: var(--cc-clock-text);
+  background: var(--cc-clock-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--cc-clock-shadow);
+  transition: all 0.3s ease;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 标题 */
+.cc-clock__header {
+  margin-bottom: 20px;
+}
+
+.cc-clock__title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--cc-clock-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* 时间显示区域 */
+.cc-clock__time {
+  margin-bottom: 20px;
+}
+
+.cc-clock__time-value {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--cc-clock-primary);
+  line-height: 1;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+}
+
+.cc-clock__time-seconds {
+  font-size: 24px;
+  color: var(--cc-clock-accent);
+  margin-left: 4px;
+}
+
+/* 日期显示 */
+.cc-clock__date {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.cc-clock__date-value {
+  font-weight: 500;
+}
+
+/* 时区信息 */
+.cc-clock__timezone {
+  font-size: 14px;
+  color: #999;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* 状态修饰器 */
+.cc-clock--dark {
+  --cc-clock-text: #fff;
+  --cc-clock-bg: #1f1f1f;
+  --cc-clock-border: #333;
+  background: var(--cc-clock-bg);
+  color: var(--cc-clock-text);
+}
+
+.cc-clock--dark .cc-clock__timezone {
+  background: #2a2a2a;
+  color: #aaa;
+}
+
+.cc-clock--dark .cc-clock__date {
+  color: #aaa;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .cc-clock {
+    padding: 16px;
+    margin: 0 8px;
+  }
+
+  .cc-clock__time-value {
+    font-size: 36px;
+  }
+
+  .cc-clock__time-seconds {
+    font-size: 18px;
+  }
+}
+
+/* 动画效果 */
+@keyframes cc-clock-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cc-clock--animated {
+  animation: cc-clock-fadeIn 0.5s ease-out;
+}
+
+/* 跳动效果 */
+@keyframes cc-clock-tick {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.cc-clock__time-value--animated {
+  animation: cc-clock-tick 1s ease-in-out infinite;
+}
+
+/* 发光效果 */
+.cc-clock__time-value--glow {
+  text-shadow: 0 0 10px rgba(114, 46, 209, 0.5);
+}

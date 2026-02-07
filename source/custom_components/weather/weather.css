@@ -1,0 +1,205 @@
+/*!
+ * 天气组件样式
+ * Weather Component Styles
+ * 版本: v1.0
+ */
+
+.cc-weather {
+  background: var(--card-bg, rgba(255, 255, 255, 0.85));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: weather-float 6s ease-in-out infinite;
+}
+
+@keyframes weather-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.cc-weather:hover {
+  animation-play-state: paused;
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-medium, 0 4px 16px rgba(0, 0, 0, 0.15));
+}
+
+.cc-weather::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(73, 177, 245, 0.05), rgba(0, 196, 182, 0.05));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cc-weather > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cc-weather__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-color-muted, #999);
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.cc-weather__icon {
+  font-size: 24px;
+  display: inline-block;
+  animation: weather-icon-bounce 3s ease-in-out infinite;
+}
+
+@keyframes weather-icon-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.cc-weather__location {
+  font-size: 12px;
+  color: var(--text-color-muted, #999);
+  margin-top: 5px;
+  font-weight: 400;
+}
+
+.cc-weather__temp {
+  font-size: 36px;
+  font-weight: bold;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--primary-color, #49B1F5);
+  margin: 15px 0 10px 0;
+  text-shadow: 0 0 10px rgba(73, 177, 245, 0.3);
+  line-height: 1;
+}
+
+.cc-weather__desc {
+  font-size: 14px;
+  color: var(--text-color-light, #555);
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.cc-weather__details {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+}
+
+.cc-weather__detail {
+  text-align: center;
+}
+
+.cc-weather__detail-label {
+  font-size: 11px;
+  color: var(--text-color-muted, #999);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.cc-weather__detail-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-color, #2c3e50);
+}
+
+.cc-weather__updated {
+  font-size: 11px;
+  color: var(--text-color-muted, #999);
+  margin-top: 12px;
+  font-style: italic;
+}
+
+/* 深色模式适配 */
+[data-theme="dark"] .cc-weather {
+  background: var(--card-bg-dark, rgba(30, 30, 30, 0.85));
+  border-color: var(--border-color-dark, rgba(255, 255, 255, 0.1));
+}
+
+[data-theme="dark"] .cc-weather__detail-value {
+  color: var(--text-color-dark, #eee);
+}
+
+[data-theme="dark"] .cc-weather__desc {
+  color: var(--text-color-light, #ccc);
+}
+
+/* 加载状态 */
+.cc-weather.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.cc-weather.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--primary-color, #49B1F5);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: weather-spin 1s linear infinite;
+}
+
+@keyframes weather-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 错误状态 */
+.cc-weather.error {
+  background: rgba(255, 71, 87, 0.1);
+  border-color: var(--error-color, #ff4757);
+}
+
+.cc-weather__error {
+  font-size: 12px;
+  color: var(--error-color, #ff4757);
+  margin-top: 8px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .cc-weather {
+    padding: 16px;
+    animation: none;
+  }
+
+  .cc-weather__temp {
+    font-size: 28px;
+  }
+
+  .cc-weather__details {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
