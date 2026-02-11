@@ -3,19 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "hexo generate",
     "clean": "hexo clean",
+    "build": "hexo clean && hexo generate && node scripts/copy-assets.js",
     "deploy": "hexo deploy",
-    "server": "hexo server"
+    "server": "hexo server",
+    "g": "hexo clean && hexo generate && node scripts/copy-assets.js"
   },
   "hexo": {
     "version": "8.1.1"
   },
   "dependencies": {
+    "cheerio": "^1.2.0",
     "hexo": "^8.0.0",
     "hexo-generator-archive": "^2.0.0",
     "hexo-generator-category": "^2.0.0",
     "hexo-generator-index": "^4.0.0",
+    "hexo-generator-search": "^2.4.3",
     "hexo-generator-tag": "^2.0.0",
     "hexo-renderer-ejs": "^2.0.0",
     "hexo-renderer-marked": "^7.0.0",

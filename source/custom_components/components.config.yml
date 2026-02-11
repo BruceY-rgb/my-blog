@@ -25,7 +25,7 @@ components:
 
   # 待办事项组件
   todo:
-    enable: false
+    enable: true
     name: "Todo Component"
     description: "管理个人待办事项的组件"
     css: "/custom_components/todo/todo.css"
@@ -35,7 +35,7 @@ components:
 
   # 数据分析组件
   analytics:
-    enable: false
+    enable: true
     name: "Analytics Component"
     description: "显示访问统计和数据分析的组件"
     css: "/custom_components/analytics/analytics.css"

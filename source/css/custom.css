@@ -33,8 +33,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60%;
-  background: linear-gradient(to top, #0d0d15 0%, rgba(13, 13, 21, 0.8) 50%, transparent 100%);
+  height: 40%;
+  background: linear-gradient(to top, #0d0d15 0%, rgba(13, 13, 21, 0.6) 50%, transparent 100%);
   z-index: 1;
   pointer-events: none;
 }
@@ -309,25 +309,405 @@ svg.hero-waves {
   pointer-events: none;
 }
 
-/* 毛玻璃导航栏 - 修复定位问题 */
+/* 毛玻璃导航栏 - 完全固定，不随滚动移动 */
 #nav {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   width: 100% !important;
+  height: 60px !important;
   z-index: 999 !important;
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
   background: rgba(0, 0, 0, 0.3) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all var(--transition-normal) var(--ease-out);
+  /* 移除所有可能影响定位的过渡 */
+  transition: none !important;
+  /* 强制稳定定位 */
+  transform: translateZ(0);
+  will-change: auto;
+  /* 防止任何变化 */
+  animation: none !important;
 }
 
+/* 悬停效果增强（不影响定位） */
 #nav:hover {
   backdrop-filter: blur(14px) saturate(180%);
   -webkit-backdrop-filter: blur(14px) saturate(180%);
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 防御性样式：强制覆盖所有可能的定位变化 */
+#page-header.nav-fixed #nav,
+#page-header.nav-visible #nav,
+#page-header.nav-fixed #nav:hover,
+#page-header.nav-visible #nav:hover,
+#page-header #nav {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 60px !important;
+  z-index: 999 !important;
+  transform: translateZ(0) !important;
+  transition: none !important;
+}
+
+/* 防御性样式：强制覆盖所有可能的定位变化 */
+#page-header.nav-fixed #nav,
+#page-header.nav-visible #nav,
+#page-header.nav-fixed #nav:hover,
+#page-header.nav-visible #nav:hover,
+#page-header #nav {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 60px !important;
+  z-index: 999 !important;
+  transform: translateZ(0) !important;
+  transition: none !important;
+}
+
+/* 确保导航栏内容可以动画，但不影响定位 */
+#nav .navbar-brand,
+#nav .menu-item,
+#nav #menus,
+#nav #blog-info {
+  transition: color 0.3s ease, opacity 0.3s ease;
+  transform: translateZ(0);
+}
+
+/* 站点信息容器 - 左侧 */
+#nav #blog-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  z-index: 1021 !important;
+}
+
+/* 站点标题和 Logo */
+#nav #blog-info .nav-site-title,
+#nav #blog-info .site-name,
+#nav #blog-info .site-icon {
+  color: #00f0ff !important;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8),
+               0 0 20px rgba(0, 240, 255, 0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+#nav #blog-info .nav-site-title:hover,
+#nav #blog-info .site-name:hover,
+#nav #blog-info .site-icon:hover {
+  color: #00ffff !important;
+  text-shadow: 0 0 15px rgba(0, 255, 255, 1),
+               0 0 30px rgba(0, 255, 255, 0.8) !important;
+  transform: translateX(2px);
+}
+
+/* 菜单容器 */
+#nav #menus {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 1rem !important;
+  z-index: 1001 !important;
+}
+
+/* 确保搜索按钮在最右侧 */
+#nav #menus #search-button {
+  order: 999 !important;
+  margin-left: auto !important;
+}
+
+/* 汉堡菜单按钮也保持在最右侧 */
+#nav #menus #toggle-menu {
+  order: 998 !important;
+}
+
+/* 搜索按钮 */
+#nav #search-button {
+  display: flex !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+  background: rgba(0, 240, 255, 0.1) !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+}
+
+#nav #search-button:hover {
+  background: rgba(0, 240, 255, 0.2) !important;
+  border-color: rgba(0, 240, 255, 0.6) !important;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+#nav #search-button .search,
+#nav #search-button i,
+#nav #search-button span {
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6) !important;
+  transition: all 0.3s ease !important;
+}
+
+#nav #search-button:hover .search,
+#nav #search-button:hover i,
+#nav #search-button:hover span {
+  color: #00ffff !important;
+  text-shadow: 0 0 12px rgba(0, 255, 255, 1) !important;
+}
+
+/* 菜单项容器 */
+#nav .menus_items {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+/* 单个菜单项 */
+#nav .menus_item,
+#nav .menu-item {
+  position: relative !important;
+  margin: 0 10px !important;
+}
+
+/* 菜单链接 */
+#nav .menus_item a,
+#nav .menu-item a,
+#nav .menus_items a,
+#nav #menus a {
+  color: #00f0ff !important;
+  text-decoration: none !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6) !important;
+  display: inline-block !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#nav .menus_item a::before,
+#nav .menu-item a::before,
+#nav .menus_items a::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent) !important;
+  transition: left 0.5s ease !important;
+}
+
+#nav .menus_item a:hover::before,
+#nav .menu-item a:hover::before,
+#nav .menus_items a:hover::before {
+  left: 100% !important;
+}
+
+#nav .menus_item a:hover,
+#nav .menu-item a:hover,
+#nav .menus_items a:hover {
+  color: #00ffff !important;
+  background: rgba(0, 240, 255, 0.15) !important;
+  text-shadow: 0 0 12px rgba(0, 255, 255, 1),
+               0 0 24px rgba(0, 255, 255, 0.8) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* 移动端汉堡菜单按钮 */
+#nav #toggle-menu {
+  display: none !important;
+  cursor: pointer !important;
+  padding: 0.5rem !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+}
+
+#nav #toggle-menu:hover {
+  background: rgba(0, 240, 255, 0.1) !important;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3) !important;
+}
+
+#nav #toggle-menu i {
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6) !important;
+  font-size: 1.2rem !important;
+  transition: all 0.3s ease !important;
+}
+
+#nav #toggle-menu:hover i {
+  color: #00ffff !important;
+  text-shadow: 0 0 12px rgba(0, 255, 255, 1) !important;
+  transform: scale(1.1);
+}
+
+/* 菜单项容器 */
+#nav .menus_items {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+/* 单个菜单项 */
+#nav .menus_item,
+#nav .menu-item {
+  position: relative !important;
+  margin: 0 10px !important;
+}
+
+/* 菜单链接 */
+#nav .menus_item a,
+#nav .menu-item a,
+#nav .menus_items a,
+#nav #menus a {
+  color: #00f0ff !important;
+  text-decoration: none !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6) !important;
+  display: inline-block !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#nav .menus_item a::before,
+#nav .menu-item a::before,
+#nav .menus_items a::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent) !important;
+  transition: left 0.5s ease !important;
+}
+
+#nav .menus_item a:hover::before,
+#nav .menu-item a:hover::before,
+#nav .menus_items a:hover::before {
+  left: 100% !important;
+}
+
+#nav .menus_item a:hover,
+#nav .menu-item a:hover,
+#nav .menus_items a:hover {
+  color: #00ffff !important;
+  background: rgba(0, 240, 255, 0.15) !important;
+  text-shadow: 0 0 12px rgba(0, 255, 255, 1),
+               0 0 24px rgba(0, 255, 255, 0.8) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* 移动端汉堡菜单按钮 */
+#nav #toggle-menu {
+  display: none !important;
+  cursor: pointer !important;
+  padding: 0.5rem !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+}
+
+#nav #toggle-menu:hover {
+  background: rgba(0, 240, 255, 0.1) !important;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3) !important;
+}
+
+#nav #toggle-menu i {
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6) !important;
+  font-size: 1.2rem !important;
+  transition: all 0.3s ease !important;
+}
+
+#nav #toggle-menu:hover i {
+  color: #00ffff !important;
+  text-shadow: 0 0 12px rgba(0, 255, 255, 1) !important;
+  transform: scale(1.1);
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  #nav,
+  #page-header.nav-fixed #nav,
+  #page-header.nav-visible #nav,
+  #page-header #nav {
+    height: 56px !important;
+    padding: 0 1rem !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* 移动端隐藏菜单项，只显示汉堡菜单 */
+  #nav .menus_items {
+    display: none !important;
+  }
+
+  /* 显示汉堡菜单按钮 */
+  #nav #toggle-menu {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* 移动端搜索按钮样式调整 */
+  #nav #search-button {
+    padding: 0.4rem 0.8rem !important;
+    margin-left: 0.5rem !important;
+  }
+
+  #nav #search-button span {
+    display: none !important;
+  }
+
+  /* 移动端站点信息调整 */
+  #nav #blog-info .site-name {
+    font-size: 0.9rem !important;
+  }
+
+  #nav #blog-info .site-icon {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  /* 移动端菜单展开状态 */
+  #nav.menu-open .menus_items {
+    display: flex !important;
+    position: absolute !important;
+    top: 56px !important;
+    left: 0 !important;
+    right: 0 !important;
+    flex-direction: column !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    padding: 1rem !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.2) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  #nav.menu-open .menus_items .menus_item,
+  #nav.menu-open .menus_items .menu-item {
+    margin: 0.5rem 0 !important;
+    width: 100% !important;
+  }
+
+  #nav.menu-open .menus_items a {
+    display: block !important;
+    text-align: center !important;
+    width: 100% !important;
+    padding: 0.75rem 1rem !important;
+  }
 }
 
 /* 深色模式下的导航栏 */
@@ -411,6 +791,694 @@ body {
 /* ========================================
    2. 文章页体验模块
    ======================================== */
+
+/* 搜索功能优化 - 赛博朋克风格 */
+#local-search,
+.search-wrap,
+.search-input-wrap,
+.search {
+  position: relative;
+  z-index: 100;
+}
+
+#local-search .search-wrap {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 8px 15px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#local-search .search-wrap:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: var(--primary-color, #49B1F5);
+  box-shadow: 0 0 15px rgba(73, 177, 245, 0.3);
+}
+
+#local-search input[type="text"],
+.search-input,
+.search-input-wrap input {
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+  font-size: 14px;
+  width: 200px;
+  outline: none !important;
+  padding: 5px 0 !important;
+}
+
+#local-search input[type="text"]::placeholder,
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+#local-search .search-icon,
+.search-input-wrap::before {
+  color: var(--primary-color, #49B1F5) !important;
+  margin-right: 8px;
+  transition: all 0.3s ease;
+}
+
+#local-search .search-wrap:hover .search-icon,
+.search-input-wrap:hover::before {
+  color: #00f0ff !important;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+/* 搜索结果框样式 */
+#local-search .search-result,
+.search-result-wrap {
+  background: rgba(30, 30, 30, 0.95) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  margin-top: 10px !important;
+}
+
+#local-search .search-result li,
+.search-result-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.3s ease;
+}
+
+#local-search .search-result li:hover,
+.search-result-item:hover {
+  background: rgba(73, 177, 245, 0.1) !important;
+  transform: translateX(5px);
+}
+
+#local-search .search-result li:last-child,
+.search-result-item:last-child {
+  border-bottom: none !important;
+}
+
+#local-search .search-result a,
+.search-result-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 14px;
+  padding: 10px 15px;
+  display: block;
+  text-decoration: none;
+}
+
+#local-search .search-result a:hover,
+.search-result-link:hover {
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* 导航栏中的搜索框样式 */
+.navbar-nav,
+.nav-right,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* 移动端搜索框适配 */
+@media (max-width: 768px) {
+  #local-search input[type="text"],
+  .search-input {
+    width: 150px !important;
+    font-size: 13px !important;
+  }
+
+  #local-search .search-wrap {
+    padding: 6px 12px !important;
+  }
+}
+
+/* 文章页标题区域优化 - 赛博朋克风格 */
+#post-info,
+.post-info,
+.article-container .post-header,
+.post-header {
+  text-align: left !important;
+  margin: 2rem 0 !important;
+  padding: 2rem 0 !important;
+}
+
+/* 文章标题样式优化 */
+#post-info .post-title,
+.post-title,
+.article-container .post-title,
+.post-header h1 {
+  text-align: left !important;
+  letter-spacing: 2px !important;
+  margin-bottom: 1.5rem !important;
+  padding-left: 1.5rem !important;
+  border-left: 4px solid #00f0ff !important;
+  box-shadow: -4px 0 10px rgba(0, 240, 255, 0.3) !important;
+  position: relative !important;
+  display: block !important;
+}
+
+/* 标题发光效果增强 */
+#post-info .post-title::before,
+.post-title::before,
+.article-container .post-title::before,
+.post-header h1::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #ff00ff, #00ffff, #ff00ff) !important;
+  opacity: 0.6 !important;
+  animation: title-glow-border 3s ease-in-out infinite alternate !important;
+}
+
+@keyframes title-glow-border {
+  0% {
+    opacity: 0.6;
+    box-shadow: -2px 0 5px rgba(255, 0, 255, 0.5);
+  }
+  100% {
+    opacity: 1;
+    box-shadow: -2px 0 15px rgba(0, 240, 255, 0.8);
+  }
+}
+
+/* ========================================
+   CSS 变量系统重构 (CSS Custom Properties)
+   ======================================== */
+:root {
+  /* 覆盖Butterfly主题的默认CSS变量 */
+  --light-grey: #00f0ff !important;
+  --text-color: #00f0ff !important;
+  --meta-color: #00f0ff !important;
+  --meta-text-color: #00f0ff !important;
+}
+
+/* 文章详情页元数据样式 */
+#post-meta {
+  position: relative !important;
+  z-index: 10 !important;
+  color: #00f0ff !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 1.5rem !important;
+  margin-top: 2rem !important;
+  padding: 1rem 1.5rem !important;
+  border-left: 4px solid #00f0ff !important;
+  padding-left: 1rem !important;
+  box-shadow: -4px 0 10px rgba(0, 240, 255, 0.3) !important;
+  filter: brightness(1.1) !important;
+  min-height: 3rem !important;
+  height: auto !important;
+}
+
+#post-meta .meta-firstline,
+#post-meta .meta-secondline {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+  line-height: 1.3 !important;
+  min-height: 2rem !important;
+}
+
+#post-meta .post-meta-date,
+#post-meta .post-meta-categories,
+#post-meta .post-meta-wordcount,
+#post-meta .post-meta-pv-cv {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+#post-meta .post-meta-label,
+#post-meta .post-meta-date-created,
+#post-meta .post-meta-date-updated,
+#post-meta .post-meta-categories a,
+#post-meta .post-meta-wordcount,
+#post-meta .post-meta-pv-cv,
+#post-meta span,
+#post-meta a,
+#post-meta i,
+#post-meta time {
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.8),
+               0 0 16px rgba(0, 240, 255, 0.4) !important;
+  filter: brightness(1.2) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  z-index: 11 !important;
+  line-height: 1.3 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+#post-meta .post-meta-separator {
+  color: rgba(0, 240, 255, 0.5) !important;
+  line-height: 1.3 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 1.3em !important;
+}
+
+#post-meta .post-meta-icon {
+  color: rgba(0, 240, 255, 0.95) !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.8),
+               0 0 16px rgba(0, 240, 255, 0.4) !important;
+  margin-right: 0.3rem !important;
+  margin-top: 0 !important;
+  filter: brightness(1.3) !important;
+  position: relative !important;
+  z-index: 11 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.3 !important;
+  vertical-align: middle !important;
+  transform: translateY(0px) !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+#post-meta .post-meta-label:hover,
+#post-meta .post-meta-date-created:hover,
+#post-meta .post-meta-date-updated:hover,
+#post-meta .post-meta-categories a:hover {
+  color: #00ffff !important;
+  text-shadow: 0 0 12px rgba(0, 255, 255, 1),
+               0 0 24px rgba(0, 255, 255, 0.8) !important;
+  transform: translateX(3px) !important;
+}
+
+/* 标签样式 */
+.post-meta__tag-list {
+  margin-top: 1.5rem !important;
+  padding-top: 1rem !important;
+  border-top: 1px solid rgba(0, 240, 255, 0.2) !important;
+}
+
+.post-meta__tags {
+  display: inline-block !important;
+  margin: 0.25rem 0.5rem 0.25rem 0 !important;
+  padding: 0.3rem 0.8rem !important;
+  background: rgba(255, 0, 255, 0.1) !important;
+  color: #ff00ff !important;
+  text-decoration: none !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 0, 255, 0.3) !important;
+  font-size: 0.85rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.post-meta__tags:hover {
+  background: rgba(255, 0, 255, 0.2) !important;
+  color: #ff66ff !important;
+  text-shadow: 0 0 8px rgba(255, 0, 255, 0.8) !important;
+  transform: translateY(-2px) scale(1.05) !important;
+}
+
+/* 元数据基础样式重构 */
+#post-info .post-meta-stats,
+.post-meta,
+.post-meta-date {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+  margin-top: 0 !important;
+  padding-left: 1.5rem !important;
+  line-height: 1.3 !important;
+}
+
+/* 文章列表页元数据容器 - 移除不必要的padding-left */
+.article-meta-wrap {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+  margin-top: 0 !important;
+  padding-left: 0 !important;
+  line-height: 1.3 !important;
+}
+
+/* 元数据颜色和发光效果重构 */
+#post-info .post-meta-stats,
+.post-meta,
+.article-meta-wrap,
+.post-meta-date {
+  color: #00f0ff !important;
+}
+
+#post-info .post-meta-stats span,
+#post-info .post-meta-stats a,
+#post-info .post-meta-stats time,
+.post-meta span,
+.post-meta a,
+.post-meta time,
+.article-meta-wrap span,
+.article-meta-wrap a,
+.article-meta-wrap time,
+.post-meta-date span,
+.post-meta-date a,
+.post-meta-date time {
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.8),
+               0 0 16px rgba(0, 240, 255, 0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 文章卡片元数据对齐优化 - 移除line-height和vertical-align */
+.recent-posts .article-meta-wrap,
+.recent-posts .post-meta-date {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+}
+
+.recent-posts .article-meta-wrap span,
+.recent-posts .post-meta-date span,
+.recent-posts .article-meta-wrap time,
+.recent-posts .post-meta-date time {
+  display: flex !important;
+  align-items: center !important;
+  font-size: 0.9rem !important;
+}
+
+/* 图标固定对齐 */
+.recent-posts .article-meta-wrap i,
+.recent-posts .post-meta-date i {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin-right: 0.2rem !important;
+}
+
+/* 标签样式 */
+.recent-posts .article-meta-label {
+  margin-right: 0.2rem !important;
+  opacity: 0.9 !important;
+}
+
+/* 文章页元数据样式 - 精简选择器 */
+#post .post-header .post-meta,
+#post .article-header .post-meta,
+#post .post-header .article-meta {
+  color: #00f0ff !important;
+}
+
+#post .post-header .post-meta a,
+#post .post-header .post-meta time,
+#post .article-header .post-meta a,
+#post .article-header .post-meta time {
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.8),
+               0 0 16px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* 图标颜色重构 */
+#post .post-header .post-meta i,
+#post .article-header .post-meta i,
+.recent-posts i {
+  color: rgba(0, 240, 255, 0.95) !important;
+}
+
+/* 时间元素统一样式 */
+.post-meta time,
+.article-meta time,
+.post-meta-date time,
+.article-meta-wrap time {
+  color: #00f0ff !important;
+  font-weight: 500 !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.8),
+               0 0 16px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* 深色模式元数据强化 */
+[data-theme="dark"] .post-meta,
+[data-theme="dark"] .article-meta,
+[data-theme="dark"] .post-meta-date,
+[data-theme="dark"] .article-meta-wrap,
+[data-theme="dark"] #post-meta {
+  color: #00f0ff !important;
+}
+
+[data-theme="dark"] .post-meta a,
+[data-theme="dark"] .post-meta time,
+[data-theme="dark"] .post-meta-label,
+[data-theme="dark"] .post-meta-date-created,
+[data-theme="dark"] .post-meta-date-updated,
+[data-theme="dark"] .post-meta-categories a {
+  color: #00f0ff !important;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.8),
+               0 0 16px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* Font Awesome图标统一样式 */
+.recent-posts .far,
+.recent-posts .fas,
+.recent-posts .fab,
+.post-meta .far,
+.post-meta .fas,
+.post-meta .fab {
+  color: rgba(0, 240, 255, 0.95) !important;
+}
+
+/* 图标颜色简化样式 */
+#post-info .post-meta-stats i,
+.post-meta i,
+.meta-icon,
+.post-meta .meta-item i,
+.post-meta time::before,
+.meta-item::before,
+.article-meta-wrap span i,
+.post-meta-date span i,
+.article-meta-label i,
+.article-meta-wrap .icon,
+.post-meta-date .icon,
+.article-meta-label .icon,
+.article-meta-wrap time::before,
+.post-meta-date time::before,
+.article-meta-label::before,
+.recent-posts .article-meta-wrap i,
+.recent-posts .post-meta-date i,
+.recent-posts .article-meta-label i,
+.recent-posts .far,
+.recent-posts .fas,
+.recent-posts .fab,
+#post .post-header .post-meta span i,
+#post .post-header .post-meta span .icon,
+#post .post-header .article-meta span i,
+#post .post-header .article-meta span .icon,
+#post .article-header .post-meta span i,
+#post .article-header .post-meta span .icon,
+#post .article-header .article-meta span i,
+#post .article-header .article-meta span .icon,
+.post-content .post-header .post-meta span i,
+.post-content .post-header .post-meta span .icon,
+.post-content .post-header .article-meta span i,
+.post-content .post-header .article-meta span .icon,
+.post-content .article-header .post-meta span i,
+.post-content .article-header .post-meta span .icon,
+.post-content .article-header .article-meta span i,
+.post-content .article-header .article-meta span .icon,
+.article-content .post-header .post-meta span i,
+.article-content .post-header .post-meta span .icon,
+.article-content .post-header .article-meta span i,
+.article-content .post-header .article-meta span .icon,
+.article-content .article-header .post-meta span i,
+.article-content .article-header .post-meta span .icon,
+.article-content .article-header .post-meta span i,
+.article-content .article-header .post-meta span .icon {
+  color: rgba(0, 240, 255, 0.95) !important;
+  margin-right: 0.5rem !important;
+}
+
+/* 元数据悬停效果，增强优先级 */
+#post-info .post-meta-stats span:hover,
+.post-meta a:hover,
+.meta-link:hover,
+.post-meta time:hover,
+.article-meta-wrap a:hover,
+.post-meta-date a:hover,
+.article-meta-label:hover,
+.article-meta-wrap time:hover,
+.post-meta-date time:hover,
+.recent-posts .article-meta-wrap a:hover,
+.recent-posts .post-meta-date a:hover,
+.recent-posts .article-meta-label:hover,
+.recent-posts .article-meta-wrap time:hover,
+.recent-posts .post-meta-date time:hover,
+#post .post-header .post-meta a:hover,
+#post .post-header .article-meta a:hover,
+#post .article-header .post-meta a:hover,
+#post .article-header .article-meta a:hover,
+.post-content .post-header .post-meta a:hover,
+.post-content .post-header .article-meta a:hover,
+.post-content .article-header .post-meta a:hover,
+.post-content .article-header .article-meta a:hover,
+.article-content .post-header .post-meta a:hover,
+.article-content .post-header .article-meta a:hover,
+.article-content .article-header .post-meta a:hover,
+.article-content .article-header .article-meta a:hover {
+  color: #00ffff !important;
+  text-shadow: 0 0 12px rgba(0, 255, 255, 1),
+               0 0 24px rgba(0, 255, 255, 0.8),
+               0 0 36px rgba(0, 255, 255, 0.6) !important;
+  transform: translateX(3px) !important;
+}
+
+/* 分类和标签特殊样式，增强优先级 */
+#post-info .post-meta .category,
+.post-meta .category,
+.meta-category,
+.article-meta-wrap .category,
+.post-meta-date .category,
+.article-meta-label .category,
+#post .post-header .post-meta .category,
+#post .post-header .article-meta .category,
+#post .article-header .post-meta .category,
+#post .article-header .article-meta .category,
+.post-content .post-header .post-meta .category,
+.post-content .post-header .article-meta .category,
+.post-content .article-header .post-meta .category,
+.post-content .article-header .article-meta .category,
+.article-content .post-header .post-meta .category,
+.article-content .post-header .article-meta .category,
+.article-content .article-header .post-meta .category,
+.article-content .article-header .article-meta .category {
+  background: rgba(0, 240, 255, 0.1) !important;
+  padding: 0.3rem 0.8rem !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+  margin-right: 0.5rem !important;
+  font-size: 0.85rem !important;
+}
+
+#post-info .post-meta .tag,
+.post-meta .tag,
+.meta-tag,
+.article-meta-wrap .tag,
+.post-meta-date .tag,
+.article-meta-label .tag,
+#post .post-header .post-meta .tag,
+#post .post-header .article-meta .tag,
+#post .article-header .post-meta .tag,
+#post .article-header .article-meta .tag,
+.post-content .post-header .post-meta .tag,
+.post-content .post-header .article-meta .tag,
+.post-content .article-header .post-meta .tag,
+.post-content .article-header .article-meta .tag,
+.article-content .post-header .post-meta .tag,
+.article-content .post-header .article-meta .tag,
+.article-content .article-header .post-meta .tag,
+.article-content .article-header .article-meta .tag {
+  background: rgba(255, 0, 255, 0.1) !important;
+  padding: 0.3rem 0.8rem !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 0, 255, 0.3) !important;
+  margin-right: 0.5rem !important;
+  font-size: 0.85rem !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  #post-info .post-title,
+  .post-title,
+  .article-container .post-title,
+  .post-header h1 {
+    font-size: 1.5rem !important;
+    letter-spacing: 1px !important;
+    padding-left: 1rem !important;
+    border-left-width: 3px !important;
+  }
+
+  #post-info .post-meta-stats,
+  .post-meta,
+  .post-meta-stats,
+  .article-meta-wrap,
+  .post-meta-date {
+    padding-left: 1rem !important;
+    gap: 1rem !important;
+  }
+
+  #post-info .post-meta-stats span,
+  .post-meta span,
+  .article-meta-wrap span,
+  .post-meta-date span {
+    font-size: 0.9rem !important;
+  }
+
+  /* 移动端文章卡片元数据优化 */
+  .recent-posts .article-meta-wrap,
+  .recent-posts .post-meta-date {
+    gap: 0.25rem !important;
+  }
+
+  .recent-posts .article-meta-wrap span,
+  .recent-posts .post-meta-date span,
+  .recent-posts .article-meta-label {
+    font-size: 0.85rem !important;
+  }
+
+  .recent-posts .article-meta-wrap i,
+  .recent-posts .post-meta-date i {
+    width: 14px !important;
+    height: 14px !important;
+    margin-right: 0.25rem !important;
+  }
+
+  /* 移动端文章详情页元数据优化 */
+  #post-meta {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 0.8rem 1rem !important;
+    padding-left: 0.75rem !important;
+    border-left-width: 3px !important;
+    filter: brightness(1.15) !important;
+    gap: 1rem !important;
+  }
+
+  #post-meta .meta-firstline,
+  #post-meta .meta-secondline {
+    display: flex !important;
+    gap: 1rem !important;
+    min-height: 1.8rem !important;
+    line-height: 1.3 !important;
+  }
+
+  #post-meta .post-meta-date,
+  #post-meta .post-meta-categories,
+  #post-meta .post-meta-wordcount,
+  #post-meta .post-meta-pv-cv {
+    gap: 0.3rem !important;
+    line-height: 1.3 !important;
+  }
+
+  #post-meta .post-meta-label,
+  #post-meta .post-meta-date-created,
+  #post-meta .post-meta-date-updated,
+  #post-meta .post-meta-wordcount,
+  #post-meta .post-meta-pv-cv {
+    font-size: 0.9rem !important;
+    filter: brightness(1.25) !important;
+  }
+
+  #post-meta .post-meta-icon {
+    width: auto !important;
+    height: auto !important;
+    transform: translateY(0.5px) !important;
+    filter: brightness(1.3) !important;
+  }
+}
 
 /* 阅读进度条 */
 .reading-progress-bar {
@@ -851,5 +1919,106 @@ body {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: white !important;
+  }
+}
+
+/* 强制确保元数据不被遮挡 */
+#post-meta,
+#post-meta *,
+#post-meta .post-meta-label,
+#post-meta .post-meta-date-created,
+#post-meta .post-meta-date-updated,
+#post-meta .post-meta-categories a,
+#post-meta .post-meta-wordcount,
+#post-meta .post-meta-pv-cv,
+#post-meta .post-meta-icon {
+  position: relative !important;
+  z-index: 9999 !important;
+  filter: brightness(1.2) contrast(1.1) !important;
+}
+
+/* 确保在所有背景下都可见 */
+#post-info #post-meta {
+  position: relative !important;
+  z-index: 9999 !important;
+  filter: brightness(1.1) contrast(1.1) saturate(1.2) !important;
+}
+
+/* 修复任何可能被遮挡的子元素 */
+#post-meta .meta-firstline *,
+#post-meta .meta-secondline * {
+  position: relative !important;
+  z-index: 10000 !important;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  #nav,
+  #page-header.nav-fixed #nav,
+  #page-header.nav-visible #nav,
+  #page-header #nav {
+    height: 56px !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* 移动端隐藏菜单项，只显示汉堡菜单 */
+  #nav .menus_items {
+    display: none !important;
+  }
+
+  /* 显示汉堡菜单按钮 */
+  #nav #toggle-menu {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* 移动端搜索按钮样式调整 */
+  #nav #search-button {
+    padding: 0.4rem 0.8rem !important;
+    margin-left: 0.5rem !important;
+  }
+
+  #nav #search-button span {
+    display: none !important;
+  }
+
+  /* 移动端站点信息调整 */
+  #nav #blog-info .site-name {
+    font-size: 0.9rem !important;
+  }
+
+  #nav #blog-info .site-icon {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  /* 移动端菜单展开状态 */
+  #nav.menu-open .menus_items {
+    display: flex !important;
+    position: absolute !important;
+    top: 56px !important;
+    left: 0 !important;
+    right: 0 !important;
+    flex-direction: column !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    padding: 1rem !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.2) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  #nav.menu-open .menus_items .menus_item,
+  #nav.menu-open .menus_items .menu-item {
+    margin: 0.5rem 0 !important;
+    width: 100% !important;
+  }
+
+  #nav.menu-open .menus_items a {
+    display: block !important;
+    text-align: center !important;
+    width: 100% !important;
+    padding: 0.75rem 1rem !important;
   }
 }

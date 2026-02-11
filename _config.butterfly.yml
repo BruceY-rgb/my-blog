@@ -18,10 +18,11 @@ nav:
   fixed: false
 
 menu:
-  # Home: / || fas fa-home
-  # List||fas fa-list:
-  #   Music: /music/ || fas fa-music
-  #   Movie: /movies/ || fas fa-video
+  Home: / || fas fa-home
+  Archive: /archives/ || fas fa-archive
+  Tags: /tags/ || fas fa-tags
+  Categories: /categories/ || fas fa-folder
+  About: /about/ || fas fa-user
 
 # --------------------------------------
 # Code Blocks Settings
@@ -53,7 +54,7 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
+favicon: /img/favicon.ico
 
 avatar:
   img: /img/butterfly-icon.png
@@ -289,7 +290,7 @@ aside:
       enable: true
       icon: fab fa-github
       text: Follow Me
-      link: https://github.com/xxxxxx
+      link: https://github.com/BruceY-rgb
   card_announcement:
     enable: true
     content: "🎉 欢迎来到我的博客！<br>✨ 分享技术、记录生活<br>💡 每日更新精彩内容<br>🌟 让我们一起成长"
@@ -465,7 +466,7 @@ math:
 
   katex:
     # Enable the copy KaTeX formula
-    copy_tex: false
+    copy_tex: true
 
 # --------------------------------------
 # Search
@@ -474,8 +475,8 @@ math:
 search:
   # Choose: algolia_search / local_search / docsearch
   # leave it empty if you don't need search
-  use:
-  placeholder:
+  use: local_search
+  placeholder: 输入搜索内容...
 
   # Algolia Search
   algolia_search:
@@ -909,7 +910,7 @@ clickShowText:
 # https://github.com/francoischalifour/medium-zoom
 # https://fancyapps.com/fancybox/
 # Leave it empty if you don't need lightbox
-lightbox:
+lightbox: fancybox
 
 # --------------------------------------
 # Tag Plugins settings
@@ -1011,11 +1012,11 @@ instantpage: false
 # Lazyload
 # https://github.com/verlok/vanilla-lazyload
 lazyload:
-  enable: false
+  enable: true
   # Use browser's native lazyload instead of vanilla-lazyload
   native: false
   # Specify the field to use lazyload (site or post)
-  field: site
+  field: post
   placeholder:
   blur: false
 
@@ -1070,10 +1071,10 @@ inject:
     - <link rel="stylesheet" href="/custom_components/weather/weather.css">
     # 时钟组件样式
     - <link rel="stylesheet" href="/custom_components/clock/clock.css">
-    # inject:todo
-    # - <link rel="stylesheet" href="/custom_components/todo/todo.css">
-    # inject:analytics
-    # - <link rel="stylesheet" href="/custom_components/analytics/analytics.css">
+    # 待办事项组件样式
+    - <link rel="stylesheet" href="/custom_components/todo/todo.css">
+    # 数据分析组件样式
+    - <link rel="stylesheet" href="/custom_components/analytics/analytics.css">
     # inject:end
 
   bottom:
@@ -1090,10 +1091,10 @@ inject:
     - <script src="/custom_components/weather/weather.js"></script>
     # 时钟组件脚本
     - <script src="/custom_components/clock/clock.js"></script>
-    # inject:todo
-    # - <script src="/custom_components/todo/todo.js"></script>
-    # inject:analytics
-    # - <script src="/custom_components/analytics/analytics.js"></script>
+    # 待办事项组件脚本
+    - <script src="/custom_components/todo/todo.js"></script>
+    # 数据分析组件脚本
+    - <script src="/custom_components/analytics/analytics.js"></script>
     # inject:end
 
     # 组件管理脚本（可选）

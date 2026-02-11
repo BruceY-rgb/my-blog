@@ -1,0 +1,260 @@
+/*!
+ * 数据分析组件样式
+ * Analytics Component Styles
+ * 版本: v1.0
+ */
+
+.cc-analytics {
+  background: var(--card-bg, rgba(255, 255, 255, 0.85));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: analytics-float 6s ease-in-out infinite;
+}
+
+@keyframes analytics-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.cc-analytics:hover {
+  animation-play-state: paused;
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-medium, 0 4px 16px rgba(0, 0, 0, 0.15));
+}
+
+.cc-analytics::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 196, 182, 0.05), rgba(73, 177, 245, 0.05));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cc-analytics > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cc-analytics__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+}
+
+.cc-analytics__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--success-color, #00c4b6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cc-analytics__refresh {
+  background: none;
+  border: none;
+  color: var(--primary-color, #49B1F5);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.cc-analytics__refresh:hover {
+  background: rgba(73, 177, 245, 0.1);
+  transform: rotate(180deg);
+}
+
+.cc-analytics__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.cc-analytics__stat {
+  text-align: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.05));
+  transition: all 0.3s ease;
+}
+
+.cc-analytics__stat:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cc-analytics__stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color, #49B1F5);
+  margin-bottom: 5px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.cc-analytics__stat-label {
+  font-size: 12px;
+  color: var(--text-color-muted, #999);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cc-analytics__chart {
+  height: 120px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.05));
+}
+
+.cc-analytics__chart::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+    rgba(73, 177, 245, 0.1) 0%,
+    rgba(0, 196, 182, 0.1) 100%);
+  animation: chart-pulse 4s ease-in-out infinite;
+}
+
+@keyframes chart-pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.cc-analytics__chart-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-color-muted, #999);
+  font-size: 12px;
+  text-align: center;
+}
+
+.cc-analytics__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  font-size: 11px;
+  color: var(--text-color-muted, #999);
+}
+
+.cc-analytics__last-update {
+  font-style: italic;
+}
+
+.cc-analytics__status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cc-analytics__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success-color, #00c4b6);
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+/* 深色模式适配 */
+[data-theme="dark"] .cc-analytics {
+  background: var(--card-bg-dark, rgba(30, 30, 30, 0.85));
+  border-color: var(--border-color-dark, rgba(255, 255, 255, 0.1));
+}
+
+[data-theme="dark"] .cc-analytics__stat {
+  background: rgba(30, 30, 30, 0.5);
+}
+
+[data-theme="dark"] .cc-analytics__stat:hover {
+  background: rgba(30, 30, 30, 0.8);
+}
+
+[data-theme="dark"] .cc-analytics__chart {
+  background: rgba(30, 30, 30, 0.3);
+  border-color: var(--border-color-dark, rgba(255, 255, 255, 0.1));
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .cc-analytics {
+    padding: 16px;
+    animation: none;
+  }
+
+  .cc-analytics__stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .cc-analytics__stat {
+    padding: 10px;
+  }
+
+  .cc-analytics__stat-value {
+    font-size: 20px;
+  }
+}
+
+/* 加载状态 */
+.cc-analytics.loading .cc-analytics__stat-value {
+  animation: loading-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

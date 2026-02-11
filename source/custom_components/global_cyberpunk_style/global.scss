@@ -58,6 +58,7 @@ body::before {
   0% {
     background-position: 0 0, 0 0;
   }
+
   100% {
     background-position: 20px 20px, 20px 20px;
   }
@@ -71,7 +72,12 @@ body {
    文字排版 (Typography)
    ======================================== */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: $font-title;
   font-weight: $fw-bold;
   line-height: $lh-tight;
@@ -150,7 +156,8 @@ a {
   }
 }
 
-code, pre {
+code,
+pre {
   font-family: $font-mono;
   font-size: 0.9em;
   background: rgba($bg-tertiary, 0.8);
@@ -235,6 +242,7 @@ input[type="button"] {
 
   // 次要按钮
   &.btn-secondary {
+
     &::before,
     &::after {
       background: $gradient-button-secondary;
@@ -247,6 +255,7 @@ input[type="button"] {
 
   // 成功按钮
   &.btn-success {
+
     &::before,
     &::after {
       background: $gradient-button-success;
@@ -310,7 +319,7 @@ input[type="button"] {
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 32px rgba(0, 240, 255, 0.3),
-                0 4px 16px rgba(0, 0, 0, 0.5);
+      0 4px 16px rgba(0, 0, 0, 0.5);
 
     &::before {
       opacity: 0.6;
@@ -389,7 +398,7 @@ input[type="button"] {
     }
   }
 
-  // 搜索框
+  // 框
   #search-input,
   .search-input {
     background: rgba($bg-tertiary, 0.6);
@@ -830,6 +839,7 @@ textarea {
   }
 
   #nav {
+
     .logo,
     #site-name,
     #brand {
@@ -839,6 +849,7 @@ textarea {
 }
 
 @include respond-to(lg) {
+
   .post-content,
   #post {
     padding: $space-12;
@@ -914,7 +925,12 @@ textarea {
     @include glassmorphism(0.85, 15px);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: lighten($text-primary, 10%);
   }
 
@@ -952,6 +968,7 @@ a,
 
 // 减少动画（用户偏好）
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

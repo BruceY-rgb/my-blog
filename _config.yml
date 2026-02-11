@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: BruceY's Blog
 subtitle: ''
 description: ''
 keywords:
-author: John Doe
-language: en
+author: BruceY
+language: cn
 timezone: ''
 
 # URL
@@ -40,7 +40,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
@@ -98,7 +98,27 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: butterfly
 
+# Search
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html
+
+# Search Generator
+search_generator:
+  path: search.xml
+  field: all
+  content: true
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+# Marked Renderer Configuration
+marked:
+  prependRoot: false
+  postAsset: false
+  breaks: false
+  gfm: true
