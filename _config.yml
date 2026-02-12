@@ -122,3 +122,11 @@ marked:
   postAsset: false
   breaks: false
   gfm: true
+
+# Markdown-it Configuration
+markdown:
+  html: false
+  linkify: true
+  typographer: true
+  plugins:
+    - name: 'markdown-it-admonition'

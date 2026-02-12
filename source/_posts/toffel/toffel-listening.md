@@ -66,13 +66,14 @@ cover: https://www.cheersyou.com/sites/default/files/styles/news_show_2022/publi
   - Isn't the library hosting an event today?
 
 !!! example
-    ![alt text](image-13.png)
-    
-    B 个人观点——寻求共情
+![alt text](image-13.png)
 
-    ![alt text](image-14.png)
+B 个人观点——寻求共情
 
-    A 事件描述——表达不确定性
+![alt text](image-14.png)
+
+A 事件描述——表达不确定性
+!!!
 
 #### 2. 陈述句
 
@@ -99,8 +100,9 @@ cover: https://www.cheersyou.com/sites/default/files/styles/news_show_2022/publi
 
 
 !!! example
-    ![alt text](image-15.png)
-    ~~C~~ B C是一种在得知信息之后不礼貌的说辞，表示不知道**一定要用过去式**
+![alt text](image-15.png)
+~~C~~ B C是一种在得知信息之后不礼貌的说辞，表示不知道**一定要用过去式**
+!!!
 
 #### 3. 一般疑问句
 
@@ -117,11 +119,12 @@ cover: https://www.cheersyou.com/sites/default/files/styles/news_show_2022/publi
   - 如真题选项C查日程表->因为日程表有 会议地点，动作能帮确认核心疑问
 
 !!! example
-    ![alt text](image-17.png)
-    ~~B~~ A 题目中问的是shirt，但是B选项中的答案是pants
+![alt text](image-17.png)
+~~B~~ A 题目中问的是shirt，但是B选项中的答案是pants
 
-    ![alt text](image-18.png)
-    ~~D~~ B一定要注意时态，题目问的是过去式的是否完成
+![alt text](image-18.png)
+~~D~~ B一定要注意时态，题目问的是过去式的是否完成
+!!!
 
 #### 4. 特殊疑问句
 
@@ -176,3 +179,9 @@ cover: https://www.cheersyou.com/sites/default/files/styles/news_show_2022/publi
 - `garage`:车库
 - `recipe`:菜谱
 - `I can help with that`：我自己能行
+- `appetizer`:开胃菜
+- `be thrilled to do`:很激动地做某事
+- `proceed`:收益
+- `criteria`:标准(单数：`criterion`)
+- `anthropologist`:人类学家
+- `book fair`:书展

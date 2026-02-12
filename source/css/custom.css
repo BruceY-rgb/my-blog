@@ -2022,3 +2022,134 @@ body {
     padding: 0.75rem 1rem !important;
   }
 }
+
+/* ========================
+   Admonition Cyberpunk Styles
+   ======================== */
+.admonition {
+  background: rgba(10, 10, 15, 0.9) !important;
+  border-left: 4px solid #00f0ff !important;
+  border-radius: 6px !important;
+  margin: 1.5em 0 !important;
+  padding: 1em 1.2em !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15), inset 0 0 30px rgba(0, 240, 255, 0.03) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.admonition::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #00f0ff, transparent) !important;
+  opacity: 0.7 !important;
+}
+
+.admonition-title {
+  background: rgba(0, 240, 255, 0.08) !important;
+  color: #00f0ff !important;
+  font-weight: 700 !important;
+  font-size: 0.9em !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 0.6em 1em !important;
+  margin: -1em -1.2em 1em -1.2em !important;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.25) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5em !important;
+}
+
+.admonition p {
+  color: rgba(255, 255, 255, 0.85) !important;
+  line-height: 1.7 !important;
+  margin: 0 !important;
+}
+
+/* Admonition Types with Different Neon Colors */
+.admonition.note {
+  border-left-color: #00f0ff !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15) !important;
+}
+.admonition.note .admonition-title {
+  color: #00f0ff !important;
+  border-bottom-color: rgba(0, 240, 255, 0.25) !important;
+}
+.admonition.note::before {
+  background: linear-gradient(90deg, transparent, #00f0ff, transparent) !important;
+}
+
+.admonition.tip {
+  border-left-color: #00ff88 !important;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.15) !important;
+}
+.admonition.tip .admonition-title {
+  color: #00ff88 !important;
+  background: rgba(0, 255, 136, 0.08) !important;
+  border-bottom-color: rgba(0, 255, 136, 0.25) !important;
+}
+.admonition.tip::before {
+  background: linear-gradient(90deg, transparent, #00ff88, transparent) !important;
+}
+
+.admonition.warning {
+  border-left-color: #ffaa00 !important;
+  box-shadow: 0 0 20px rgba(255, 170, 0, 0.15) !important;
+}
+.admonition.warning .admonition-title {
+  color: #ffaa00 !important;
+  background: rgba(255, 170, 0, 0.08) !important;
+  border-bottom-color: rgba(255, 170, 0, 0.25) !important;
+}
+.admonition.warning::before {
+  background: linear-gradient(90deg, transparent, #ffaa00, transparent) !important;
+}
+
+.admonition.danger {
+  border-left-color: #ff3366 !important;
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.2) !important;
+}
+.admonition.danger .admonition-title {
+  color: #ff3366 !important;
+  background: rgba(255, 51, 102, 0.1) !important;
+  border-bottom-color: rgba(255, 51, 102, 0.3) !important;
+}
+.admonition.danger::before {
+  background: linear-gradient(90deg, transparent, #ff3366, transparent) !important;
+}
+
+.admonition.example {
+  border-left-color: #aa66ff !important;
+  box-shadow: 0 0 20px rgba(170, 102, 255, 0.15) !important;
+}
+.admonition.example .admonition-title {
+  color: #aa66ff !important;
+  background: rgba(170, 102, 255, 0.08) !important;
+  border-bottom-color: rgba(170, 102, 255, 0.25) !important;
+}
+.admonition.example::before {
+  background: linear-gradient(90deg, transparent, #aa66ff, transparent) !important;
+}
+
+/* Code block inside admonition */
+.admonition code {
+  background: rgba(0, 0, 0, 0.4) !important;
+  color: #00f0ff !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+}
+
+.admonition pre {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border-radius: 4px !important;
+  padding: 0.8em !important;
+}
+
+.admonition pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  color: #e0e0e0 !important;
+}

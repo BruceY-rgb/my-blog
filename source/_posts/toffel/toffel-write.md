@@ -114,6 +114,7 @@ cover: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD_UcDSjOb5tiuWcLls
 - `nomad`:流浪者，游民
 - `rising emergent tendency`: 日益增强的新兴趋势
 - `burnout`:倦怠
+- `veterans`: 老兵、经验丰富的人
 
 ## 练习
 
