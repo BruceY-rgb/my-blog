@@ -162,6 +162,73 @@ A 事件描述——表达不确定性
 
 ![alt text](image-19.png)
 
+### 3.1 意外发生型
+
+- 提出 **事件**
+- 意外 + **原因**
+- 事件细节描述
+- **解决方案**
+
+### 3.2 评价分析型 
+
+- 提出**事件**
+- 事件细节描述/**评价**
+- 未来计划
+
+### 3.3 求助建议型
+
+- 提出**事件**
+- 给出**建议**
+- 接受建议
+
+### 3.4 信息分享型
+
+- 询问**事件**
+- 信息信息给出
+- 附加信息
+
+### 3.5 任务催促型
+
+- 提出事件
+- 未做理由
+- 说服完成
+- 承诺时间
+
+
+## 3. 听力高频词
+
+### 3.1 工作场合话题
+
+- `resume`:简历
+- `recruit`:招聘
+- `promote`：晋升，推广
+- `resign`:主动辞职(quit)
+  - `fair` = `leave  off` ：被动离职
+- `pension`:退休金
+- `commission`:佣金
+- `work overtime`:加班
+- `overworked`:过度劳累的
+- `leave`:休假（短假）
+- `contract`:合同
+- `negotiate`:谈判、协商；砍价
+- `client`,`customer`, `consumer`
+- `feedback` = `review`
+- `complaint`:投诉
+- `performance`:业绩
+- `shift`: 轮班
+  - `work the night shift`
+- `intern`:实习生
+- `qualification`：资格，学历
+- `centificate`:证书（学历证书）
+- `diploma`：文凭
+- `appointment`:预约
+- `work remotely`=`telecommute` 远程工作
+- `layoff`:裁员
+- `economic downturn`:经济下行
+- `bankruptcy`:破产
+- `merger`:合并
+- `budget` = `schedule` = `arrange`
+
 ## 词汇积累
 
 - `get back to sb on that`:稍后回复某人，属于**通用答案**，基本上都可以使用
@@ -185,3 +252,8 @@ A 事件描述——表达不确定性
 - `criteria`:标准(单数：`criterion`)
 - `anthropologist`:人类学家
 - `book fair`:书展
+- `not at all`:完全不(would you mind doing ...的固定回答)
+- `webinar`：直播，在线会议
+- `lobby`:大堂
+- `workout`:锻炼
+- `renovate`:翻修
