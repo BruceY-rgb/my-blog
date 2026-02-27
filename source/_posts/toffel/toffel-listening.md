@@ -194,10 +194,70 @@ A 事件描述——表达不确定性
 - 说服完成
 - 承诺时间
 
+## 3. Lecture
 
-## 3. 听力高频词
+### 3.2 常见结构
 
-### 3.1 工作场合话题
+#### 1. 并列型
+
+- 主旨
+- 主讲术语：术语本身
+- 对比术语：目的
+- 定义核心：关键词
+- 分论点：关键词+例子
+- 评价
+  - 优点
+  - 缺点
+  - 重要性
+- next（预告）
+
+![alt text](image-47.png)
+
+#### 2. 术语型
+
+- 主旨：`today...`
+- 主讲术语：术语本身
+- 对比术语：目的
+- 定义核心：关键词
+- 例子：从一个方向重点论述
+- 评价：有优点、缺点（`however`,`but`）重要性
+- next（预告）
+
+#### 3. 机制过程型（step by step）
+
+- 主旨
+- 背景
+- 机制过程
+- 评价
+  - 优缺点
+  - 重要性
+
+![alt text](image-48.png)
+
+### 3.3 记笔记技巧
+
+- 挑词：名词、形容词、实词
+- 缩写+符号
+- 可用汉语
+
+### 3.4 常见考点
+
+- 例子
+  - `for example`, `for instance`, `let's say`, `say`, `think about`, `such as`, `including`
+  - 目的：前面的理论
+  - 细节
+- 术语定义
+  - 对比术语：帮助理解术语本身
+  - 核心意思
+- 主旨
+- 评价
+  - 优缺点分析
+  - 重要性
+- next
+
+## 4. 听力高频词
+
+### 4.1 工作场合话题
 
 - `resume`:简历
 - `recruit`:招聘
@@ -229,6 +289,38 @@ A 事件描述——表达不确定性
 - `merger`:合并
 - `budget` = `schedule` = `arrange`
 
+### 3.2 商业话题
+
+- `venture`:风险投资
+- `firm` = `business` = `company` = `cooperation`
+  - `setup`:初创公司
+- `commercial`:商业的，商业广告
+- `retail`:零售
+- `wholesale`:批发
+- `asset`：资产
+- `liability`:负债
+- `invoice`:发票
+- `receipt`:收据
+- `contract` = `agreement`:合同
+- `partnership`:合作关系
+- `franchise`: 特许经营权，加盟店、连锁店
+- `intellectual property`:知识产权
+- `patent`:专利
+- `copyright`:版权
+- `trademark`:商标（有形的）
+- `merger`:合并
+- `acquisition`:收购
+- `monopoly`:垄断
+- `stock`:库存，股票
+- `shareholder`:股东
+- `board of directions`:董事会 
+- `target audience`:目标受众
+- `e-commerce`:电子商务
+- `logistics`:物流  
+- `outsourcing`:外包
+
+
+
 ## 词汇积累
 
 - `get back to sb on that`:稍后回复某人，属于**通用答案**，基本上都可以使用
@@ -257,3 +349,5 @@ A 事件描述——表达不确定性
 - `lobby`:大堂
 - `workout`:锻炼
 - `renovate`:翻修
+- `course sylabus`:课程大纲
+

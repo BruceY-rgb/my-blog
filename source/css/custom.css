@@ -2153,3 +2153,38 @@ body {
   padding: 0 !important;
   color: #e0e0e0 !important;
 }
+
+/* ========================================
+   侧边栏粘性增强
+   ======================================== */
+
+/* 增强侧边栏粘性效果 */
+#aside-content {
+  /* 确保父容器不会裁剪粘性元素 */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 桌面端侧边栏粘性定位 */
+@media (min-width: 900px) {
+  #aside-content .sticky_layout {
+    position: sticky !important;
+    position: -webkit-sticky !important;
+    top: 80px !important; /* 增加顶部距离，避开导航栏 */
+    z-index: 10;
+    will-change: transform;
+  }
+
+  /* 确保侧边栏内容在粘性布局内 */
+  #aside-content .sticky_layout > * {
+    transform: translateZ(0);
+  }
+}
+
+/* 移动端隐藏侧边栏粘性 */
+@media (max-width: 899px) {
+  #aside-content .sticky_layout {
+    position: relative !important;
+    top: 0 !important;
+  }
+}

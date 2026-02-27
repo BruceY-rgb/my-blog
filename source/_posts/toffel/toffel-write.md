@@ -46,6 +46,83 @@ cover: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD_UcDSjOb5tiuWcLls
 !!!
 
 ## 2 Write an E-mail
+
+### 2.1 写作思路
+
+![alt text](image-40.png)
+
+### 2.2 写作流程
+
+![alt text](image-41.png)
+![alt text](image-42.png)
+
+### 2.3 确定格式
+
+#### 1. 开头问候&寒暄
+
+- 正式场景：收件人是编辑、教授、陌生同事
+  - `Dear..., I hope this email finds you well.`
+  - `Dear..., I trust you are having a productive week.`
+- 半正式场景：收件人是同学、熟悉的同事
+  - `Hi..., hope you're doing great.`
+  - `Hey..., just wanted to reach out about...`
+  - `Hi..., how's everything going with you lately?`
+
+#### 2. 结尾礼貌用语
+
+- 感谢类：适用于咨询、请求类邮件
+  - `Thank you in advance for your help and insights.`
+  - `I really appreciate your time and recommendations.`
+  - `Your advice would be incredibly helpful - thank you so much.`
+  - `I'm grategul for any guidance you can provide.` 
+- 期待回复类：适用于反馈、跟进类邮件
+  - `Looking forward to hearing from you soon.`
+  - `Please feel free to reach out if you need more details.`
+  - `I'd be happy to clarify anything further - just let me know.`
+  - `Hoping to get your response at your earliest convenience.`
+
+### 2.4 添加语料
+
+![alt text](image-44.png)
+
+!!! example 
+*You have been working on a group project with several for a course. One of your group members, Alex, has not been particcipating actively and has missed several assignments. You want to address this issue and find a solution.*
+
+I'm writing to address your participation issue in our group and to find a solution.
+
+We've been working on our course project - a marketing plan for a local cafe - and the team has finished 60% of the work, including survey design and customer feedback analysis.
+
+First, your absence would lead to group missing out the course scholarship - evaluation depends on full participation, because team work is a key requirement.
+
+Second, your lack of involvement has significantly added to the stress of the other group members, as we've had to take on your share of the work alongside our own course load.
+
+![alt text](image-45.png)
+!!!
+
+!!! example 
+*You are planning a business trip to another city. Your colleague, Maria, recently traveled to the same city for work. You want to ask her recommendations for places to eat and things to do during your free time.*
+
+**Brainstorming**:  Mention what you'd most like to do and what you'd like to avoid.
+
+- 钱：reaonable prices, cost-effective activities
+- 闲：close to the hotel/conference venue
+- 开心幸福：restaurants with positive reviews(tasty food, nice atmosphere)
+
+**定格式**
+
+![alt text](image-46.png)
+
+I'm writing to ask for your recommendatioons about restaurants and activities in Paris, where I will be travelling during Christmas week for a business trip related to haute couture fashion(高定时装).While the official haute couture shows typically take place in January and July, I will be attending meetings and events that connect to the the industry and I would love to explore the city's festival offerings during my free time.
+
+Also, I prefer places close to the conference venue - specifically around the **Champs-Elysées** - so I can save time on travel and make the most of my breaks. A restaurant or spot within a **10-minute walk** from the venue would be ideal, as it won't **cut into my meeting schedule**.
+
+Additionally, I'm looking forward for restaurants with positive reviews: ones that serve tasty food (especially authentic French cuisine or creative twists on classics) and have a warm, inviting atmosphere. I'm open to both Michelin-starred establishments and beloved local gems, but I'd like to avoid overly loud or overcrowded places that might hinder relaxation.
+
+**I'd appreciate it if you could** your recommendations soon, **so that** I can plan my free time well - enjoying  tasty French food in a nice atmosphere while staying close to the Champs-Elysées venue. Looking forward to hearing from you soon.
+!!!
+
+
+
 ## 3 Academic discussion
 
 ### 3.1 评分点
@@ -471,7 +548,7 @@ Admittedly, while acknowledging the concern that mandatory evening classes puts 
 ![alt text](image-30.png)
 ![alt text](image-31.png)
 
-#### 2. Hedging（模糊陈述）
+### 4.2 Hedging（模糊陈述）
 
 ![alt text](image-32.png)
 
@@ -488,6 +565,52 @@ Admittedly, while acknowledging the concern that mandatory evening classes puts 
   - 使用修饰词(modifiers) ,如可能的(possible),可能地(potentially)等，来修饰陈述并减少绝对性
 - 忽略了条件
   - 使用条件句(conditional sentences)，如如果(if), 除非(unless)等，来表示某种条件下的可能性或不确定性
+
+## 5 Logical Errors
+
+### 5.1 Irrlevant Information Insertion
+
+![alt text](image-33.png)
+
+> 论述具体论点的时候要根据论点进行论述，不能插入无关信息，比如论述省钱但是不能插入生活幸福
+
+### 5.2 Logical Jump
+
+![alt text](image-34.png)
+
+> 结论本身可能是正确的，但是要有完整的逻辑链条，不能只说结论不说原因
+
+![alt text](image-35.png)
+
+### 5.3 Discussion Redundancy
+
+> 一些常识性的内容不需要展开论述
+
+![alt text](image-36.png)
+
+> 将文章写成肥皂剧的典型案例
+
+!!! tip
+一定要保证讲故事的过程遵循
+
+- 起因
+- 经过
+- 结果
+
+即可
+!!!
+
+### 5.4 Self-contradiction
+
+![alt text](image-37.png)
+![alt text](image-38.png)
+
+!!! tip
+- 要始终围绕论点，不能左右逢源
+- 可以从不同的角度思考问题，但是不能同时赞同不同的角度
+!!!
+
+![alt text](image-39.png)
 
 ## 词汇积累
 
