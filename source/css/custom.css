@@ -969,18 +969,18 @@ body {
    CSS 变量系统重构 (CSS Custom Properties)
    ======================================== */
 :root {
-  /* 覆盖Butterfly主题的默认CSS变量 */
-  --light-grey: #00f0ff !important;
-  --text-color: #00f0ff !important;
-  --meta-color: #00f0ff !important;
-  --meta-text-color: #00f0ff !important;
+  /* 亮色模式使用深色文字以保证可读性 */
+  --light-grey: #6c757d;
+  --text-color: #2c3e50;
+  --meta-color: #6c757d;
+  --meta-text-color: #6c757d;
 }
 
 /* 文章详情页元数据样式 */
 #post-meta {
   position: relative !important;
   z-index: 10 !important;
-  color: #00f0ff !important;
+  color: var(--meta-color, #6c757d) !important;
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
@@ -989,9 +989,9 @@ body {
   gap: 1.5rem !important;
   margin-top: 2rem !important;
   padding: 1rem 1.5rem !important;
-  border-left: 4px solid #00f0ff !important;
+  border-left: 4px solid var(--primary-color, #49B1F5) !important;
   padding-left: 1rem !important;
-  box-shadow: -4px 0 10px rgba(0, 240, 255, 0.3) !important;
+  box-shadow: var(--shadow-light) !important;
   filter: brightness(1.1) !important;
   min-height: 3rem !important;
   height: auto !important;
@@ -2187,4 +2187,27 @@ body {
     position: relative !important;
     top: 0 !important;
   }
+}
+
+/* ========================================
+   深色模式专属赛博朋克霓虹效果
+   ======================================== */
+[data-theme="dark"] {
+  /* 文章元数据霓虹效果 - 仅在深色模式下生效 */
+  --light-grey: #00f0ff;
+  --text-color: #00f0ff;
+  --meta-color: #00f0ff;
+  --meta-text-color: #00f0ff;
+}
+
+[data-theme="dark"] #post-meta {
+  color: #00f0ff !important;
+  border-left-color: #00f0ff !important;
+  box-shadow: -4px 0 10px rgba(0, 240, 255, 0.3) !important;
+}
+
+[data-theme="dark"] .post-meta a,
+[data-theme="dark"] .post-meta time,
+[data-theme="dark"] .post-meta-label {
+  color: #00f0ff !important;
 }
