@@ -268,6 +268,21 @@ going paperless isn't just convenient - it's also environmentally friendly. For 
 - 总结(不好影响的解决办法)
 
 
+#### 5. 论证方法——对比法
+
+> 尤其适用于偏好类，二选一的情况下
+
+从多个角度来分析一个问题，从而增强论证的深度
+
+1. 引入对比的事物或观点：首先要明确你要比较的事物或现象，它们可以是 **过去与现在**，**不同群体**，**不同选择**等
+2. 对比分析：列举两者的异同点，强调它们的差异，指出一个相对于另一个的优势
+
+!!! "Do you prefer reading physical books or e-books?"
+**选e-book**
+
+Physical books are often **bulky and heavy**(大而重), which makes it difficult to carry a lot of them at once. **In contrasst**, e-books are extremely convenient. You can carry an entire library in a single device, which makes them great for travelling or when you need **accesss to**(`access to`很灵活，要注意使用) multiple books at once. Another advantage of e-books is **cunstomization**(个性化).I can easily adjust the font size, brightness and background color to suit my reading preference. This feature makes reading much more comfortable, especially in low-light environments. moreover, e-books are **more environmentally friendly** because they do not require paper. **So I feel better about reducing my environmental footprint**(减少碳足迹).
+!!!
+
 ### 2.3 结构清晰——方法论
 
 **Position 立场：直接表态**
@@ -310,3 +325,4 @@ going paperless isn't just convenient - it's also environmentally friendly. For 
 - `What I mean is [elaborate on reason]`
 - `Not only that, but [reason 2]`
 - `for instance, [elaborate on reason or give example]`
+

@@ -1,12 +1,12 @@
 ---
 title: Abstract Skeletons
-catogories: 
-    - 科研训练
-    - 运动数据采集
-    - 抽象骨骼
+categories: 
+  - 科研训练
+  - 运动数据采集
+  - 抽象骨骼
 tags:
-    - 抽象骨骼
-    - SMPL
+  - 抽象骨骼
+  - SMPL
 cover: https://bpic.588ku.com/element_pic/25/06/05/e441a687382ef1955a090bb4aeb80fb3.jpg!/fw/350/quality/99/unsharp/true/compress/true
 ---
 
@@ -287,3 +287,4 @@ skeleton = Skeleton_SMPL24()
 print(skeleton.joint_names) # 输出关节点名称
 print(skeleton.parent)
 ```
+
