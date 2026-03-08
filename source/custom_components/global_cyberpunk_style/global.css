@@ -816,32 +816,30 @@ input[type="button"].disabled:hover {
 pre[class*="language-"],
 .code-block,
 .highlight {
-  background: rgba(26, 26, 46, 0.95) !important;
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  border-radius: 16px;
-  padding: 1.5rem !important;
-  box-shadow: 0 4px 24px rgba(0, 240, 255, 0.1),
-              0 2px 8px rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 10px;
+  padding: 0 !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
   position: relative;
-  overflow-x: auto;
+  overflow: hidden;
+  margin: 1.5em 0;
 }
 
 pre[class*="language-"]::before,
 .code-block::before,
 .highlight::before {
-  content: attr(class);
-  position: absolute;
-  top: 0;
-  right: 1rem;
-  background: linear-gradient(135deg, #00f0ff 0%, #9d00ff 100%);
-  color: #0a0a0a;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  font-family: 'Orbitron', 'Rajdhani', 'Exo 2', monospace;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-radius: 0 0 4px 4px;
+  display: none;
+}
+
+.highlight table {
+  margin: 0 !important;
+}
+
+.highlight pre {
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  background: transparent !important;
 }
 
 pre[class*="language-"] code,

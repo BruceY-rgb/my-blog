@@ -1,0 +1,131 @@
+/* Pyodide Runner - Cyberpunk Container with Simple Code Area */
+
+.pyrun-container {
+  margin: 1.5em 0;
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 10px;
+  background: rgba(13, 13, 21, 0.85);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+  overflow: hidden;
+}
+
+.pyrun-container figure.highlight {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.12);
+  box-shadow: none !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.pyrun-container figure.highlight table {
+  margin: 0 !important;
+}
+
+.pyrun-container figure.highlight pre {
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  background: transparent !important;
+}
+
+.pyrun-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 240, 255, 0.08);
+  border: none;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.12);
+  color: #00f0ff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pyrun-button:hover {
+  background: rgba(0, 240, 255, 0.15);
+}
+
+.pyrun-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pyrun-output:empty {
+  display: none;
+}
+
+.pyrun-loading {
+  padding: 12px 16px;
+  color: rgba(0, 240, 255, 0.7);
+  font-size: 0.85rem;
+}
+
+.pyrun-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 240, 255, 0.2);
+  border-top-color: #00f0ff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.pyrun-stdout,
+.pyrun-stderr,
+.pyrun-result,
+.pyrun-error {
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  font-family: 'Consolas', monospace !important;
+  font-size: 0.85rem !important;
+  line-height: 1.5 !important;
+  white-space: pre-wrap !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.pyrun-stdout {
+  background: rgba(0, 240, 255, 0.03) !important;
+  color: #c8e6c9 !important;
+  border-left: 3px solid rgba(0, 240, 255, 0.5) !important;
+}
+
+.pyrun-stderr {
+  background: rgba(255, 170, 0, 0.04) !important;
+  color: #ffcc80 !important;
+  border-left: 3px solid rgba(255, 170, 0, 0.5) !important;
+}
+
+.pyrun-result {
+  background: rgba(255, 255, 255, 0.02) !important;
+  color: #b0b0b0 !important;
+  border-left: 3px solid rgba(150, 150, 150, 0.5) !important;
+}
+
+.pyrun-error {
+  background: rgba(255, 0, 100, 0.04) !important;
+  color: #ff6b9d !important;
+  border-left: 3px solid rgba(255, 0, 100, 0.5) !important;
+}
+
+.pyrun-plot {
+  padding: 16px;
+  text-align: center;
+}
+
+.pyrun-plot img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.pyrun-empty {
+  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 0.85rem;
+  font-style: italic;
+}

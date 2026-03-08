@@ -64,16 +64,16 @@ avatar:
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img:
+default_top_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
 
 # The banner image of index page
-index_img: https://preview.redd.it/3zxbaf83uw961.jpg?width=1080&crop=smart&auto=webp&s=92065094c8da4e56848a0db7f71af845cf1a64ac
+index_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
 
 # The banner image of archive page
-archive_img:
+archive_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
 
 # Note: tag page, not tags page
-tag_img:
+tag_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
 
 # The banner image of tag page, you can set the banner image for each tag
 # Format:
@@ -81,8 +81,7 @@ tag_img:
 tag_per_img:
 
 # Note: category page, not categories page
-category_img:
-
+category_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
 # The banner image of category page, you can set the banner image for each category
 # Format:
 #  - category name: xxxxx
@@ -91,10 +90,13 @@ category_per_img:
 # The background image of footer
 footer_img: false
 
+# https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
+
 # Website Background
 # Can set it to color, image URL or an array containing colors and/or image URLs
 # If an array is provided, a random background will be selected from the array on each load
-background:
+background: 
+# https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
 
 cover:
   # Disable the cover or not
@@ -1075,6 +1077,8 @@ inject:
     - <link rel="stylesheet" href="/custom_components/todo/todo.css">
     # 数据分析组件样式
     - <link rel="stylesheet" href="/custom_components/analytics/analytics.css">
+    # Pyodide Runner 可执行代码块样式
+    - <link rel="stylesheet" href="/css/pyodide-runner.css">
     # inject:end
 
   bottom:
@@ -1086,6 +1090,8 @@ inject:
     - <script src="/js/global-effects.js"></script>
     # 运行时间统计脚本
     - <script src="/js/runtime-counter.js"></script>
+    # 标签页增强脚本（搜索+分类筛选）
+    - <script src="/js/tags-enhance.js"></script>
 
     # 天气组件脚本
     - <script src="/custom_components/weather/weather.js"></script>
@@ -1095,6 +1101,8 @@ inject:
     - <script src="/custom_components/todo/todo.js"></script>
     # 数据分析组件脚本
     - <script src="/custom_components/analytics/analytics.js"></script>
+    # Pyodide Runner 可执行代码块脚本
+    - <script src="/js/pyodide-runner.js"></script>
     # inject:end
 
     # 组件管理脚本（可选）

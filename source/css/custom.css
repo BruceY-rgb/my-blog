@@ -792,124 +792,336 @@ body {
    2. 文章页体验模块
    ======================================== */
 
-/* 搜索功能优化 - 赛博朋克风格 */
-#local-search,
-.search-wrap,
-.search-input-wrap,
-.search {
-  position: relative;
-  z-index: 100;
+/* 搜索弹窗 - kbar 风格赛博朋克重构 */
+
+/* 遮罩层 */
+#search-mask {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.65) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  z-index: 1000 !important;
+  transition: opacity 0.2s ease !important;
 }
 
-#local-search .search-wrap {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 25px;
-  padding: 8px 15px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* 搜索弹窗主体 - kbar 居中浮层风格 */
+#local-search .search-dialog {
+  position: fixed !important;
+  top: 18% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  margin-left: 0 !important;
+  width: 580px !important;
+  max-width: 92vw !important;
+  max-height: 65vh !important;
+  background: rgba(16, 18, 36, 0.95) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(0, 240, 255, 0.25) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 240, 255, 0.1),
+    0 24px 80px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(0, 240, 255, 0.08) !important;
+  z-index: 1001 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
 }
 
-#local-search .search-wrap:hover {
-  background: rgba(0, 0, 0, 0.5);
-  border-color: var(--primary-color, #49B1F5);
-  box-shadow: 0 0 15px rgba(73, 177, 245, 0.3);
+/* When dialog is shown by JS (display: block), use flex layout */
+#local-search .search-dialog[style*="display: block"] {
+  display: flex !important;
+  flex-direction: column !important;
 }
 
-#local-search input[type="text"],
-.search-input,
-.search-input-wrap input {
+@keyframes searchDialogIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.96) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1) translateY(0);
+  }
+}
+
+/* 顶部导航栏 */
+#local-search .search-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.12) !important;
+  background: rgba(0, 240, 255, 0.03) !important;
+  flex-shrink: 0 !important;
+}
+
+#local-search .search-dialog-title {
+  font-family: 'Orbitron', 'Rajdhani', monospace !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  color: rgba(0, 240, 255, 0.7) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+}
+
+#local-search .search-close-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  padding: 0 !important;
+  font-size: 0.8rem !important;
+}
+
+#local-search .search-close-button:hover {
+  background: rgba(255, 0, 153, 0.15) !important;
+  border-color: rgba(255, 0, 153, 0.4) !important;
+  color: #ff0099 !important;
+  box-shadow: 0 0 8px rgba(255, 0, 153, 0.3) !important;
+}
+
+/* 搜索输入区域 */
+#local-search .local-search-input {
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+#local-search .local-search-input input,
+#local-search .search-dialog input[type="text"] {
+  width: 100% !important;
+  padding: 14px 20px !important;
   background: transparent !important;
   border: none !important;
-  color: white !important;
-  font-size: 14px;
-  width: 200px;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1) !important;
+  border-radius: 0 !important;
+  color: #e0e0e0 !important;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 400 !important;
   outline: none !important;
-  padding: 5px 0 !important;
+  caret-color: #00f0ff !important;
+  transition: border-color 0.2s ease !important;
 }
 
-#local-search input[type="text"]::placeholder,
-.search-input::placeholder {
-  color: rgba(255, 255, 255, 0.6) !important;
+#local-search .local-search-input input:focus,
+#local-search .search-dialog input[type="text"]:focus {
+  border-bottom-color: rgba(0, 240, 255, 0.35) !important;
 }
 
-#local-search .search-icon,
-.search-input-wrap::before {
-  color: var(--primary-color, #49B1F5) !important;
-  margin-right: 8px;
-  transition: all 0.3s ease;
+#local-search .local-search-input input::placeholder,
+#local-search .search-dialog input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.25) !important;
+  font-weight: 300 !important;
 }
 
-#local-search .search-wrap:hover .search-icon,
-.search-input-wrap:hover::before {
+/* 分隔线隐藏（用 border-bottom 替代） */
+#local-search .search-dialog hr {
+  display: none !important;
+}
+
+/* Loading 状态 */
+#local-search #loading-database {
+  padding: 2rem !important;
+  color: rgba(0, 240, 255, 0.6) !important;
+  font-family: 'Rajdhani', sans-serif !important;
+  font-size: 0.9rem !important;
+}
+
+#local-search #loading-database i,
+#local-search #loading-status {
   color: #00f0ff !important;
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
 }
 
-/* 搜索结果框样式 */
-#local-search .search-result,
-.search-result-wrap {
-  background: rgba(30, 30, 30, 0.95) !important;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
-  margin-top: 10px !important;
+/* 搜索结果区域 */
+#local-search #local-search-results {
+  overflow-y: auto !important;
+  flex: 1 !important;
+  padding: 6px 0 !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(0, 240, 255, 0.3) transparent !important;
 }
 
-#local-search .search-result li,
-.search-result-item {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-  transition: all 0.3s ease;
+#local-search #local-search-results::-webkit-scrollbar {
+  width: 4px !important;
 }
 
-#local-search .search-result li:hover,
-.search-result-item:hover {
-  background: rgba(73, 177, 245, 0.1) !important;
-  transform: translateX(5px);
+#local-search #local-search-results::-webkit-scrollbar-track {
+  background: transparent !important;
 }
 
-#local-search .search-result li:last-child,
-.search-result-item:last-child {
-  border-bottom: none !important;
+#local-search #local-search-results::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.25) !important;
+  border-radius: 4px !important;
 }
 
-#local-search .search-result a,
-.search-result-link {
-  color: rgba(255, 255, 255, 0.9) !important;
-  font-size: 14px;
-  padding: 10px 15px;
-  display: block;
-  text-decoration: none;
+/* 单条搜索结果 */
+#local-search .local-search-list-item {
+  margin: 2px 8px !important;
+  border-radius: 10px !important;
+  transition: all 0.15s ease !important;
+  border: 1px solid transparent !important;
 }
 
-#local-search .search-result a:hover,
-.search-result-link:hover {
+#local-search .local-search-list-item:hover {
+  background: rgba(0, 240, 255, 0.06) !important;
+  border-color: rgba(0, 240, 255, 0.15) !important;
+}
+
+/* 结果标题 */
+#local-search .local-search-list-item a.search-list-title {
+  display: flex !important;
+  align-items: center !important;
+  padding: 10px 14px !important;
+  color: #e0e0e0 !important;
+  font-family: 'Rajdhani', 'Exo 2', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  gap: 8px !important;
+}
+
+#local-search .local-search-list-item a.search-list-title::before {
+  content: '›' !important;
+  color: rgba(0, 240, 255, 0.4) !important;
+  font-size: 1.2rem !important;
+  font-weight: 300 !important;
+  flex-shrink: 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+#local-search .local-search-list-item:hover a.search-list-title {
   color: #00f0ff !important;
-  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3) !important;
 }
 
-/* 导航栏中的搜索框样式 */
-.navbar-nav,
-.nav-right,
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+#local-search .local-search-list-item:hover a.search-list-title::before {
+  color: #00f0ff !important;
+  transform: translateX(3px) !important;
 }
 
-/* 移动端搜索框适配 */
+/* 结果链接通用 */
+#local-search .local-search-list-item a {
+  color: #b0b0b0 !important;
+  text-decoration: none !important;
+}
+
+#local-search .local-search-list-item a::after {
+  display: none !important;
+}
+
+/* 结果内容预览 */
+#local-search .local-search-list-item .search-list-content {
+  padding: 0 14px 10px 32px !important;
+  font-size: 0.8rem !important;
+  color: rgba(255, 255, 255, 0.35) !important;
+  line-height: 1.5 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* 关键词高亮 */
+#local-search .search-keyword {
+  color: #00f0ff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.4) !important;
+  background: rgba(0, 240, 255, 0.08) !important;
+  padding: 0 3px !important;
+  border-radius: 3px !important;
+}
+
+/* 搜索统计 */
+#local-search #local-search-stats {
+  padding: 8px 16px !important;
+  font-size: 0.7rem !important;
+  color: rgba(255, 255, 255, 0.2) !important;
+  font-family: 'Rajdhani', monospace !important;
+  border-top: 1px solid rgba(0, 240, 255, 0.08) !important;
+  flex-shrink: 0 !important;
+  text-align: right !important;
+}
+
+/* 分页 */
+#local-search .ais-Pagination {
+  padding: 8px 16px !important;
+  border-top: 1px solid rgba(0, 240, 255, 0.08) !important;
+  flex-shrink: 0 !important;
+}
+
+#local-search .ais-Pagination-list {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#local-search .ais-Pagination-item {
+  display: inline-flex !important;
+}
+
+#local-search .ais-Pagination-link {
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(0, 240, 255, 0.2) !important;
+  background: rgba(22, 33, 62, 0.5) !important;
+  color: #b0b0b0 !important;
+  font-size: 0.75rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+#local-search .ais-Pagination-link:hover {
+  border-color: #00f0ff !important;
+  color: #00f0ff !important;
+  background: rgba(0, 240, 255, 0.1) !important;
+}
+
+#local-search .ais-Pagination-item--selected .ais-Pagination-link {
+  border-color: #00f0ff !important;
+  color: #0a0a0a !important;
+  background: linear-gradient(135deg, #00f0ff, #9d00ff) !important;
+}
+
+/* 移动端搜索弹窗 */
 @media (max-width: 768px) {
-  #local-search input[type="text"],
-  .search-input {
-    width: 150px !important;
-    font-size: 13px !important;
+  #local-search .search-dialog {
+    top: 5% !important;
+    width: 95vw !important;
+    max-height: 80vh !important;
+    border-radius: 12px !important;
   }
 
-  #local-search .search-wrap {
-    padding: 6px 12px !important;
+  #local-search .local-search-input input,
+  #local-search .search-dialog input[type="text"] {
+    font-size: 1rem !important;
+    padding: 12px 16px !important;
+  }
+
+  #local-search .local-search-list-item a.search-list-title {
+    font-size: 0.9rem !important;
+    padding: 8px 12px !important;
+  }
+
+  #local-search .local-search-list-item .search-list-content {
+    padding: 0 12px 8px 28px !important;
+    font-size: 0.75rem !important;
   }
 }
 
@@ -2210,4 +2422,545 @@ body {
 [data-theme="dark"] .post-meta time,
 [data-theme="dark"] .post-meta-label {
   color: #00f0ff !important;
+}
+
+/* ========================================
+   Tags & Categories Pages - Cyberpunk Style
+   ======================================== */
+
+/* --- Page Container (shared by both pages) --- */
+#page .page-title {
+  font-family: 'Orbitron', 'Rajdhani', 'Exo 2', monospace;
+  color: #00f0ff;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8),
+               0 0 20px rgba(0, 240, 255, 0.6),
+               0 0 40px rgba(0, 240, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 2px solid rgba(0, 240, 255, 0.3);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* ========================================
+   Tags Page - Neon Pill Cloud
+   ======================================== */
+
+/* Search bar */
+.tags-search-wrap {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.tags-search-wrap input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.8rem;
+  background: rgba(22, 33, 62, 0.6) !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+  border-radius: 12px !important;
+  color: #e0e0e0 !important;
+  font-family: 'Rajdhani', 'Exo 2', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.tags-search-wrap input:focus {
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+  background: rgba(22, 33, 62, 0.8) !important;
+}
+
+.tags-search-wrap input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.tags-search-wrap .search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(0, 240, 255, 0.6);
+  pointer-events: none;
+  font-size: 0.9rem;
+}
+
+/* Category filter tabs */
+.tags-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+.tags-category-tab {
+  padding: 5px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  background: rgba(22, 33, 62, 0.5);
+  color: #b0b0b0;
+  font-family: 'Rajdhani', 'Exo 2', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tags-category-tab:hover {
+  border-color: rgba(0, 240, 255, 0.5);
+  color: #e0e0e0;
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.tags-category-tab.active {
+  border-color: #00f0ff;
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.12);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
+}
+
+/* Tag group sections */
+.tags-group {
+  margin-bottom: 1.5rem;
+}
+
+.tags-group-title {
+  font-family: 'Orbitron', 'Rajdhani', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #00f0ff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  border-left: 3px solid #00f0ff;
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.4);
+}
+
+.tags-group:nth-child(3n+1) .tags-group-title {
+  color: #ff0099;
+  border-left-color: #ff0099;
+  text-shadow: 0 0 6px rgba(255, 0, 153, 0.4);
+}
+
+.tags-group:nth-child(3n+2) .tags-group-title {
+  color: #ffcc00;
+  border-left-color: #ffcc00;
+  text-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
+}
+
+.tags-group-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* No results message */
+.tags-no-result {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+  padding: 2rem 0;
+  display: none;
+}
+
+/* Tag pills - scoped to #page only */
+#page .tag-cloud-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem 0;
+}
+
+#page .tag-cloud-list a {
+  display: inline-block;
+  padding: 6px 16px !important;
+  border-radius: 20px !important;
+  color: #e0e0e0 !important;
+  background: rgba(22, 33, 62, 0.8) !important;
+  border: 1px solid rgba(0, 240, 255, 0.4) !important;
+  text-decoration: none !important;
+  font-family: 'Rajdhani', 'Exo 2', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  text-shadow: none !important;
+  box-shadow: 0 0 6px rgba(0, 240, 255, 0.15),
+              inset 0 0 8px rgba(0, 240, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer sweep on hover */
+#page .tag-cloud-list a::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.15), transparent) !important;
+  transition: left 0.5s ease !important;
+}
+
+#page .tag-cloud-list a:hover::before {
+  left: 100% !important;
+}
+
+/* Hover state - cyan glow */
+#page .tag-cloud-list a:hover {
+  color: #fff !important;
+  background: rgba(0, 240, 255, 0.15) !important;
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.6),
+              0 0 16px rgba(0, 240, 255, 0.3),
+              inset 0 0 10px rgba(0, 240, 255, 0.1) !important;
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.8) !important;
+  transform: translateY(-3px) scale(1.05) !important;
+}
+
+/* Active/click state */
+#page .tag-cloud-list a:active {
+  transform: translateY(-1px) scale(0.98) !important;
+  box-shadow: 0 0 4px rgba(0, 240, 255, 0.4) !important;
+}
+
+/* Alternate neon colors */
+#page .tag-cloud-list a:nth-child(3n+2):hover {
+  border-color: #ff0099 !important;
+  box-shadow: 0 0 8px rgba(255, 0, 153, 0.6),
+              0 0 16px rgba(255, 0, 153, 0.3),
+              inset 0 0 10px rgba(255, 0, 153, 0.1) !important;
+  text-shadow: 0 0 6px rgba(255, 0, 153, 0.8) !important;
+  background: rgba(255, 0, 153, 0.12) !important;
+}
+
+#page .tag-cloud-list a:nth-child(5n+3):hover {
+  border-color: #ffcc00 !important;
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.6),
+              0 0 16px rgba(255, 204, 0, 0.3),
+              inset 0 0 10px rgba(255, 204, 0, 0.1) !important;
+  text-shadow: 0 0 6px rgba(255, 204, 0, 0.8) !important;
+  background: rgba(255, 204, 0, 0.1) !important;
+}
+
+/* Dim siblings on hover for focus effect */
+#page .tag-cloud-list:hover a:not(:hover) {
+  opacity: 0.55 !important;
+}
+
+/* Hidden tag (filtered out by search/category) */
+#page .tag-cloud-list a.tag-hidden {
+  display: none !important;
+}
+
+/* ========================================
+   Categories Page - Glassmorphism Cards
+   ======================================== */
+
+/* Top-level list: card grid layout */
+.category-lists > .category-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Top-level category items as glassmorphism cards */
+.category-lists > .category-list > .category-list-item {
+  list-style: none !important;
+  background: rgba(22, 33, 62, 0.7) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 16px !important;
+  padding: 1.5rem !important;
+  margin: 0 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Neon border glow on hover */
+.category-lists > .category-list > .category-list-item:hover {
+  border-color: #00f0ff;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4),
+              0 8px 32px rgba(0, 240, 255, 0.15),
+              0 4px 16px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px);
+}
+
+/* Animated top-edge glow line */
+.category-lists > .category-list > .category-list-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00f0ff, #ff0099, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.category-lists > .category-list > .category-list-item:hover::before {
+  opacity: 1;
+}
+
+/* Alternate card accent colors */
+.category-lists > .category-list > .category-list-item:nth-child(3n+2) {
+  border-color: rgba(255, 0, 153, 0.3);
+}
+
+.category-lists > .category-list > .category-list-item:nth-child(3n+2):hover {
+  border-color: #ff0099;
+  box-shadow: 0 0 12px rgba(255, 0, 153, 0.4),
+              0 8px 32px rgba(255, 0, 153, 0.15),
+              0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.category-lists > .category-list > .category-list-item:nth-child(3n+2)::before {
+  background: linear-gradient(90deg, transparent, #ff0099, #ffcc00, transparent);
+}
+
+.category-lists > .category-list > .category-list-item:nth-child(3n+3) {
+  border-color: rgba(255, 204, 0, 0.3);
+}
+
+.category-lists > .category-list > .category-list-item:nth-child(3n+3):hover {
+  border-color: #ffcc00;
+  box-shadow: 0 0 12px rgba(255, 204, 0, 0.4),
+              0 8px 32px rgba(255, 204, 0, 0.15),
+              0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.category-lists > .category-list > .category-list-item:nth-child(3n+3)::before {
+  background: linear-gradient(90deg, transparent, #ffcc00, #00f0ff, transparent);
+}
+
+/* Top-level category link (card title) */
+.category-lists > .category-list > .category-list-item > a.category-list-link {
+  display: block !important;
+  font-family: 'Orbitron', 'Rajdhani', 'Exo 2', monospace !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: #00f0ff !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.category-lists > .category-list > .category-list-item > a.category-list-link:hover {
+  color: #fff !important;
+  text-shadow: 0 0 12px rgba(0, 240, 255, 1),
+               0 0 24px rgba(0, 240, 255, 0.6);
+}
+
+/* Remove the default ::after underline from global a styles */
+.category-lists a.category-list-link::after {
+  display: none !important;
+}
+
+/* Top-level article count badge */
+.category-lists > .category-list > .category-list-item > .category-list-count {
+  display: inline-block !important;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0a0a0a !important;
+  background: linear-gradient(135deg, #00f0ff, #9d00ff);
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  text-shadow: none;
+}
+
+.category-lists > .category-list > .category-list-item > .category-list-count::before,
+.category-lists > .category-list > .category-list-item > .category-list-count::after {
+  content: none !important;
+}
+
+/* Sub-category list: pill tags layout inside cards */
+.category-lists .category-list-child {
+  list-style: none !important;
+  padding: 0.75rem 0 0 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+/* Sub-category items as pill tags */
+.category-lists .category-list-child > .category-list-item {
+  list-style: none !important;
+  background: rgba(0, 240, 255, 0.08) !important;
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 16px !important;
+  padding: 4px 14px !important;
+  margin: 0 !important;
+  transition: all 0.3s ease;
+}
+
+.category-lists .category-list-child > .category-list-item:hover {
+  background: rgba(0, 240, 255, 0.18) !important;
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Sub-category link */
+.category-lists .category-list-child a.category-list-link {
+  font-family: 'Rajdhani', 'Exo 2', sans-serif !important;
+  font-size: 0.85rem !important;
+  font-weight: 500;
+  color: #b0b0b0 !important;
+  transition: color 0.3s ease;
+}
+
+.category-lists .category-list-child a.category-list-link:hover {
+  color: #00f0ff !important;
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.6);
+}
+
+/* Sub-category count */
+.category-lists .category-list-child .category-list-count {
+  font-size: 0.7rem;
+  color: #ffcc00 !important;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* Nested sub-sub-categories */
+.category-lists .category-list-child .category-list-child {
+  padding-top: 4px !important;
+  gap: 6px !important;
+}
+
+.category-lists .category-list-child .category-list-child > .category-list-item {
+  background: rgba(255, 0, 153, 0.06) !important;
+  border-color: rgba(255, 0, 153, 0.2);
+  padding: 2px 10px !important;
+  font-size: 0.8rem;
+}
+
+.category-lists .category-list-child .category-list-child > .category-list-item:hover {
+  background: rgba(255, 0, 153, 0.15) !important;
+  border-color: rgba(255, 0, 153, 0.5);
+  box-shadow: 0 0 6px rgba(255, 0, 153, 0.3);
+}
+
+.category-lists .category-list-child .category-list-child a.category-list-link {
+  font-size: 0.8rem !important;
+}
+
+/* Hide default list bullets from Butterfly .list-beauty */
+.category-lists .category-list-item::before {
+  display: none !important;
+}
+
+/* ========================================
+   Tags & Categories - Responsive
+   ======================================== */
+
+@media (max-width: 768px) {
+  .tag-cloud-list {
+    gap: 6px;
+    padding: 0.5rem 0;
+  }
+
+  .tag-cloud-list a {
+    padding: 4px 12px !important;
+    font-size: 0.85em !important;
+  }
+
+  .category-lists > .category-list {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .category-lists > .category-list > .category-list-item {
+    padding: 1rem !important;
+  }
+
+  .category-lists > .category-list > .category-list-item > a.category-list-link {
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-lists .category-list-child {
+    gap: 6px !important;
+  }
+
+  .category-lists .category-list-child > .category-list-item {
+    padding: 3px 10px !important;
+  }
+}
+
+/* ========================================
+   文章加粗字体 - 霓虹发光效果
+   ======================================== */
+#post article strong,
+#post .post-content strong,
+.post-content strong,
+article strong,
+strong {
+  color: #00f0ff !important;
+  font-weight: 700 !important;
+  text-shadow:
+    0 0 5px rgba(0, 240, 255, 0.8),
+    0 0 10px rgba(0, 240, 255, 0.6),
+    0 0 20px rgba(0, 240, 255, 0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+#post article strong:hover,
+#post .post-content strong:hover,
+.post-content strong:hover,
+article strong:hover,
+strong:hover {
+  color: #00ffff !important;
+  text-shadow:
+    0 0 8px rgba(0, 255, 255, 1),
+    0 0 15px rgba(0, 255, 255, 0.8),
+    0 0 30px rgba(0, 255, 255, 0.6) !important;
+}
+
+/* 深色模式下效果增强 */
+[data-theme="dark"] #post article strong,
+[data-theme="dark"] #post .post-content strong,
+[data-theme="dark"] .post-content strong,
+[data-theme="dark"] article strong,
+[data-theme="dark"] strong {
+  color: #00f0ff !important;
+  text-shadow:
+    0 0 6px rgba(0, 240, 255, 0.9),
+    0 0 12px rgba(0, 240, 255, 0.7),
+    0 0 25px rgba(0, 240, 255, 0.5) !important;
+}
+
+[data-theme="dark"] #post article strong:hover,
+[data-theme="dark"] #post .post-content strong:hover,
+[data-theme="dark"] .post-content strong:hover,
+[data-theme="dark"] article strong:hover,
+[data-theme="dark"] strong:hover {
+  color: #ff00ff !important;
+  text-shadow:
+    0 0 8px rgba(255, 0, 255, 1),
+    0 0 15px rgba(255, 0, 255, 0.8),
+    0 0 30px rgba(255, 0, 255, 0.6) !important;
 }
