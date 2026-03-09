@@ -2,6 +2,7 @@
 title: Learning Human Project
 categories:
     - 科研训练
+    - 机器人与大模型
     - 运动数据采集
     - 索引
 tags:

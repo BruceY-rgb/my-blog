@@ -282,7 +282,15 @@ going paperless isn't just convenient - it's also environmentally friendly. For 
 
 Physical books are often **bulky and heavy**(大而重), which makes it difficult to carry a lot of them at once. **In contrasst**, e-books are extremely convenient. You can carry an entire library in a single device, which makes them great for travelling or when you need **accesss to**(`access to`很灵活，要注意使用) multiple books at once. Another advantage of e-books is **cunstomization**(个性化).I can easily adjust the font size, brightness and background color to suit my reading preference. This feature makes reading much more comfortable, especially in low-light environments. moreover, e-books are **more environmentally friendly** because they do not require paper. **So I feel better about reducing my environmental footprint**(减少碳足迹).
 !!!
+                   
+#### 6. 引入假设情景
 
+!!! example "What is your reaction to robots becoming the mainstream development direction in the future"
+- 引入假设情景：If robots were to become the mainstream development in the  future, we could **expect significant changes in many industries and aspects of daily life**, robots could play a much larger role in society.
+- 推导正面影响：**On the posotive side**, robots could **bring about increased efficiency and procductivity**. For example, in industries like manufacturing or healthcare, robots can perform repetitive or dangerous takes more quickly and accurately than humans. **This would lead to lower costs and higher-quality  products**.
+- 推导负面影响：**However, there could also be some negative consequences to** the rise of robots. One concern is that **job displacement** could occur, as robots might **replace human workers in many sectors**, leading to unemployment and economic ineuqality. For example, in industries such as retail or transportation, robots might take over jobs that were previousaly done by people.
+!!!
+    
 ### 2.3 结构清晰——方法论
 
 **Position 立场：直接表态**

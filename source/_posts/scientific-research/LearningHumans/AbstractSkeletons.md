@@ -2,6 +2,7 @@
 title: Abstract Skeletons
 categories: 
   - 科研训练
+  - 机器人与大模型
   - 运动数据采集
   - 抽象骨骼
 tags:
