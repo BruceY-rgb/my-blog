@@ -6,8 +6,11 @@
 const { join, dirname, basename, extname } = require('path').posix;
 
 hexo.extend.filter.register('after_post_render', function(data) {
-  const { post_asset_folder } = this.config;
+  const { post_asset_folder, root } = this.config;
   if (!post_asset_folder) return data;
+
+  // Get root path (e.g., '/my-blog/')
+  const rootPath = root || '/';
 
   const fullPath = data.source;
   if (!fullPath) return data;
@@ -53,14 +56,14 @@ hexo.extend.filter.register('after_post_render', function(data) {
     if (lazySrc && !lazySrc.startsWith('http') && !lazySrc.startsWith('/')) {
       // This is a relative path that needs to be fixed
       const fileName = lazySrc.split('/').pop();
-      const newSrc = '/' + year + '/' + month + '/' + day + '/' + urlPath + '/' + fileName;
+      const newSrc = rootPath + year + '/' + month + '/' + day + '/' + urlPath + '/' + fileName;
       $(this).attr('data-lazy-src', newSrc);
     }
 
     // Also fix src attribute if it's a relative path
     if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('data:')) {
       const fileName = src.split('/').pop();
-      const newSrc = '/' + year + '/' + month + '/' + day + '/' + urlPath + '/' + fileName;
+      const newSrc = rootPath + year + '/' + month + '/' + day + '/' + urlPath + '/' + fileName;
       $(this).attr('src', newSrc);
     }
   });

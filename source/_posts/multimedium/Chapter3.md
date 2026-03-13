@@ -87,6 +87,13 @@ cover: https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800
 
 #### 1.1.5 颜色感知公式
 
+- 这些光谱敏感函数通常不用“R、G、B”来表示；这里我们使用向量函数 $q(\lambda)$，其分量为：
+
+  $$q (\lambda) = (q_R(\lambda), q_G(\lambda), q_B(\lambda))^T \tag{4.1}$$
+
+- 人眼各颜色通道的响应与被激活（放电）的神经元数量成正比。
+
+
 人眼中每个颜色通道的响应可表示为积分形式：
 
 $$R = \int E(\lambda) q_R(\lambda) d\lambda$$
@@ -138,7 +145,13 @@ $$B = \int E(\lambda) S(\lambda) q_B(\lambda) d\lambda$$
 CRT的输出光强与驱动电压的关系是：
 $$Light \propto Voltage^\gamma$$
 
+$$
+R \rightarrow R^{\gamma}
+$$
+
 其中 **γ（Gamma）** 约为 **2.2**
+
+![alt text](image-30.png)
 
 #### 1.2.3 Gamma校正过程
 
@@ -148,7 +161,17 @@ $$R' = R^{1/\gamma}$$
 
 接收端：$R = (R')^\gamma$
 
+![alt text](image-31.png)
+
+**电压归一化至最大值1**
+
+![alt text](image-32.png)
+
 #### 1.2.4 实际应用中的Gamma校正公式
+
+![alt text](image-33.png)
+![alt text](image-34.png)
+
 
 摄像机传递函数（SMPTE-170标准）：
 
@@ -175,25 +198,31 @@ $$
 - 使用的三种原色：红色（700nm）、绿色（546.1nm）、蓝色（435.8nm）
 - 实验设备称为**色度计**（Colorimeter）
 
+![alt text](image-35.png)
+
 #### 1.3.2 CIE RGB颜色匹配函数
 
 将每个单波长光匹配所需的R、G、B量形成颜色匹配曲线：
 
 $$r(\lambda), g(\lambda), b(\lambda)$$
 
+![alt text](image-36.png)
+
 由于r(λ)有负值，**CIE**（国际照明委员会）设计了虚构的原色，产生只有正值的三刺激值：
 
-$$x(\lambda), y(\lambda), z(\lambda)$$
+$$\bar{x}(\lambda), \bar{y}(\lambda), \bar{z}(\lambda)$$
 
 #### 1.3.3 CIE XYZ颜色空间
 
 CIE标准颜色匹配函数：
 
-$$X = \int E(\lambda) x(\lambda) d\lambda$$
+![alt text](image-37.png)
 
-$$Y = \int E(\lambda) y(\lambda) d\lambda$$
+$$X = \int E(\lambda) \bar{x}(\lambda) d\lambda$$
 
-$$Z = \int E(\lambda) z(\lambda) d\lambda$$
+$$Y = \int E(\lambda) \bar{y}(\lambda) d\lambda$$
+
+$$Z = \int E(\lambda) \bar{z}(\lambda) d\lambda$$
 
 其中 **y(λ)** 正好等于视敏函数V(λ)
 
@@ -203,7 +232,7 @@ $$Z = \int E(\lambda) z(\lambda) d\lambda$$
 
 #### 1.4.1 Weber定律
 
-> "变化量越大，需要更多的变化才能感知到差异"
+> "数量越多，需要更多的变化才能感知到差异"
 > - 变化相同时感知也相同（基于比率）
 
 **50 → 100**（100%变化）
@@ -211,9 +240,28 @@ $$Z = \int E(\lambda) z(\lambda) d\lambda$$
 
 这导致了**对数近似**。
 
+![alt text](image-38.png)
+
+`Lab`包括三个值
+- `Luminance`
+- `Colorfulness`
+- `Hue`
+
+![alt text](image-40.png)
+
 #### 1.4.2 CIELAB颜色空间
 
-使用**1/3次幂定律**代替对数：
+使用**1/3次幂定律**代替对数：(对数近似1/3指数)
+
+![alt text](image-39.png)
+
+颜色差异定义为
+
+$$
+\Delta E_{ab}^* = \sqrt{(L_2^* - L_1^*)^2 + (a_2^* - a_1^*)^2 + (b_2^* - b_1^*)^2}
+$$
+
+其中
 
 $$L^* = 116 \left(\frac{Y}{Y_n}\right)^{1/3} - 16$$
 
@@ -222,6 +270,8 @@ $$a^* = 500 \left[\left(\frac{X}{X_n}\right)^{1/3} - \left(\frac{Y}{Y_n}\right)^
 $$b^* = 200 \left[\left(\frac{Y}{Y_n}\right)^{1/3} - \left(\frac{Z}{Z_n}\right)^{1/3}\right]$$
 
 其中 $X_n, Y_n, Z_n$ 是白点的XYZ值。
+
+![alt text](image-41.png)
 
 ---
 

@@ -407,3 +407,113 @@ For example, last semester I tried running both **outside in the park and inside
 
 But a treadmill, after 10 minutes, **I kept checking the screen and felt bored**. So based on that experience, I feel outdoor exercise **helps me stay more engaged and makes the workout feel easier and more refreshing**.
 !!!
+
+**室内/室外活动、未来趋势类答题模版**
+
+> I believe ... will become a lot more popular in the future.
+> One main Reason is that ...(趋势原因)
+> ... bring many benefits ...
+> For example, ...(例子)
+> As ..., ... will only become more common(未来更普遍)
+
+# 英语口语笔记：运动与健康主题
+
+## 一、课前回顾
+### 高频句型
+- `after the hustle and bustle of the daily life` —— 繁忙的日子之后
+- `the main reason is that... + 句子` —— 主要原因是……
+- `the main reason is + n.` —— 主要原因是……
+- `I'm really into...` —— 我真的很喜欢……
+
+---
+
+## 二、Q3：室内/室外活动、未来趋势类
+### 核心题目
+1. Some people believe that exercising outdoors is more beneficial than indoors. Do you agree or disagree? Why?
+2. Outdoor activities are becoming more popular. In your area, will their popularity increase in the future? Why or why not?
+3. In the future, do you think indoor gyms will become more popular? Why or why not?
+
+### 通用答题框架
+```
+I believe ... will become a lot more popular in the future.
+One main reason is that ... (趋势原因)
+... bring many benefits: ... (好处)
+For example, ... (例子)
+As ..., ... will only become more common. (未来更普遍)
+```
+
+### 范文1：室内健身房更受欢迎
+```
+I believe indoor gyms will become more popular in the future.
+
+One main reason is the development of fitness technology, which has greatly lowered the entry barrier. So gyms are more affordable, easier to join, and equipped with modern, user-friendly facilities in the future.
+
+The biggest advantages of indoor gyms are high efficiency and stability. Unlike outdoor activities, gyms are not affected by weather, time, or pollution. People can walk in anytime and use professional equipment immediately, allowing them to exercise in a focused way without wasting time.
+
+For example, busy office workers can finish a complete workout in just 30 to 40 minutes, no matter if it's rainy, cold, or dark outside.
+
+As people value time efficiency and convenient fitness more than ever, indoor gyms will definitely become more common.
+```
+
+### 范文2：户外活动更受欢迎
+```
+I think outdoor activities will become a lot more popular in the future.
+
+I guess life is getting more stressful, and many people are tired of being stuck indoors all day. That's why more and more people are looking for fun, natural ways to relax and unwind.
+
+The best part about being outside is that fresh air, sunlight, and open space really help people calm down and recharge. It just feels way more relaxing than staying in a crowded gym.
+
+For example, many young people now choose hiking on weekends rather than going to gyms. They enjoy nature and share their trips online, making this trend even more popular.
+
+As people care more about mental well-being and healthy lifestyles, outdoor activities will only become more common.
+```
+
+---
+
+## 三、Q4：运动App、儿童运动、自律培养类
+### 核心题目
+1. Do you agree that using fitness apps is a good way to track goals? Why?
+   - 关键词：`track goals`（追踪目标）、`real-time data`（实时数据）、`reminders`（提醒）
+2. Some people believe outdoor activities are essential for children's health. Do you agree? Or can indoor activities also be beneficial?
+   - 关键词：`immune system`（免疫系统）、`natural elements`（自然元素）、`fight off illnesses`（抵御疾病）
+3. Some people believe exercising regularly is essential for developing self-discipline. Do you agree? Or can other activities also help?
+   - 关键词：`self-discipline`（自律）、`consistent with sth/stick to sth`（坚持某事）、`stick to a plan`（坚持计划）
+
+### 高频词汇
+- `consistent with sth/stick to sth` —— 坚持某事
+- `reminders / remind me` —— 提醒 / 提醒我
+- `self-discipline` —— 自律
+- `immune system` —— 免疫系统
+- `fight off illnesses` —— 抵御疾病
+
+### 范文1：健身App有助于追踪目标
+```
+Yes, I do think fitness apps are a great way to track exercise goals.
+
+One big reason is you can set clear, specific goals. These apps can design a workout plan based on your own details like your weight, height, and fitness goals, so the plan feels much more tailored than just following a random video online. This gives you a clear direction.
+
+Another advantage is real-time data. For example, the app records how long I exercised, how many calories I burned, even my heart rate and step count. When I see those numbers improving week by week, it gives me a real sense of progress and motivates me to keep going.
+
+Finally, it's super convenient. Most apps provide weekly or monthly reports. By looking at the charts and statistics, you can easily see your improvements and adjust your plan if necessary.
+
+Overall, fitness apps make exercise more structured, flexible, and motivating.
+```
+
+### 范文2：户外活动对儿童健康至关重要
+```
+P: I do think outdoor activities are essential for children's health.
+A: especially because they help build a stronger immune system. Children are still developing their immunity, and they actually need exposure to natural elements like sunlight, fresh air, and even small amounts of harmless bacteria to train their bodies to fight off illnesses. That's something indoor activities really can't offer.
+S: For example, my cousin's daughter used to stay indoors often and got sick easily. Later, she started playing outside on weekends, running on grass and enjoying nature. After several months, she became much healthier and rarely caught colds.
+S: So from this perspective, outdoor activities aren't just "fun." They provide natural conditions that support the immune system during a critical stage of childhood development.
+```
+
+### 范文3：规律运动培养自律
+```
+I agree that regular exercise is essential for developing self-discipline.
+
+Self-discipline means sticking to a plan, staying consistent, and keeping promises to ourselves, even when we feel tired or unwilling.
+
+Regular exercise truly trains these qualities. For instance, we have to get up early to work out instead of sleeping in, keep exercising even when our bodies feel sore, and follow a planned schedule rather than giving up halfway. This process forces us to put long-term health ahead of short-term comfort.
+
+In this way, exercise helps us build strong self-discipline step by step.
+```
