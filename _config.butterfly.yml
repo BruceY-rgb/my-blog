@@ -1092,6 +1092,8 @@ inject:
     - <script src="/js/runtime-counter.js"></script>
     # 标签页增强脚本（搜索+分类筛选）
     - <script src="/js/tags-enhance.js"></script>
+    # 搜索结果滚动定位修复
+    - <script src="/js/search-scroll-fix.js"></script>
 
     # 天气组件脚本
     - <script src="/custom_components/weather/weather.js"></script>

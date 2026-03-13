@@ -3,7 +3,7 @@ title: Chapter1 Python语言概述
 date: 2026-03-07 17:25
 categories:
     - CS课程笔记
-    - Python学习
+    - Python
     - 课程笔记
 tags:
     - Python

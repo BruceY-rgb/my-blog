@@ -334,3 +334,76 @@ Physical books are often **bulky and heavy**(大而重), which makes it difficul
 - `Not only that, but [reason 2]`
 - `for instance, [elaborate on reason or give example]`
 
+### 2.4 题材积累
+
+#### 1. 运动健康
+
+**运动的好处**
+
+- `physical health`
+  - `Strengthen bones and muscles`
+  - `helps to control weight`
+  - `improves sleep`
+  - `improves energy level`
+  - `prevents cognitive decline`
+- `mental health`
+  - `improved Mood`
+  - `More Energy`
+  - `Higher Self-Confidence`
+  - `Better Brain Health`
+  - `Healthy Distraction`
+  - `Reduced Anxiety and Depression Levels`
+- 运动可以怎么说：`exercise`, `sports`, `workout`, `physical activity`,`cardio exercises`(有氧运动)
+
+!!! note "描述类题目可以怎么回答"
+- 背景
+  - 从6个维度回答：`what`, `who`, `when`, `where`, `how often`, `why`
+- 过程
+  - 描述固定流程
+    - 可以从时间、地点、人群等维度的过程描述
+  - 可以无限扩充细节
+- 结果
+!!!
+
+!!! example "描述一个运动/户外运动"
+**Routine Cycle**(3-step routine)
+
+- 适合：描述固定流程
+
+```
+warm-up
+   ↓
+main workout
+   ↓
+cool-down
+```
+
+- 背景：I usually play badminton with my roommate in the university sports center.(**Where**).We go there about twice a week(**how often**), normally on Tuesday and Friday evenings(**when**), because it's close to our dorm and easy to book a court(**why**).
+- 过程:(**Warm-up→Main workout→Cool-down**)We always start with a quick warm-up, like light stretching and a few practice swings to loosen our shoulders. Then we move int the main part: a 30-minute rally where we practice footwork, smashes, and quick net shots.**That's the most intense part and it really gets my heart rate up**.
+- 结果：After that, **we cool down by slowing the pace and doing a short walk around the gym to relax our muscles.**
+!!!
+
+!!! example "运动偏好(独自 vs 他人/团队)"
+*Would you prefer to exercise alone， or with others*
+
+I prefer **exercising with others** rather than alone.
+
+Exercising with others provides **more motivation and support**, while exercising alone often relies solely on self-descipline. This difference is important because having companions encourages me to **push myself harder** and **keeps me consistent with my routine**.
+
+**For instance**, when I go jogging with friends, their energy and encouragement motivate me to run faster and finish the full distance. **On the other hand, when I run alone, it's easy to slow down or skip part of the workout, eapecially when I  feel tired.** 
+
+So that's why I would choose that option.
+!!!
+
+!!! example "室内室外活动/未来趋势"
+- 产生的原因
+- 选项的好处
+
+I actually think exercising outdoors is more beneficial.
+
+One big reason is the environment. Outdoors you **get fresh air and sunlight**, which **naturally  boost your mood**, while indoors you're **basically staring at walls**  or **machines the whole time**. It just feels **less inspiring.**
+
+For example, last semester I tried running both **outside in the park and inside on s treadmill(跑步机**).When I ran outside, the trees, the river, and even the breeze made the whole experience enjoyable. I ended up running **alomost 20 minutes longer without noticing.**
+
+But a treadmill, after 10 minutes, **I kept checking the screen and felt bored**. So based on that experience, I feel outdoor exercise **helps me stay more engaged and makes the workout feel easier and more refreshing**.
+!!!

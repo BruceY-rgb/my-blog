@@ -2367,37 +2367,43 @@ body {
 }
 
 /* ========================================
-   侧边栏粘性增强
+   侧边栏固定定位 - 像导航栏一样固定不动
    ======================================== */
 
-/* 增强侧边栏粘性效果 */
-#aside-content {
-  /* 确保父容器不会裁剪粘性元素 */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-/* 桌面端侧边栏粘性定位 */
 @media (min-width: 900px) {
-  #aside-content .sticky_layout {
-    position: sticky !important;
-    position: -webkit-sticky !important;
-    top: 80px !important; /* 增加顶部距离，避开导航栏 */
-    z-index: 10;
-    will-change: transform;
+  /* 侧边栏固定在视口右侧 */
+  #aside-content {
+    position: fixed !important;
+    top: 80px !important;
+    right: 0 !important;
+    width: calc(26% - 15px) !important;
+    max-width: calc((1200px * 0.26) - 15px) !important;
+    height: calc(100vh - 100px) !important;
+    overflow-y: auto !important;
+    padding-left: 15px !important;
+    z-index: 10 !important;
   }
 
-  /* 确保侧边栏内容在粘性布局内 */
-  #aside-content .sticky_layout > * {
-    transform: translateZ(0);
+  /* 侧边栏滚动条 */
+  #aside-content::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  #aside-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 240, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  /* 让主内容区占满，避免右侧空白 */
+  .layout > div:first-child {
+    width: 74% !important;
   }
 }
 
-/* 移动端隐藏侧边栏粘性 */
-@media (max-width: 899px) {
-  #aside-content .sticky_layout {
-    position: relative !important;
-    top: 0 !important;
+/* 大屏适配 */
+@media (min-width: 2000px) {
+  #aside-content {
+    max-width: calc((60vw * 0.26) - 15px) !important;
   }
 }
 
