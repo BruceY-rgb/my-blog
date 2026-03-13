@@ -28,12 +28,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
-      - name: Setup Hexo
+      - name: Install dependencies
         run: |
+          rm -rf node_modules package-lock.json
           npm install -g hexo-cli
-          npm ci
+          npm install
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

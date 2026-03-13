@@ -79,6 +79,11 @@ cover: https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800
 - 视锥细胞约有**600万个**
 - 红、绿、蓝三种视锥细胞的比例：**R:G:B = 40:20:1**
 - 人眼对可见光中间的波长最为敏感
+  - 人眼对光的敏感是**波长的函数**
+  - 蓝色受体的敏感度未按比例显示，因其远小于红色或绿色曲线的数值。
+
+![alt text](image-28.png)
+![alt text](image-27.png)
 
 #### 1.1.5 颜色感知公式
 
@@ -99,6 +104,8 @@ $$B = \int E(\lambda) q_B(\lambda) d\lambda$$
 1. 光源发出的光具有SPD **E(λ)**
 2. 照射到物体表面，物体表面具有光谱反射函数 **S(λ)**
 3. 反射光经过人眼视锥细胞过滤
+
+![alt text](image-29.png)
 
 **颜色信号**定义为：$C(\lambda) = E(\lambda) \cdot S(\lambda)$
 
