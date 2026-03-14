@@ -1063,9 +1063,6 @@ css_prefix: true
 # inject:start - 请勿删除此标记，管理脚本将根据此标记自动更新配置
 inject:
   head:
-    # 赛博朋克风格全局样式（必须最先加载，覆盖主题默认样式）
-    - <link rel="stylesheet" href="/custom_components/global_cyberpunk_style/global.css">
-
     # 主自定义样式
     - <link rel="stylesheet" href="/css/custom.css">
 
