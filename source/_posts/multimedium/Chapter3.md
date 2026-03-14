@@ -299,9 +299,11 @@ $$b^* = 200 \left[\left(\frac{Y}{Y_n}\right)^{1/3} - \left(\frac{Z}{Z_n}\right)^
 - 在帧缓冲器中存储**与强度成比例的整数**
 - 需要进行**Gamma校正**
 
-
+![alt text](image-42.png)
 
 ### 2.2 减法颜色：CMY模型
+
+![alt text](image-43.png)
 
 **RGB是加色法**，**CMYK是减色法**。
 
@@ -324,6 +326,10 @@ $$C' = C - K$$
 $$M' = M - K$$
 
 $$Y' = Y - K$$
+
+![alt text](image-44.png)
+
+> 之所以添加一个black是因为黑色往往无法直接通过`CMY`中的三种颜色直接获得。
 
 ---
 

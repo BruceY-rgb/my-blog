@@ -49,3 +49,22 @@ svg.hero-waves {
   opacity: 0 !important;
   visibility: hidden !important;
 }
+
+/* ========================================
+   侧边栏平滑滚动
+   ======================================== */
+
+/* 确保侧边栏 sticky 行为平滑 */
+#aside-content .card-widget,
+#sidebar .card-widget,
+.aside-content .card-widget {
+  position: sticky;
+  top: 20px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* 修复侧边栏滚动不平滑的问题 */
+#aside-content {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
