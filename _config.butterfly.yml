@@ -1063,8 +1063,8 @@ css_prefix: true
 # inject:start - 请勿删除此标记，管理脚本将根据此标记自动更新配置
 inject:
   head:
-    # 主自定义样式（已禁用）
-    # - <link rel="stylesheet" href="/css/custom.css">
+    # 主自定义样式
+    - <link rel="stylesheet" href="/css/custom.css">
 
     # 天气组件样式
     - <link rel="stylesheet" href="/custom_components/weather/weather.css">

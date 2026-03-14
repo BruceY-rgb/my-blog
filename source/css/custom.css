@@ -68,3 +68,164 @@ svg.hero-waves {
   transform: translateZ(0);
   backface-visibility: hidden;
 }
+
+/* ========================================
+   Admonition 语法框样式
+   ======================================== */
+
+.admonition {
+  position: relative;
+  margin: 1.5em 0;
+  padding: 12px 16px;
+  border-left: 4px solid;
+  border-radius: 4px;
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.admonition:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.admonition-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+  text-transform: capitalize;
+}
+
+/* 代码块内容样式 */
+.admonition pre {
+  margin: 0;
+  padding: 12px;
+  background-color: var(--code-bg) !important;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.admonition code {
+  background-color: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* 不同类型的颜色 */
+.admonition.note {
+  border-left-color: #49b1f5;
+  background-color: rgba(73, 177, 245, 0.1);
+}
+
+.admonition.note .admonition-title {
+  color: #49b1f5;
+}
+
+.admonition.abstract {
+  border-left-color: #00c4b6;
+  background-color: rgba(0, 196, 182, 0.1);
+}
+
+.admonition.abstract .admonition-title {
+  color: #00c4b6;
+}
+
+.admonition.info {
+  border-left-color: #49b1f5;
+  background-color: rgba(73, 177, 245, 0.1);
+}
+
+.admonition.info .admonition-title {
+  color: #49b1f5;
+}
+
+.admonition.tip {
+  border-left-color: #91d500;
+  background-color: rgba(145, 213, 0, 0.1);
+}
+
+.admonition.tip .admonition-title {
+  color: #91d500;
+}
+
+.admonition.success {
+  border-left-color: #91d500;
+  background-color: rgba(145, 213, 0, 0.1);
+}
+
+.admonition.success .admonition-title {
+  color: #91d500;
+}
+
+.admonition.question {
+  border-left-color: #a4a400;
+  background-color: rgba(164, 164, 0, 0.1);
+}
+
+.admonition.question .admonition-title {
+  color: #a4a400;
+}
+
+.admonition.warning {
+  border-left-color: #ffb700;
+  background-color: rgba(255, 183, 0, 0.1);
+}
+
+.admonition.warning .admonition-title {
+  color: #ffb700;
+}
+
+.admonition.failure {
+  border-left-color: #ff4e00;
+  background-color: rgba(255, 78, 0, 0.1);
+}
+
+.admonition.failure .admonition-title {
+  color: #ff4e00;
+}
+
+.admonition.danger {
+  border-left-color: #ff0000;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.admonition.danger .admonition-title {
+  color: #ff0000;
+}
+
+.admonition.bug {
+  border-left-color: #ff0000;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.admonition.bug .admonition-title {
+  color: #ff0000;
+}
+
+.admonition.example {
+  border-left-color: #9c27b0;
+  background-color: rgba(156, 39, 176, 0.1);
+}
+
+.admonition.example .admonition-title {
+  color: #9c27b0;
+}
+
+.admonition.quote {
+  border-left-color: #607d8b;
+  background-color: rgba(96, 125, 139, 0.1);
+}
+
+.admonition.quote .admonition-title {
+  color: #607d8b;
+}
+
+/* 暗色主题适配 */
+[data-theme="dark"] .admonition {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .admonition pre {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+}
