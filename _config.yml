@@ -129,7 +129,7 @@ marked:
 
 # Markdown-it Configuration
 markdown:
-  html: false
+  html: true
   linkify: true
   typographer: true
   prependRoot: true

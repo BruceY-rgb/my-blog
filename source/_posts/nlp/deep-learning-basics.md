@@ -26,14 +26,22 @@ tags:
 - **语音识别（Speech Recognition）**
   输入："How are you" → 输出：文字
 
+![alt text](image-3.png)
+
 - **图像识别（Image Recognition）**
   输入：图片 → 输出："Cat"
+
+![alt text](image-4.png)
 
 - **围棋对弈（Playing Go）**
   输入：棋盘状态 → 输出："5-5"（下一步）
 
+![alt text](image-5.png)
+
 - **对话系统（Dialogue System）**
   输入："Hi"（用户说的话） → 输出："Hello"（系统回复）
+
+![alt text](image-6.png)
 
 ---
 
@@ -54,6 +62,8 @@ tags:
 - 从函数集合中选出表现最好的函数
 - 用于测试（Testing）新的输入数据
 
+![alt text](image-7.png)
+![alt text](image-8.png)
 ---
 
 ## 3. 人工智能的诞生
@@ -110,6 +120,8 @@ tags:
 - **偏置（Bias）**：一个偏置值
 - **激活函数（Activation Function）**：如 Sigmoid 函数
 
+![alt text](image-9.png)
+
 **示例：**
 ```
 输入: [1, -2, -1]
@@ -122,6 +134,7 @@ z = (1×2) + (-2×-1) + (-1×1) + 4 = 2 + 2 - 1 + 4 = 7
 输出 = Sigmoid(7) ≈ 0.999
 ```
 
+
 ### 4.2 Sigmoid 激活函数
 
 Sigmoid 函数将任意实数映射到 (0, 1) 区间：
@@ -130,10 +143,15 @@ Sigmoid 函数将任意实数映射到 (0, 1) 区间：
 σ(z) = 1 / (1 + e^(-z))
 ```
 
+![alt text](image-10.png)
+
 ### 4.3 神经网络结构
 
 - **不同的连接方式** 导致不同的网络结构
 - **不同的权重和偏置** 导致不同的函数
+  - `weight`和`biases`是网络的参数$\theta$
+
+
 
 ---
 
@@ -154,6 +172,8 @@ Sigmoid 函数将任意实数映射到 (0, 1) 区间：
   ↓
 输出层（Output Layer）
 ```
+
+![alt text](image-11.png)
 
 **特点：**
 - 每一层的神经元与下一层的所有神经元相连（全连接）
@@ -178,7 +198,9 @@ Sigmoid 函数将任意实数映射到 (0, 1) 区间：
 - **浅而宽的网络**：分段能力较弱（Less pieces）
 - **深而窄的网络**：分段能力更强（More pieces）
 
-深度网络能用更少的参数学习到更复杂的函数。
+![alt text](image-12.png)
+
+深度网络能**用更少的参数学习到更复杂的函数**。
 
 ---
 
@@ -219,16 +241,17 @@ y2 (是2) → 0
 y10 (是0) → 0
 ```
 
+![alt text](image-13.png)
+
 **Softmax 函数的作用：**
 - 将普通层的任意实数输出转换为概率分布
 - 所有输出值和为 1
 
-**示例：**
-```
-普通层输出: [3, 1, -3, 2.7]
-↓ Softmax
-概率输出: [0.88, 0.12, ≈0, 0.05]
-```
+
+
+!!! example
+![alt text](image-14.png)
+!!!
 
 ---
 
@@ -241,6 +264,8 @@ y10 (是0) → 0
 **常用损失函数：**
 1. **均方误差（Square Error）**
 2. **交叉熵（Cross Entropy）**
+
+**损失函数通常位于`network output`和`target`两层之间**
 
 ### 8.2 Total Loss（总损失）
 
@@ -306,6 +331,8 @@ Total Loss L = Σ (所有训练样本的损失)
 
 **不同的初始点** → 到达不同的最小值 → 不同的结果
 
+
+![alt text](image-15.png)
 ---
 
 ## 10. Backpropagation（反向传播）

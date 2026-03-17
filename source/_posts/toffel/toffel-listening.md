@@ -27,9 +27,9 @@ cover: https://www.cheersyou.com/sites/default/files/styles/news_show_2022/publi
 - 建立意识、快问快答
 - 确保听到，注意四词
   - 疑问词优先：what/why/how...
-  - 话题词相关
-  - 时间词辅助
-  - 人称词
+  - **话题词**相关
+  - **时间词**辅助
+  - **人称词**
 - 识别语用，识别答案
   - `asking for help`
   - `decline politely`:婉拒
@@ -162,18 +162,38 @@ A 事件描述——表达不确定性
 
 ![alt text](image-19.png)
 
+## 3. Conversation
+
 ### 3.1 意外发生型
 
 - 提出 **事件**
 - 意外 + **原因**
-- 事件细节描述
+- 事件细节描述*
 - **解决方案**
+
+!!! note 
+**信息分类**
+
+- 提出**事件**
+- 意外+**原因**
+- 事件细节描述 
+- **解决方案**
+!!!
+
+!!! example 
+![alt text](image-54.png)
+
+- 事件：`concert`
+- 原因：`help cousin move into her apartment`
+- 解决方案：`will be at spring festival`
+!!!
 
 ### 3.2 评价分析型 
 
 - 提出**事件**
 - 事件细节描述/**评价**
-- 未来计划
+- **未来计划**
+
 
 ### 3.3 求助建议型
 
@@ -181,18 +201,31 @@ A 事件描述——表达不确定性
 - 给出**建议**
 - 接受建议
 
+!!! note 
+主要考点：**建议是什么**或 **对建议的态度**
+!!!
+
+visit new coffee
+surprise
+best
+after basketball game
+
 ### 3.4 信息分享型
 
 - 询问**事件**
-- 信息信息给出
+- 信息给出
 - 附加信息
+
+!!! example
+![alt text](image-55.png)
+!!!
 
 ### 3.5 任务催促型
 
-- 提出事件
-- 未做理由
-- 说服完成
-- 承诺时间
+- 提出**事件**
+- 未做**理由**
+- 说服完成(原因)
+- **承诺时间**
 
 ## 3. Lecture
 
