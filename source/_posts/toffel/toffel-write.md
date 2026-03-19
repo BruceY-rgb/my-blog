@@ -368,10 +368,10 @@ Enterprises should hire experienced veterans, as this could enhance the future d
 
 - `save money`
   - individual
-    - optimize(personal) spendign:优化支出
+    - optimize(personal) spending:优化支出
     - reduce(daily) cost：节省成本
     - economize on (daily) expenses：节省日常开支
-    - manage (persoanl) finances frugally
+    - manage(persoanl) finances frugally:节俭地管理个人财务
   - nation/government/enterprise
     - optimize(national) spending
     - reduce(operational) cost
@@ -382,43 +382,44 @@ Enterprises should hire experienced veterans, as this could enhance the future d
     - increase earnings
     - increase salaries
     - elevate income levels
-    - augment income/salary
+    - **augment income/salary**
   - nation/government/enterprise
     - generate/maximize/boost/enhance/raise national income
     - earn profits
-    - expand fiscal revenue
+    - **expand fiscal revenue**:增加财政收入
     - increase industrial output
 
 #### 3.6.2 Time/Efficiency（时间/效率）
 
 - save time 
   - individual
-    - optimize(personal) time utilization
+    - **optimize(personal) time utilization**
     - streamline(personal)time utilization
     - reduce/decrease/minimize (personal) time expenditure
   - nation/government/enterprise (基本与individual相似)
 - Higher efficiency
   - individual
-    - enhance/maximize/boost/improve (personal) efficiency optimize processes
+    - **enhance/maximize/boost/improve** (personal) **efficiency** 
+    - **optimize processes**
   - nation/government/enterprise  
     - enhance/maximize/boost/improve (national) efficiency 
     - optimize processes
-    - accelerate optimization
+    - **accelerate optimization**
     - enhance/maximize/boost/improve (national) productivity
 
 !!! example "你是否会在同一个城市过一生"
 **To be more specific,** **initially**, residing in various cities enables people to **increase earnings**, as it provides more promising job prospects and superior career opportunities.
 
-**Additionally**, living in different cities can **enhance people's horizons**, since they get to experience diverse cultures and broaden their outlook on life.
+**Additionally**, living in different cities can **enhance people's horizons**, since they get to **experience diverse cultures and broaden their outlook on life**.
 !!!
 
 !!! example "Are these international organization effective at addressing global challenges?"
 
-As far as I am concerned, I **firmly** advocate the prossposition that international organizations are ~~effective~~ **considerably** competent at ~~addressing~~ dealing with ~~global challenges~~ **sophisticated** worldwide issues, as they could **profoundly** enhance the **sustainable** future development of ~~humanity~~ global community.
+**As far as I am concerned**, **I firmly advocate the prossposition that** international organizations are ~~effective~~ **considerably** competent at ~~addressing~~ dealing with ~~global challenges~~ **sophisticated** worldwide issues, as they could **profoundly** enhance the **sustainable** future development of ~~humanity~~ global community.
 
 **Further Elaboration**
 
-To be more specific, initially, organizations play an effective role in dealing with global issues since they can boost the income of developing countries and help relieve poverty. Additionally, these global institutions contribute to solving worldwide problems, as they improve social welfare and enhance the overall well-being of citizens in many nations.
+**To be more specific**, **initially**, organizations **play an effective role in dealing with global issues since** they can **boost the income of developing countries** and **help relieve poverty**. **Additionally**, these global institutions **contribute to** solving **worldwide problems**, as they improve social welfare and enhance the overall well-being of citizens in many nations.
 !!!
 
 !!! example
