@@ -244,6 +244,17 @@ after basketball game
   - 重要性
 - next（预告）
 
+!!! note 
+- 定义：纯解释
+- 并列结构：
+  - 1.
+  - 2.
+  - 3.
+- 评价
+  - 优缺点
+  - 重要性
+!!!
+
 ![alt text](image-47.png)
 
 #### 2. 术语型

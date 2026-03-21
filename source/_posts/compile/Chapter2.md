@@ -797,6 +797,7 @@ for (P 中的每个集合 G) {
 
 !!! example DFA 最小化示例
 ![alt text](image-55.png)
+
 !!!
 ---
 

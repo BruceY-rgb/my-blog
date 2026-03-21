@@ -464,13 +464,13 @@ As people value time efficiency and convenient fitness more than ever, indoor gy
 !!! example "户外活动更受欢迎"
 I think outdoor activities will become a lot more popular in the future.
 
-I guess life is getting more stressful, and many people are tired of being stuck indoors all day. That's why more and more people are looking for fun, natural ways to relax and unwind.
+I guess life is getting more stressful, and **many people are tired of being stuck indoors all day**. **That's why more and more people are looking for fun, natural ways to relax and unwind.**
 
-The best part about being outside is that fresh air, sunlight, and open space really help people calm down and recharge. It just feels way more relaxing than staying in a crowded gym.
+The best part about being outside is that fresh air, sunlight, and open space really help people **calm down and recharge**. It just feels way more relaxing than staying in a crowded gym.
 
-For example, many young people now choose hiking on weekends rather than going to gyms. They enjoy nature and share their trips online, making this trend even more popular.
+For example, many young people now choose hiking on weekends rather than going to gyms. **They enjoy nature and share their trips online, making this trend even more popular.**
 
-As people care more about mental well-being and healthy lifestyles, outdoor activities will only become more common.
+**As people care more about mental well-being and healthy lifestyles, outdoor activities will only become more common**.
 !!!
 
 ---

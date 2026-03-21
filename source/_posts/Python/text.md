@@ -12,5 +12,5 @@ cover: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPZDX1rgXZe2ME5x8Na
 ---
 
 - 执行赋值操作`a=100`的本质是将数值100装入名为`a`的盒子里
-  - `False`:`a`只是一个标签
+  - `False`:`a`只是一 个标签
 - `a = 0.1+0.2`

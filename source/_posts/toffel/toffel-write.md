@@ -428,13 +428,13 @@ Enterprises should hire experienced veterans, as this could enhance the future d
 **观点**
 
 - 缔造主干：Free will is an illusion and that our choices are determined by factors beyond our control, as this could hinder the future development of subjective initialtive.
-- 升级词汇：Subjective intialtive is a delusion and that our decisions are influences by elements beyond our control, as this could hinder the future development of subjective initialtive.
-- 完善修饰——形容词副词：Subjective intialtive is a delusion and that our decisions are influences by external elements beyond our control, as this could hinder the sustainable future development of self-growth.
-- 完善修饰——观点：As far as I am concerned, I firmly advocate the proposition that subjective intialtive is a delusion and that our decisions are influences by external elements beyond our control, as this could hinder the sustainable future development of self-growth.
+- 升级词汇：**Subjective intialtive** is a **delusion** and that our decisions are influences by elements beyond our control, **as this could hinder the future development of subjective initialtive**.
+- 完善修饰——形容词副词：Subjective intialtive is a delusion and that our decisions are influences by **external** elements beyond our control, as this could hinder the **sustainable** future development of self-growth.
+- 完善修饰——观点：**As far as I am concerned**, I **firmly advocate the proposition that** subjective intialtive is a delusion and that our decisions are influences by external elements beyond our control, as this could hinder the sustainable future development of self-growth.
 
 **论证段**
 
-To be more specific, initially, through personal intiative, we can strice to improve iur careers and increase wealth by our own efforts, which free us from being controlled by external conditions. Additionally, free will sshape our well-being: we can choose positive attitudes toward life, and happiness mainly depends on our own choices, not outside influences.
+**To be more specific**, initially, **through personal intiative**, **we can strice to** improve our careers and increase wealth by our own efforts, which free us from being controlled by external conditions. **Additionally**, free will shape our well-being: we can choose positive attitudes toward life, and happiness mainly depends on our own choices, not outside influences.
 !!!
 
 ### 3.7 Illustration（举例说明）
@@ -442,7 +442,7 @@ To be more specific, initially, through personal intiative, we can strice to imp
 - Example
   - story
   - case study
-  - personal experience
+  - **personal experience**
   - historical facts
 - Statistical data
 - Research results
@@ -451,48 +451,64 @@ To be more specific, initially, through personal intiative, we can strice to imp
 ![alt text](image-27.png)
 
 !!! warning
-细节才是重中之重，一定要在文章中体现出细节
+- 细节才是重中之重，一定要在文章中体现出细节
+- 结尾一定要紧扣主题
 !!!
 
 !!! example
 *Which is the better strategy for making purchasing decisions, relying on advice from friends and family, or depending on information from online sources?*
 
 - **cause**: When purchasng an oven
-- **process**:I first reciewed product evaluations on   `rednote`, then studied operational tutorials on `Bilibili`, compared prices and finally bought one on `Taobao`.
-- **result**:The detailed and professional online information o`ptimized` my decisin-making, `saving both time and money`.
+- **process**:I first reciewed product evaluations on `rednote`, then studied operational tutorials on `Bilibili`, compared prices and finally bought one on `Taobao`.
+- **result**:The detailed and professional online information `optimized` my decisin-making, `saving both time and money`.
 !!!
 
 
 !!! example
-*Whether new, innvative subjects should be taught in public schools*
+*Whether new, innovative subjects should be taught in public schools*
 
 - **起因**：For illustration, consider a student. Leo, who took artificial intelligence courses in public school.
-- **经过**：He acquired practical skills that greatly strengthen his competitiveness in future employment in tech corporations. Meanwhile, these courses were engaging and brought him great pleasure in learning.
+- **经过**：He **acquired practical skills** that greatly strengthen his competitiveness in future employment in tech corporations. Meanwhile, these courses were **engaging** and **brought him great pleasure** in learning.
 - **结果**：which fully proves that innovative subjects benefit students' career development and personal well-being.
 !!!
 
+
 !!! example "Hiring experienced vertans or younger employees"
 - **起因**：For illustration, my cousinEthan runs a small digital marketingcompany that focus on online brand promotion. He hired young employees whho have sharp creative thinking.
-- **经过**：Their relatively low salaries helped cut the company's labor by 15%. Meanwhile, their new ideas increased customer engagement by 30% and released sales by 20% within six months.
-- **结果**：This example clearly shows that young employees can reduce costs and fuel corporate innovation.
+- **经过**：Their relatively low salaries helped **cut the company's labor by 15%**. Meanwhile, their new ideas **increased customer engagement by 30% and released sales by 20% within six months**.
+- **结果**：**This example clearly shows that** young employees can reduce costs and fuel corporate innovation.
 !!!
 
 !!! example "Do you think that more cities should make their central zones car-free"
 
 - **起因**：For illustration, Shanghai has not introduced  car-free politics in its city center.
-- **经过**：if such rules were carried out, hsops, restaurants and drivers who rely on  convenient traffic would suffer heavy economic issues. Meanwhile, residents would spend much more time commuting, causing great inconvenience.
+- **经过**：**if such rules were carried out**, shops, restaurants and drivers who rely on  convenient traffic would suffer heavey economic issues. Meanwhile, residents would spend much more time **commuting**, causing great inconvenience.
 - **结果**：This clearly shows that car-free zones would harm business and people's well-being.
 
 !!!
 
 !!! example "Do you think digital nomadism is likely to continue increasing"
 
-**For illustration, Leo, a freelance online tutor, once worked in an expensive city and spent most of his salary on rent.**
+**For illustration, Leo, a freelance online tutor（一名线上家教）, once worked in an expensive city and spent most of his salary on rent.**
 
 Now he works remotely in low-cost areas and saves a lot of money. He also enjoys flexible hours and can combine work with travel. This makes his life more relaxing and enjoyable.
 
 Clearly， digital nomadism reduces and improve personal well-being.
 !!!
+
+#### Universal Illustration
+
+**1. Education and Talent Cultivation**
+
+In Finland, a decade-long shift toward holistic education-propioritizing creativity, emotional intelligence, and practical skills over standardized testing-raised student satisfaction by 30% and reduced high school fropout rates by 40%, **proving that well rounded development enhances both academic engagement and lifelong competence**.
+
+**2. Technology and Social reform**
+
+AI-powered supply chain management in blobal retail reduced operational costs by 25% and boosted revenue by 18% within three years, **showcasing how technology drives economic efficiency and growth.**
+
+**3. Environment**
+
+Norway's tax incentives for electric vehicles——including exemptions from import taxes, VAT, and toll fees--boosted EV adoption from 20% to 80% over a decade, cutting urban CO2 emissions by 35% and spurring local charging infrastructure growth.
 
 ### 3.8 Concession and Refutation（让步与反驳）
 
@@ -502,8 +518,8 @@ Clearly， digital nomadism reduces and improve personal well-being.
 #### 3.8.1 A or B（对比型）
 
 !!! example 
-- `ordinary people`:**While acknowledging the benefit that** asking celebrities, famous entertainers, or sports figures to promote their products could **bring a sense of happiness of adoring celebrities.** **Neverthless**, **the superiority of** to have ordinary people talk about the product **lies in** improving advertising profit and efficiency, **makig it the preferable choice**.
-- `celebrities`:While acknowledging the benefit that having ordinary people talk about the product could bring a more down-to-earth vibes.
+- `ordinary people`:Admitttedly, **While acknowledging the benefit that** asking celebrities, famous entertainers, or sports figures to promote their products could **bring a sense of happiness of adoring celebrities.** **Neverthless**, **the superiority of** to have ordinary people talk about the product **lies in** improving advertising profit and efficiency(全文两个论点做总结), **makig it the preferable choice**.
+- `celebrities`:Admittedly, **while acknowledging the benefit that** to have ordinary people talk about the product could bring a more down-to-earth vibe(接地气的效果). **Nevertheless**, **the superiority of** asking celebrities, famous entertainers, or sports figures to promote their products **lies in** improving advertising profit and efficiency, **making it the preferable choice**.
 !!!
 
 !!! example 

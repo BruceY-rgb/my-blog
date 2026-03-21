@@ -485,9 +485,11 @@ $$
 
 | 处理方式 | 目的 | 适用场景 |
 |----------|------|----------|
-| **消除二义性** | 消除同一句子的多棵分析树 | 所有分析器 |
+| **消除二义性** | **消除同一句子的多棵分析树** | 所有分析器 |
 | **消除左递归** | 避免自顶向下分析无限循环 | LL 分析 |
 | **提左公因子** | 避免回溯 | LL 分析 |
+
+> 二义性：如果文法的某些句子存在不止一棵分析书，则该文法是二义的，或者说：若一个文法中存在某个句子，它有**两个不同的最左或最右推导**，则这个文法是二义性的 
 
 ### 6.4 二义性文法 (Ambiguous Grammar)
 
@@ -598,12 +600,25 @@ E → if E then E
 
 - 从上往下、从左往右
 - 每一步推导中，都需要做两个选择：
-  1. 替换当前句型中的哪个非终结符？
-  2. 用该非终结符的哪个产生式进行替换？
+  1. **替换**当前句型中的**哪个非终结符**？
+  2. 用该**非终结符的哪个产生式**进行替换？
 
-!!! note 提示
+!!! tip 提示
 
 **自顶向下分析总是选择每个句型的最左非终结符进行替换！**
+
+!!!
+
+!!! example
+
+**文法**
+
+```
+S → E+S | E
+E → num(S)
+```
+
+![alt text](image-73.png)
 
 !!!
 
@@ -611,27 +626,41 @@ E → if E then E
 
 **递归下降分析**（Recursive-Descent Parsing）是自顶向下分析的通用形式：
 
-- 由一组过程/函数组成，每个过程对应一个非终结符
+- 由一组**过程/函数**组成，每个过程对应一个**非终结符**
 - 从开始符号 S 对应的过程开始，（递归）调用其它过程
-- 如果 S 对应的过程恰好扫描了整个输入串，则完成分析
+- 如果 S 对应的过程**恰好扫描了整个输入串**，则完成分析
+
+- 利用非终结符A的规则$A\rightarrow X_1...X_k$，定义识别A的过程
+  - **如果$X_i$是非终结符**：调用相应非终结符对应的过程
+  - **如果$X_i$是终结符**：**匹配**输入串种对应的终结符
 
 ```c
 void A() {
-    // 1) 选择一个A产生式，A→X1 X2 ... Xk
-    // 2) for (i = 1 to k)
-    //     if (Xi 是非终结符) 调用过程 Xi();
-    //     else if (Xi 等于当前的输入符号a) 读入下一个输入符号;
-    //     else /* 发生了一个错误 */
+    选择一个A产生式，A→X1 X2 ... Xk
+    for (i = 1 to k)
+        if (Xi 是非终结符) 
+            调用过程 Xi();
+        else if (Xi 等于当前的输入符号a) 读入   
+            下一个输入符号;
+        else /* 发生了一个错误 */
 }
 ```
+
+!!! tip
+如果选择了不合适的产生式，可能需要回溯
+!!!
+
+> 后续会给出相应的代码实现例子
 
 #### 4.1.3 回溯问题
 
 递归下降分析的主要问题是**回溯**：
 
-- 非终结符有可能有多个产生式，由于信息缺失，无法准确预测选择哪一个
-- 考虑到往往需要对多个非终结符进行推导展开，因此尝试的路径可能呈指数级爆炸
-- 其分析过程类似于 NFA
+> **复杂的回溯会造成极高的代价**
+
+- 非终结符有可能有多个产生式，由于信息缺失，**无法准确预测选择哪一个**
+- 考虑到往往需要对多个非终结符进行推导展开，**因此尝试的路径可能呈指数级爆炸**(理论上可能要尝试一棵树的所有分支)
+- 其分析过程类似于 NFA(本质上也是一棵树$$)
 
 !!! example 需要回溯的文法
 
@@ -643,6 +672,8 @@ void A() {
 1. 首先尝试 A → ab，发现不匹配
 2. 然后回溯尝试 A → a，成功匹配
 
+![alt text](image-74.png)
+
 !!!
 
 ### 4.2 LL(1) 和预测分析法
@@ -651,32 +682,100 @@ void A() {
 
 **预测分析法**（Predictive Parsing）此方法接受 LL(k) 文法！
 
-- **L**: "left-to-right" 从左到右扫描
-- **L**: "leftmost derivation" 最左推导
-- **k**: 向前看 k 个 Token 来确定产生式（通常 k=1）
+- **L**: "left-to-right" **从左到右扫描**
+- **L**: "leftmost derivation" **最左推导**
+- **k**: **向前看 k 个 Token 来确定产生式**（通常 k=1）
 
 每次为最左边的非终结符号选择产生式时，向前看 1 个输入符号，预测要使用的产生式。
 
 #### 4.2.2 First 集和 Follow 集
 
-**First 集**：可从 α 推导得到的串的首个终结符的集合
+##### 1.1 First 集
+
+**First 集**：可从 α 推导得到的串的**首个终结符**的集合
 
 $$
 First(α) = \{a | α ⇒^* a..., a ∈ T\}
 $$
 
-**Follow 集**：从 S 出发，可能在推导过程中跟在 A 右边的终结符号集
+- **Base case**: If X is a terminal: First(X) = {X}
+- **Inductive case**:
+
+```c
+if X → Y1Y2...Yn{
+    First(X) ∪= First(Y1) //也就是说First(Y1)是First(X)的子集
+    if Y1 ∈ Nullable{
+        First(X) ∪= First(Y2)
+    }
+    if Y1,Y2 ∈ Nullable{
+        First(X) ∪= First(Y3)
+    }
+}
+```
+
+> 上述规则看起来似乎是关于非终结符的，但是First是关于文法符号串α(如产生式右部)的，规则如inductive case
+
+![alt text](image-75.png)
+
+**Follow 集**：从 S 出发，可能在推导过程中**跟在 A 右边的终结符号集**
 
 $$
 Follow(A) = \{a | S ⇒^* ...Aa...，a∈T\}
 $$
 
-##### Nullable 集（可空集）
+- **Base case**: 初始化为空
+  - Follow(A) = {}
+- **Inductive case**:
 
-如果 X 可以推导空串，则 X 是 Nullable 的。
+```c
+if B → s1 A s2 for any s1 and s2{
+    1. Follow(A) ∪= First(s2)
+    2. if s2 is Nullable, Follow(A) ∪= Follow(B)
+}
+```
+
+> 关于第2种情况，假设$S ⇒^* ...Bb..., b \in Follow(B)$
+> - 用s1As2替换B后：$S ⇒^* ...s_1As_2...$
+> - 由于s2是Nullable，因此b也属于Follow(A)
+
+
+![alt text](image-76.png)
+
+Follow集的归纳定义是一般情况，对于一些特殊的产生式，可能可以运用简单的推论，比如
+
+![alt text](image-77.png)
+
+![alt text](image-78.png)
+
+#### 4.2.3 Nullable 集（可空集）
+
+如果 X 可以推导**空串**，则 X 是 Nullable 的。
 
 - **Base case**: X → ε，则 X ∈ Nullable
 - **Inductive case**: X → Y₁Y₂...Yₙ，如果所有 Yᵢ ∈ Nullable，则 X ∈ Nullable
+
+> $X \rightarrow ^* ε$，则 X ∈ Nullable
+
+**通过迭代的方法计算Nullable集**
+
+```c
+Nullable <- {}
+while(Nullable still changes){
+    for (each production X → α)
+    {
+        switch(α)
+        case ε:
+            Nullable ∪ {X};
+            break;
+        case Y1 ... Yn:
+            if (Y1 ∈ Nullable && ... && Yn ∈ Nullable){
+                Nullable ∪ {X};
+            }
+            break;
+    }
+}
+```
+
 
 !!! example 计算 Nullable, First, Follow 集
 
@@ -685,60 +784,136 @@ $$
 Z → d
 Y → c | ε
 X → Y | a
+Z → XYZ
 ```
 
+**为了知道每个产生式的第一个可能会出现的终结符**，我们需要计算First, Nullable, Follow 集
+
 计算过程：
-1. 由于 Y → ε，Y ∈ Nullable
-2. 由于 X → Y 且 Y ∈ Nullable，X ∈ Nullable
-3. First(Z) = {d}
-4. First(Y) = {c, ε} = {c}
-5. First(X) = First(Y) ∪ {a} = {c, a}
-6. Follow(Z) = {}
-7. Follow(Y) = First(Z) = {d}
-8. Follow(X) = Follow(Y) ∪ Follow(Z) = {d}
+
+**Nullable集**
+
+1. 初始化为false(或者说Nullable集合为空)
+
+![alt text](image-79.png)
+
+2. 由于$Y → ε$，所以$Nullable \cup = {Y}$
+
+![alt text](image-80.png)
+
+3. 由于$X → Y$，所以$Nullable \cup = {X}$(Inductive case)
+
+![alt text](image-81.png)
+
+4. 由$Z → XYZ$确认，这里我们要停止迭代
+
+![alt text](image-82.png)
+
+**First集**
+
+1. 初始化First集
+
+![alt text](image-83.png)
+
+2. 找到所有Base case
+
+![alt text](image-84.png)
+
+3. 考虑Inductive case,也就是所有产生式右侧出现非终结符的情况
+
+![alt text](image-85.png)
+![alt text](image-86.png)
+
+4. 继续迭代直到不会产生任何变化
+
+
+**Follow集**
+
+1. 初始化Follow集为空
+
+![alt text](image-87.png)
+
+2. Indective Case的两种情况
+
+![alt text](image-88.png)
+![alt text](image-89.png)
 
 !!!
 
-#### 4.2.3 LL(1) 文法的定义
+#### 4.2.4 LL(1) 文法的定义
+
+预测分析器(自顶向下)在展开非终结符A时，只看 **当前一个输入符号**就必须**唯一确定选哪条产生式**
 
 文法 G 的任何两个产生式 A → α | β 都满足下列条件：
 
 1. **First(α) ∩ First(β) = ∅**
    - α 和 β 推导不出以同一个单词为首的串
 
-2. **若 β ⇒* ε，则 α ⇒* ε，且 First(α) ∩ Follow(A) = ∅**
+    **意义**：假设下一个输入是b，且$First(\alpha)$和$First(\beta)$不相交
+
+    - 若$b\in First(\alpha)$,则选择$A \rightarrow \alpha$
+    - 若$b\in First(\beta)$,则选择$A \rightarrow \beta$
+
+2. **若 $β ⇒^* ε$，则 $α ⇒^* ε$，且 First(α) ∩ Follow(A) = ∅**
    - α 和 β 不能同时推出 ε
    - First(α) 不应在 Follow(A) 中
 
+    **意义**：假设下一个输入是b，且$\beta ⇒* ε$
+
+    - 如果$b\in First(\alpha)$,则选择$A \rightarrow \alpha$
+    - 如果$b\in Follow(A)$,则选择$A \rightarrow \beta$，因为最终达到了$\epsilon$且后面跟着b
+
+    **场景推演**
+    ![alt text](image-90.png)
+
+!!! note "Follow(A)的直觉"
+- **Follow(A)=**在所有句型中，紧跟在A后面出现的 **终结符**的集合
+- 当选择$A \rightarrow \beta \text{ and } \beta \Rightarrow ^* \epsilon$时，A相当于不产生任何内容，接下来读到的就是Follow(A)中的符号
+- 条件2.1保证：能触发$A \rightarrow \alpha$和$A \rightarrow \beta$(消失)的符号集合没有交集
+!!!
+
 以上条件可以保证产生式选择的唯一性。
 
-#### 4.2.4 预测分析表的构造
+#### 4.2.5 预测分析表的构造
+
+##### 预测分析表的结构
 
 预测分析表是一个二维表：
-- **行**：对应一个非终结符
-- **列**：对应某个终结符或输入结束符 $
+- **行A**：对应一个**非终结符**
+- **列a**：对应某个**终结符或输入结束符 $**
+- **项(A,a)**:针对非终结符为A，当下一个输入Token为a时，可选的产生式
 
-构造规则：
-- 若 t ∈ First(γ)，则将产生式 X → γ 填入表项 M[X, t]
-- 若 γ 是 Nullable 且 t ∈ Follow(X)，则将产生式 X → γ 填入表项 M[X, t]
+![alt text](image-91.png)
+
+!!! example "`[E,int]`"
+当现在的非终结符是E并且下一个输入是`int`时，我们使用产生式`E → TX`
+!!!
+
+##### 构造规则
+
+对于文法G的每个产生式$X → γ$
+
+- 若 $t ∈ First(γ)$，则将产生式 $X → γ$ 填入表项 `M[X, t]`(M行t列)
+- 若 $γ$ 是 Nullable 且 $t ∈ Follow(X)$，则将产生式 X → γ 填入表项 `M[X, t]`
 
 !!! example 预测分析表构造
 
 文法：
-```
-Z → X Y Z | d
-Y → c | ε
-X → Y | a
-```
+![alt text](image-92.png)
 
-预测分析表：
-|      | a    | c    | d    | $    |
-|------|------|------|------|------|
-| Z    | Z→XYZ| Z→XYZ| Z→d  |      |
-| Y    | Y→ε  | Y→c  | Y→ε  |      |
-| X    | X→a  | X→Y  |      |      |
+Nullable,First,Follow Set
 
+![alt text](image-93.png)
+
+![alt text](image-94.png)
+![alt text](image-95.png)
+![alt text](image-96.png)
+![alt text](image-97.png)
+
+**上表中，存在某一个表格中有两个语法规则**，这就可以说明上面的文法**不是LL(1)文法**
 !!!
+
+**LL(1)文法的另一种定义**：如果按这种方式构造的预测分析表(`predivitive parsing table`)中**不存在冲突项**，那么该文法就被称为LL(1)文法
 
 #### 4.2.5 LL(1) 预测分析的实现
 
@@ -760,13 +935,29 @@ while True:
     else: ERROR!
 ```
 
+**栈的作用**：Stack：用于追踪推导过程中待处理事项
+
+- 若栈顶是非终结符X，利用预测分析表，选择产生式$X → \alpha$
+- 若栈顶是终结符a:栈顶记号a和输入中的Token匹配的话，pop掉并读入下一个lookahead符号
+
 **递归实现**：递归下降分析，每个非终结符对应一个函数。
+
 
 ### 4.3 文法改造
 
+**LL(1)文法有一些明显的性质**
+
+- LL(1)文法是无二义的
+- LL(1)文法是无左公因子的
+- LL(1)文法无左递归的
+
+> 除了利用LL(1)文法的定义外，有时也可以利用这些性质判定某些文法不是LL(1)的
+
 #### 4.3.1 提左公因子
 
-**左公因子**（Left Factoring）：同一非终结符的多个候选式存在共同前缀，可能导致回溯。
+**左公因子**（Left Factoring）：同一非终结符的多个候选式**存在共同前缀**，可能导致回溯。
+
+很明显这违背了`First`原则
 
 **提左公因子**的方法：
 ```
@@ -777,46 +968,215 @@ while True:
 
 其中 Q 是新增加的非终结符。
 
+通过改写产生式来 **推迟决定**，等读入了足够多的输入，获得足够信息后再做选择
+
 #### 4.3.2 消除左递归
 
-**左递归**（Left Recursive）：如果一个文法中有非终结符号 A 使得 A ⇒⁺ Aα，那么这个文法就是左递归的。
+**左递归**（Left Recursive）：
 
-**消除直接左递归**：
-```
-原始：A → Aα | β（其中 α ≠ ε，β 不以 A 开头）
-改造：A → βA'
-      A' → αA' | ε
-```
+- 如果一个文法中有非终结符号 A 使得 $A ⇒⁺ Aα$，那么这个文法就是左递归的。
+- $S \rightarrow Sa|b$(直接/立即左递归)
+
+!!! question "递归下降分析可能进入无限循环"
+- 如考虑`baaaa`
+- 最左推导:$S \Rightarrow Sa \Rightarrow Saa \Rightarrow Saaa ...$
+
+**解决思路**：限制文法或者进行文法变换
+!!!
+
+##### 消除直接左递归：
+
+
+原始：$A → Aα | β$（其中 $α ≠ ε，β$ 不以 A 开头）
+
+![alt text](image-98.png)
+
+改造：(**把左递归转成右递归**)
+
+$A → βA'$
+    
+$A' → αA' | ε$
+
+![alt text](image-99.png)
+
+- 观察：由A生成的串以某个$\beta$开头，然后跟上零个或者多个$\alpha$
 
 ### 4.4 错误恢复
 
-#### 4.4.1 错误恢复策略
+#### 4.4.1 为什么错误恢复很重要
+
+**编译器的错误处理**：
+- **词法错误**，如标识符、关键字或算符的**拼写错误**
+- **语法错误**，如算术表达式的**括号不配对**
+- **语义错误**，如算符作用于不相容的运算对象
+- …
+
+**错误处理的基本目标**：
+1. 清楚而准确地报告错误的出现，并尽量少伪错误
+2. 迅速地从错误中恢复过来，以便诊断后面的错误
+3. 不应该使正确程序的处理速度降低太多
+
+!!! example Good Compiler UX vs Bad Compiler UX
+
+**Bad Compiler UX（差的用户体验）**：
+```
+$ cc foo.c
+recompile →
+error: expected ')' on line 4
+discover next error
+1 error. Fix and recompile.
+→ repeat…
+```
+
+> 只能给出一个错误
+
+**Good Compiler UX（好的用户体验）**：
+```
+$ cc foo.c
+User sees all
+error: expected ')' on line 4
+errors at once
+error: expected ';' on line 6
+→ faster edit-
+error: undeclared 'z' on line 9
+compile cycle.
+3 errors
+```
+
+> 编译器在一次运行中就发现了所有错误。它没有在第一个错误后停止——而是恢复并继续解析。
+
+!!!
+
+#### 4.4.2 预测分析中的错误来源
+
+回顾：预测分析器使用表 `M[A, t]`，由非终结符 A 和lookahead符号 t 索引。
+
+- **当 parser 查找 M[A, t] 并发现空条目时，检测到错误。**
+
+![alt text](image-100.png)
+
+#### 4.4.3 错误恢复策略概述
 
 | 策略 | 描述 | 优点 | 缺点 |
 |------|------|------|------|
-| **抛出并退出** | 遇到第一个错误就停止 | 简单易实现 | 用户体验差 |
-| **插入 Token** | 假装期望的 Token 存在 | 简单 | 可能导致无限循环 |
-| **删除 Token** | 跳过输入直到 FOLLOW 集 | 一定终止 | 可能跳过有效代码 |
+| **1. 抛出并退出 (Raise & Quit)** | 遇到第一个错误就抛出异常并停止，完全不恢复 | 简单易实现 | 每次编译只出现一个错误；用户体验差 |
+| **2. 插入 Token (Insert Tokens)** | 假装期望的 Token 存在，继续正常解析 | 简单 | 可能导致无限循环 |
+| **3. 删除 Token (Delete Tokens)** | 跳过输入直到找到 FOLLOW 集中的 token | 一定终止（到达 EOF） | 可能跳过有效代码 |
 
-#### 4.4.2 Panic Mode（删除策略）
+#### 4.4.4 策略一：抛出并退出 (Raise & Quit)
 
-当检测到错误时，跳过输入符号直到找到属于当前非终结符 FOLLOW 集的符号。
+当 parser 遇到空的表项时，立即停止：
+
+**不稳健且用户体验差！**
 
 ```c
-void skipto(int follow[]) {
-    while (!member(tok, follow) && tok != EOF) {
-        tok = nextToken();  // 丢弃
+void T() {
+    switch (tok) {
+        case ID:
+        case NUM:
+        case LPAREN: F(); Tprime(); break;
+        default: error!
     }
 }
 ```
 
-!!! note 提示
+- 每次编译只报告一个错误——用户必须反复修复并重新编译
+- 不稳健：单个拼写错误会使所有后续分析停止
 
-FOLLOW 集作为同步点的原因：
-- FOLLOW(A) 中的符号可以合法地出现在 A 之后
-- 到达 FOLLOW(A) 意味着：停止分析 A 并继续上层
+#### 4.4.5 策略二：插入 Token (Insert Tokens)
+
+**插入**：当 parser 期望 token t 但看到其他东西时，假装 t 存在。打印错误消息，但不消耗任何输入。
+
+```c
+void T() {
+    switch (tok) {
+        case ID:
+        case NUM:
+        case LPAREN: F(); Tprime(); break;
+        default:
+            print("expected id, num, or left-paren");
+            // don't consume input — just return (pretend we saw a valid T)
+    }
+}
+```
+
+!!! warning 危险：无限循环！
+
+如果 parser "插入"一个 token 并返回，但调用者循环回去并尝试用相同的前看 token 解析相同的非终结符，则 parser 将：
+
+1. 看到相同的意外 token
+2. 再次"插入"
+3. 再次返回给调用者
+4. 永远循环——没有输入被消耗！
+
+**错误检测 → 打印消息并返回 → 调用者重试 T() → 无限循环**
+原因：tok ∉ FIRST(T)，没有消耗任何 token，相同的前看 token！
 
 !!!
+
+#### 4.4.6 策略三：删除 Token (Delete Tokens)
+
+**删除（Panic Mode）**：
+
+当检测到错误时，跳过输入 token，直到找到属于当前非终结符 FOLLOW 集的 token。然后返回，让调用者继续。
+
+```c
+int Tprime_follow[] = {PLUS, RPAREN, EOF};
+
+void skipto(int follow[]) {
+    while (!member(tok, follow) && tok != EOF) {
+        tok = nextToken();  // discard unexpected tokens
+    }
+}
+
+void Tprime() {
+    switch (tok) {
+        case PLUS: break;
+        case TIMES:
+            eat(TIMES); F(); Tprime(); break;
+        case RPAREN: break;
+        case EOF: break;
+        default:
+            print("expected +, *, right-paren, or end-of-file");
+            skipto(Tprime_follow);
+    }
+}
+```
+
+##### 为什么 skipto 使用 Follow 集？
+
+- **错误在 A 中**：parser 在 A 内部失去跟踪
+- **FOLLOW(A) 提供安全的同步点**
+- FOLLOW(A) 中的 token 可以合法地出现在 A 之后
+- 到达 FOLLOW(A) 意味着：停止 A 并继续上层
+
+##### 删除策略 vs 插入策略
+
+| 方面 | 插入 Token | 删除 Token |
+|------|-------------|------------|
+| **机制** | 假装期望的 token 存在 | 跳过到 FOLLOW 集 |
+| **消耗输入** | 无 | ≥ 1 个 token |
+| **终止** | 不保证 | 保证（到达 EOF） |
+| **级联错误** | 更少（保留结构） | 更多（跳过代码≈丢失上下文） |
+| **风险** | 无限循环 | 过度跳过 |
+
+!!! note 提示
+
+**工程上可能会组合使用不同策略**
+
+!!!
+
+#### 4.4.7 小结
+
+**递归下降 parser for LL(k) grammars**：
+- 计算 nullable、first 和 follow 集合
+- 根据这些集合构造解析表
+- 检查重复条目，这表示失败
+- 从解析表创建 C 程序
+
+**如果 parser 构造失败**：
+- 重写文法（提左公因子、消除左递归等）并重试
+- 尝试使用其他方法构建 parser
 
 ---
 
