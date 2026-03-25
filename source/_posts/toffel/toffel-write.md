@@ -538,11 +538,11 @@ While acknowledging the benefit that a large group of friends can bring more exc
 !!! example
 **Yes**
 
-Admittedly（诚然）, while acknowledging the concern that rapid advancement of science harms/affects morality and environment. Nevertheless, its benefits in improving/promoting economy and efficiency **far outweigh these concerns, thus making it imperative**.
+**Admittedly**（诚然）, **while acknowledging the concern that** rapid advancement of science **harms/affects** morality and environment. **Nevertheless**, **its benefits in** improving/promoting economy and efficiency **far outweigh these concerns, thus making it imperative**.
 
 **No**
 
-Admitted;y, while acknowledging the benefit that rapid advancement of science improves/promotes economy and efficiency. Neverthless, its concerns in harming/affecting morality and environment far outweigh these benefits, thus making it imperative.
+Admittedly, while acknowledging the benefit that rapid advancement of science improves/promotes economy and efficiency. Neverthless, its concerns in harming/affecting morality and environment far outweigh these benefits, thus making it imperative.
 !!!
 
 !!! example
@@ -572,7 +572,7 @@ Admittedly, while acknowledging the concern that mandatory evening classes puts 
 ### 4.1 Word Choice（词汇选择）
 
 - 不具描述性的词语：`thing`,`happy`, `good`,`big`,`nice`, `bad`
-- 更具体的词语：`phenomenon` or `concept`,`effective`, `beneficial`, `significant`, `substantial`, `commendable`, `specific`, `sad`, `heart-breaking`
+- 更具体的词语：`phenomenon` or `concept`,`effective`, `beneficial`, `significant`, `substantial`, `commendable`（值得称赞的）, `specific`, `sad`, `heart-breaking`
 - 模糊→清晰
 
 ![alt text](image-30.png)

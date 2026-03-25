@@ -746,3 +746,18 @@ chr(20013) # '中'
 **用途**：
 - 加解密时的字符转换
 - 输出特殊符号
+
+!!! note "使用map函数对输入进行分割"
+```python
+>>> a, b = map(int, input().split())
+1 2
+>>> print(f'a = {a}, b = {b}')
+a = 1, b = 2
+>>> print(s[::-1])
+dlroW olleH
+>>> print(s[0:5:][::-1])
+olleH
+>>> s
+'Hello World'
+```
+!!!
