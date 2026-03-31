@@ -406,8 +406,4 @@ https://arxiv.org/abs/2012.00152
 4. **深度的重要性**：更多隐藏层能学习更复杂的函数
 5. **理论新进展**：NTK、Rate Reduction、Kernel Machines 等
 
----
 
-## Any Questions?
-
-如有疑问，欢迎与讲师交流！
