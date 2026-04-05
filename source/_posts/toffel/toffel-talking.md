@@ -789,6 +789,34 @@ When it's quiet, I can really get into the book, especially if the story is comp
 For example, when I read before bed, even **soft background noise can pull my attention away**. Silence helps me stay focused and **enjoy the story without feeling rushed**. So a quiet environment makes reading much more satisfying.
 !!!
 
+### 5.7 电子书(趋势选择)
+
+**提问**：Nowadays, many people prefer reeading digital books over printed ones. What are your thoughts on this trend? Do you think digital books will completely replace printed books in the future? Why or why not?
+
+**结构**
+
+- `I believe ... will become a lot more popular in the future`
+- `One main reason is that...`(趋势原因)
+- `... bring many benefits`(好处)
+- `For example, ...`(例子)
+- `As... , ... will only become more common.`(未来更普遍)
+  
+**Sample**
+
+I think digital books are becoming more popular **mainly because people's lifestyles have changed**. These days, people are much busier, and they spend most of their time on phones or tablets anyway.**As a result**, sigital books are simply easier to accfess and gfit better into daily routines.
+
+**On top of that**， digital books offer a ot of practical benefits. For example, eaders can adjust the font size and brightness, which makes reading more comfortable, especially at night。 They are also more environmentally freindly since they reduce paper use.
+
+Because of these reasons, I believe digital books will eventually replace printed ones for most readers, especially younger generations.
+
+### 5.8 书籍类型偏好
+
+**提问**：I would like to get your opinion, lf you have time to read one novel, do you think it is more worth a while to read an old classic that many readers love or would you choose a newly-published novel that tells a modern story? why?
+
+![alt text](image-56.png)
+
+Personally, I would choose a newly-published novel, especially if I'm reading for enjoyment. One important reason is interest. New novels usually have fresh and original storylines, so there's less chance of feeling like I've seen the same plot before. For instance, many modern novels experiment of with structure or perspective, which **keeps me curious and motivated** to keep reading. 
+Another reason is efficiency. With a busy schedule, I don't always have the energy for slow-paced books. Modern novels often use more accessible language and faster pacing, so I'm much more likely to actually finish the book, even if only read during short breaks.
 ---
 
 ### 5.7 图书馆场景词汇
