@@ -1317,7 +1317,7 @@ LR 系列分析使用相同的表驱动分析程序：
 
 **LR分析器的整体结构**
 
-![alt text](image-103.png)
+![LR分析器的整体结构](image-103.png)
 
 > - LR系列分析器共享 **相同的表驱动分析程序**，不同文法只需要更换对应的分析表(如SLR,LR(1)分析表)
 > - 状态栈与符号栈同步变化，用于记录分析过程中的状态
@@ -1394,7 +1394,7 @@ When to shift and when to reduce?
 #### 5.2.3 LR(0)分析NFA
 
 - 起始&终结状态
-  - 文法G中增加 **新开始符号S'**并加入产生式`S' → S$`
+  - 文法G中增加 **新开始符号S'**并加入产生式`S' → S$`（**增广文法，这是必要的**）
   - 按`S' → S$`进行归约：将输入符号串归约成为开始符号(加入S'方便表示起始和终结状态)
 
 ![alt text](image-107.png)
@@ -1628,617 +1628,563 @@ SLR(1) 使用 FOLLOW 集作为"合理但可能不够精确的近似"。
 
 ---
 
-## 6. LR(1) 分析
+### 5.4 LR(1) 分析
 
-### 6.1 LR(1) 项 (LR(1) Items)
+![LR解析器的能力范围](image-144.png)
 
-**LR(1)项**：包含**更多信息**来**消除一些归约动作**
+#### 5.4.1 LR(1)项(Items)
 
-- 实际的做法相当于"分裂"一些LR(0)状态，**精确指明何时应该归约**
+- LR(1)项包含更多信息来消除一些归约动作
+  - 实际的做法相当于 **分裂**一些LR(0)状态，精确指明何时应该归约
 
-**LR(1)项的形式**：$A \rightarrow \alpha \bullet \beta, a$
+- `LR(1)`项的形式：$A \rightarrow \alpha ∙ \beta ,a$
+  - `a`称为向前看符号(lookahead),可以是终结符号`$`
+  - $\alpha$：一个序列，已经在符号栈的栈顶
+  - 输入串的开头是可以**从$\beta a$推导得到的字符串**
 
-- a 称为**向前看符号**，可以是终结符号或者$
-- sequence α is on top of the (symbol) stack
-- the head of the input is a string derivable from βa
-
-!!! note 关键区别
+!!! note
+**关键区别**
 
 **LR(1) 项 = LR(0) 项 + 一个向前看符号 a**
 
-归约时只有当前输入 token 恰为 a 才进行归约
-
+归约时，只有当当前输入`token`恰好为a时，才进行归约
 !!!
 
-### 6.2 LR(1) 的 Closure 和 Goto
+#### 5.4.2 LR(1) parsing：closure
 
-#### Closure 操作
-
-```c
-// LR(1)
-Closure(I) = 
+```go
+Closure(I)=
     repeat
-        for any item (A → α • Xβ, z) in I
-            for any production X → γ
+        for any item(A →  α • Xβ,z) in I
+            for any production  X → γ
                 for any w ∈ First(βz)
                     I ← I ∪ {(X → • γ, w)}
     until I does not change
 return I
 ```
 
-```c
-// LR(0)
-Closure(I) =  
-    repeat
-        for any item A → α • Xβ in I
-            for any production X → γ 
-                I ← I ∪ {X → • γ}
-    until I does not change
-    return I
-```
+- **起始状态**：`LR(1)`项$S' \rightarrow•S$$ 
+  - `?`是什么无关紧要，因为`$`不会被移进
+- 处理 ϵ-transitions(也就是添加$X → • γ$)时
+  - 记录向前看符号`w`
+  - $w ∈ First(βz)$:把$A \rightarrow \alpha • X\beta,z$的信息传递到$X \rightarrow  • γ,w$
+- 含义
+  - $A→α∙Xβ,z$ 表示输入头是可从 $Xβz$ 推导的串
+  - 新加的Item:$X \rightarrow α∙Xβ$,z的信息传递到$X→∙γ,w$
+- 观察闭包推导结果发现，有些项比较相似(核心相同，仅向前看符号不同)，可以有更紧凑的等价表示，即将向前看符号合并写在一起
 
-**与 LR(0) 的区别**：处理ε-transitions(即添加X → • γ）时
-- 记录向前看符号 w
-- $w \in First(βz)$:把$A \rightarrow \alpha \bullet X\beta, z$的信息传递到 $X \rightarrow \bullet \gamma, w$
+**这里我们做一个总结**
 
-- 含义：
-  - $A \rightarrow \alpha \bullet X\beta, z$：表示输入头是可从 $X\beta z$ 推导的串
-  - 新加的 item $X \rightarrow \bullet \gamma, w$：表示输入头是可从 $\gamma w$ 推导的串
+如果一个item形如
 
-!!! example LR(1) Closure 示例
+$$
+(A→α∙Xβ, z)
+$$
 
-文法：
-```
-0：S' → S$
-1：S → V = E
-2：S → E
-3：E → V
-4：V → x
-5：V → * E
-```
+其中点号后面是一个非终结符X，那么就要把X的产生式加进来
 
-从 $S' \rightarrow \bullet S \$, ?$ 开始：
+$$
+X \rightarrow \gamma
+$$
 
-1. 首先选择 S 来生成新的 item。此时 β 相当于 $，z 是 "?"，因此 βz 是 $?
-2. 继续选择 V 来生成新的 item。此时 β 是 =E，z 是 $，因此 βz 是 =E$
-3. 继续选择 E 来生成新的 item。此时 β 是空串，z 是 $，因此 βz 是 $
-4. 继续选择 V 生成新的 item。此时 β 相当于空串，z 是 $，因此 βz 是 $
+并且新项目的展望符不是随便写的，而是
 
-**观察**：有些项比较相似，可以有更 compact 的等价表示！
-![alt text](image-129.png)
+$$
+w \in FIRST(\beta z)
+$$
+
+所以加入 $(X→∙γ, w)$
+
+**做题模板**
+
+- 先把初始项目写出来
+- 找所有“点后是**非终结符**”的项目
+- 对每个这样的项目，算FIRST(βz)
+- 把该非终结符的所有产生式加进去，展望符取自FIRST(βz)
+- 重复，直到不能再加
+- 最后可把相同核心、不同展望符的项目合并
+
+!!! example "LR(1) Closure 计算过程整理"
+
+给定增广文法：
+
+0. S' -> S $
+1. S -> V = E
+2. S -> E
+3. E -> V
+4. V -> x
+5. V -> * E
+
+现在要求计算：
+
+Closure({ S' -> • S $, $ })
+
+LR(1) Closure 的计算规则如下：
+
+如果存在一个项目
+
+(A -> α • X β, z)
+
+其中点号后面是非终结符 X，则需要把 X 的所有产生式加入项目集中，并形成新的项目：
+
+(X -> • γ, w)
+
+其中 w ∈ FIRST(βz)。
+
+不断重复这一过程，直到项目集不再增加新的项目为止。
+
+---
+
+初始项目为：
+
+I0 = { S' -> • S $, $ }
+
+观察该项目：
+
+S' -> • S $, $
+
+点号后面是非终结符 S，因此需要展开 S 的产生式。
+
+这里：
+
+β = $
+z = $
+
+因此需要计算：
+
+FIRST(βz) = FIRST($)
+
+由于 $ 是终结符，因此：
+
+FIRST($) = { $ }
+
+于是加入 S 的所有产生式，并附带展望符 $：
+
+S -> • V = E, $
+S -> • E, $
+
+此时项目集变为：
+
+S' -> • S $, $
+S -> • V = E, $
+S -> • E, $
+
+---
+
+接下来检查新加入的项目：
+
+S -> • V = E, $
+
+点号后面是非终结符 V，因此需要展开 V 的产生式。
+
+这里：
+
+β = =E
+z = $
+
+因此需要计算：
+
+FIRST(=E$)
+
+由于串的第一个符号是终结符 =，因此：
+
+FIRST(=E$) = { = }
+
+于是加入 V 的产生式：
+
+V -> • x, =
+V -> • * E, =
+
+项目集更新为：
+
+S' -> • S $, $
+S -> • V = E, $
+S -> • E, $
+V -> • x, =
+V -> • * E, =
+
+---
+
+继续检查项目：
+
+S -> • E, $
+
+点号后面是非终结符 E，因此需要展开 E。
+
+这里：
+
+β = ε
+z = $
+
+因此：
+
+FIRST(βz) = FIRST($) = { $ }
+
+于是加入：
+
+E -> • V, $
+
+项目集更新为：
+
+S' -> • S $, $
+S -> • V = E, $
+S -> • E, $
+V -> • x, =
+V -> • * E, =
+E -> • V, $
+
+---
+
+继续检查新加入的项目：
+
+E -> • V, $
+
+点号后面是非终结符 V，因此继续展开 V。
+
+这里：
+
+β = ε
+z = $
+
+因此：
+
+FIRST(βz) = FIRST($) = { $ }
+
+于是加入：
+
+V -> • x, $
+V -> • * E, $
+
+项目集变为：
+
+S' -> • S $, $
+S -> • V = E, $
+S -> • E, $
+V -> • x, =
+V -> • * E, =
+E -> • V, $
+V -> • x, $
+V -> • * E, $
+
+---
+
+继续检查新加入的项目。
+
+对于：
+
+V -> • x, =
+V -> • * E, =
+V -> • x, $
+V -> • * E, $
+
+这些项目中，点号后面都是终结符（x 或 *），因此不再满足展开条件。
+
+因此 Closure 计算结束。
+
+最终 Closure 为：
+
+S' -> • S $, $
+S -> • V = E, $
+S -> • E, $
+V -> • x, =
+V -> • * E, =
+E -> • V, $
+V -> • x, $
+V -> • * E, $
+
+---
+
+为了表示更紧凑，可以将具有相同核心项目但展望符不同的项目进行合并。
+
+例如：
+
+V -> • x, =
+V -> • x, $
+
+可以合并为：
+
+V -> • x, {=, $}
+
+同样：
+
+V -> • * E, =
+V -> • * E, $
+
+可以合并为：
+
+V -> • * E, {=, $}
+
+因此紧凑表示为：
+
+S' -> • S $, $
+S -> • V = E, $
+S -> • E, $
+E -> • V, $
+V -> • x, {=, $}
+V -> • * E, {=, $}
 !!!
 
-#### Goto 操作
+#### 5.4.3 LR(1) Parsing: GOTO
 
-```c
-// LR(1)
-Goto(I, X) = LR(1)
-J ← {}
-for any item (A → α • Xβ, z) in I
-    add (A → αX • β, z) to J
-return Closure(J)
-```
+```go
+Goto(I, X):
+    J ← {}
+    for each item (A → α • X β , z) in I do
+        add (A → α X • β , z) to J
 
-```c
-// LR(0)
-Goto(I, X)=
-    set J to the empty set
-    for any item A → α • Xβ in I
-        add A → αX • β to J
     return Closure(J)
 ```
 
-**与 LR(0) 的区别**：只改变项的形式！
+这和LR(0)的区别只在于item的格式，LR(1)的item我们多了一个展望符号`z`
 
-### 6.3 LR(1) 的 Reduce Action
+#### 5.4.4 LR(1) Reduction
 
-```c
-# SLR(1) 规约动作
+```go
 R ← {}
 for each state I in T
-    for each item A → α• in I
-        for each token X in Follow(A)
-            R ← R ∪ {(I, X, A → α)}
-
-# LR(1) 规约动作
-R ← {}
-for each state I in T
-    for each item (A → α •, z) in I
+    for each item (A → α • , z) in I
         R ← R ∪ {(I, z, A → α)}
 ```
 
-**LR(1) 的优势**：在项目和归约动作中增加lookahead符号 z
+**算法步骤**
 
-- 动作 (I, z, A → α) 表示：在状态 I 中，当展望符号为 z 时，分析器将使用产生式 A → α 进行归约。
-    - LR(1) 的lookahead token比 SLR 更精准。
-    - 在包含项目 A → α 的状态中，Follow(A) 中的部分符号并不一定是合法的展望符。
+- 创建一个空集合
+  - R表示所有规约动作的集合
+- 遍历LR自动机中的每一个状态
+  - T表示LR项目中的所有状态的状态集
+  - I表示其中的一个状态(项集)
+- 在状态`I`中找所有 **归约项目**，如果产生式右侧完全匹配，则执行归约动作
+- `I,z,A→α`可以叫做一个归约动作，意思是在状态I中，如果当前输入符号是z，则执行`A→α`
+  - LR(1)的lookahead比SLR更精确
+  - Follow(A)中的一些符号，在包含项目 $A → α•$的状态中**不一定总是合法的输入符号**
 
-**归约条件**：如果要根据 $A \rightarrow \alpha\beta \bullet, a$ 归约，下一个输入符号必须是 a
-
-### 6.4 LR(0)、SLR(1)、LR(1) 对比
-
-| 方法 | 归约条件 | 精度 |
-|------|----------|------|
-| **LR(0)** | • 在末尾即可归约（无需看输入） | 最低 |
-| **SLR(1)** | 下一个 token ∈ Follow(A)（全局集合） | 中等 |
-| **LR(1)** | 下一个 token 恰为项中的 a（精确） | 最高 |
-
-### 6.5 LR(1) 的局限性
-
-LR(1)分析表可能很大，有很多状态
-
-![alt text](image-130.png)
-
----
-
-## 7. LALR(1) 分析
-
-### 7.1 LALR(1) 方法
-
-**LALR(1)**：Look-Ahead LR，一般 LALR 指的就是 LALR(1)，类似 SLR 指 SLR(1)
-
-**两种主要方法**：
-1. 构建完整的 LR(1) 自动机，然后合并具有相同核心的状态
-2. 构建 LR(0) 自动机并为每个状态计算 lookahead（更高效？）
-
-### 7.2 LALR(1) Parsing in a Nutshell
-
-**Key Observation**:一些LR(1)的状态仅仅是lookahead 符号不同
-
-!!! example 
-![alt text](image-131.png)
-![alt text](image-132.png)
-!!!
-
-**Idea**:我们要合并LR(1)表中那些除了Lookahead符号以外都相同的状态
-
-![alt text](image-133.png)
-
-### 7.3 LALR(1) 核心概念
-
-**核心 (Core)**：一组 LR(1) 项的集合中，(忽略 lookahead 符号)后的**第一分量**（first component)）
-
-- 例如：{[X → a•b, b], [Y → γ•δ, δ]} 的核心是 {X → a•b, Y → γ•δ}
-
-!!! note 关键观察
-在 LR(1) 中，有些状态只是在 lookahead 符号上不同，这些状态有相同的核心
-
-![alt text](image-134.png)
-!!!
-
-### 7.4 构建 LALR(1) 状态
-
-考虑两个 LR(1) 状态：
-- {[X → a•, b], [Y → c•, d]}
-- {[X → a•, b], [Y → c•, d]}
-
-它们有相同的核心，可以合并。合并后的状态包含：
-- {[X → a•, b, b], [Y → c•, d, d]}
-
-**这些被称为 LALR(1) 状态**：
-- Stands for LookAhead LR
-- Typically, **10x fewer LALR(1) states** than LR(1)
-
-### 7.5 从 LR(1) 到 LALR(1)
-
-**步骤**：
-1. 选择两个**具有相同核心的不同状态**
-2. 通过创建具有所有项并集的新状态来合并状态
-3. 将前驱的边指向新状态；新状态指向前一个后继
-
-![alt text](image-135.png)
 
 !!! note
-- 合并具有相同核心的项
-- 改变GOTO表来反映合并
+- SLR(1)使用`Follow(A)`来决定在哪些符号上进行归约，但是`Follow(A)`是全局信息，某个状态里面的`A → α•`只对应**特定的上下文**，因此`Follow(A)`可能是多余的符号
+
+一个典型例子是文法：
+
+S → L = R
+S → R
+L → * R
+L → id
+R → L
+
+在某个状态中可能同时包含项目：
+
+S → L • = R
+R → L •
+
+此时 `R → L•` 是归约项目。根据 SLR 规则，需要在 `Follow(R) = { = , $ }` 上进行归约。但当下一个输入符号是 `=` 时，实际上应该执行 **shift**（继续匹配 `S → L = R`），而不是 **reduce R → L`。因此在 `=` 上产生 **shift/reduce 冲突**。
+
+原因是 `Follow(R)` 是全局集合，其中的符号 `=` 在该状态下并不是合法的归约符号。这说明 **Follow(A) 中的符号在某些状态中并不一定都是有效的 lookahead**，而 LR(1) 通过在项目中记录精确的 lookahead 可以避免这种问题。
+
+!!!
+
+!!! warning
+`LR(1)`项目中带有 **展望符z**，归约动作只在 **lookahead = z**时触发
+
+**如果要根据 A → αβ • , a 归约，下一个输入符号必须是 a**
+!!!
+
+#### 5.4.5 LR(1)的局限性
+
+LR(1)虽然能够通过精确的lookahead避免很多冲突，但是由于需要多维护一个lookahead参数，所以其分析表的规模会很大
+
+### 5.5 LALR(1) Parsing
+
+- LR(1)分析表可能会非常大，并且包含很多状态
+- `LALR(1)`分析：分析表示通过合并那些 **items相同，但是lookahead集合不同的状态**来构造的
+  - 也就是在`LR(1)`分析表中，如果两个状态的项目完全相同，**除了lookahead集合不同**，就可以合并
+- `Lookahead LR(1)`中可以合并的那些状态
+
+![可以合并的状态举例](image-145.png)
+
+#### 5.5.1 LALR(1)方法
+
+构建`LALR(1)`主要有两种方法
+
+1. 构建完整的`LR(1)`自动机，然后合并`core`相同的状态
+2. ~~构建一个`LR(0)`自动机，并为每个状态计算`lookahead`~~
+
+> 为了讲解清晰，将聚焦于第一种方法
+
+#### 5.5.2 LALR(1)语法分析概要
+
+- **核心思想**：在`LR(1)`分析表中，将**项目相同但是lookahead集合不同的状态合并**
+- **如何进行合并**
+
+![可以合并的状态](image-146.png)
+
+#### 5.5.3 LR(1)项目集合的core
+
+- **定义**：一个LR项目集合的Core是该集合中所有项目 **去掉lookahead**终结符后的部分
+- eg. `{X → a•b b, Y → g•d  d}`的核心是`{ X → a•b, Y → g•d }`
+- 在`LR(1)`自动机中，多个状态可能具有相同的Core
+
+![LR(1)有相同核心的不同状态](image-147.png)
+
+#### 5.5.4 通过合并构造LALR(1)状态
+
+- 考虑两个`LR(1)`状态
+
+```
+{ [X → α• , a], [Y → β• , c] }
+{ [X → α• , b], [Y → β• , d] }
+```
+
+- 他们具有相同的core,因此可以合并
+
+合并后的状态为
+
+```
+{ [X → α• , a,b], [Y → β• , c,d] }
+```
+
+- 这样的状态称为`LALR(1)`状态
+  - LALR表示LookAhead LR
+  - 通常LALR(1)状态数量比LR(1)少10倍
+
+#### 5.5.5 从LR(1)到LALR(1)
+
+重复一下步骤，直到 **所有状态的core都不同**
+
+1. 选择两个**有相同core的不同状态**
+2. 合并两个状态：创建一个新的状态，其项目集合为 **所有项目的并集**
+3. 更新自动机中的边
+   - 所有原来指向旧状态的边 → 指向新状态
+   - 新状态指向所有原来的后继状态
+
+![BE可以合并的例子](image-148.png) 
+
+!!! note "总结"
+• 合并具有相同 core 的项目
+• 修改 GOTO 表以反映合并后的状态
 !!!
 
 !!! example
-![alt text](image-136.png)
-![alt text](image-137.png)
+![LR(1) to LALR(1) DFA](image-149.png)
+![解析表转化](image-150.png)
 !!!
 
-### 7.6 LALR(1) vs LR(1) 对比
+- LR(1)
+    - 把期望的向前看符号也加入项中：**LR(1)项**
+    - 向前看符号串的长度即为LR(k)中的k
+    - 充分利用向前看符号，但是状态很多
+- LALR(1)
+    - 介于`SLR(1)`和`LR(1)`之间，分析表和SLR(1)一样大
+    - LALR(1)已经可以处理大部分的程序设计语言
 
-考虑两个 LR(1) 状态：
-- {[X → a•, a], [Y → b•, b]}
-- {[X → a•, b], [Y → b•, a]}
+!!! warning
+把`LR(1)`转化为`LALR(1)`**存在shift-reduce冲突**
 
-合并后的 LALR(1) 状态是：
-- {[X → a•, a, b], [Y → b•, a, b]}
+假设我们有两个完全没有冲突的 LR(1) 状态：
+- 状态 A：`{[X → α •, a], [Y → β •, b]}` (含义：如果下一个输入是 a，就按 X 归约；如果是 b，就按 Y 归约。完全没有歧义。)
+- 状态 B：`{[X → α •, b], [Y → β •, a]}` (含义：如果下一个输入是 b，就按 X 归约；如果是 a，就按 Y 归约。也完全没有歧义。)
 
-**产生了新的归约-归约冲突！**
+因为状态 A 和状态 B 的核心完全相同（都是 X → α • 和 Y → β •），LALR(1) 会强制把它们合并成一个新状态，并把向前看符号放在一起：`{[X → α •, a, b], [Y → β •, a, b]}`
 
-实际上这种情况很少见（LALR 表达力足够强大）
+**冲突产生的原因**： 现在，假设解析器正处于这个合并后的新状态中，并且读到的下一个输入符号恰好是 a（或者 b）。此时解析器就会陷入两难：它同时拥有两条合法的指令，一条告诉它遇到 a 时应该归约为 X，另一条告诉它遇到 a 时应该归约为 Y。解析器无法决定该执行哪个归约动作，这就产生了一个典型的归约-归约冲突
+!!!
 
-![alt text](image-138.png)
+## 6. Parser Generator
 
-| 方法 | 状态数 | 表达能力 |
-|------|--------|----------|
-| LR(1) | 多 | 把期望的向前看符号也加入项中，充分利用向前看符号 |
-| LALR(1) | 中等 | 介于 SLR(1) 和 LR(1) 之间，分析表和 SLR 一样大 |
-| SLR(1) | 少 | 利用 Follow 集 |
+### 6.1 语法分析器的生成器Yacc
 
-**LR(1)**
+- `Yacc`:yet another compiler-compiler
+- `Yacc`的GNU版本叫做`Bison`
 
-- 把 **期望的向前看符号**也加入项中：**LR(1)项**
-- 向前看符号(串)的长度即为LR(k)中的`k`
-- 充分利用向前看符号，但是**状态很多**
+![Yacc](image-151.png)
 
-**LALR(1)**
+### 6.2 Lex和Yacc的联系
 
-- 介于SLR(1)和R(1)之间，分析表和SLR一样大
-- LALR已经可以处理大部分的程序设计语言
+- `Lex`:词法分析器生成工具,用于把 **正则表达式规则转换成词法分析程序**
+- `Yacc`:语法分析器生成工具，用于把 **上下文无关文法规则**转换成语法分析规则
 
-![alt text](image-139.png)
+![Lax和Yacc](image-152.png)
 
-### 7.7 LR(0)、SLR(1)、LALR(1)、LR(1) 完整对比
+### 6.3 Yacc源程序的结构
 
-| Feature | LR(0) | SLR(1) | LALR(1) | LR(1) |
-|---------|--------|---------|---------|-------|
-| **Full Name** | LR(0) Parser | Simple LR(1) Parser | Look-Ahead LR(1) | Canonical LR(1) Parser |
-| **Lookahead** | None (0 tokens) | 1 token (via FOLLOW sets) | 1 token (computed more precisely) | 1 token (exact) |
-| **Parsing Power** | Weakest | Stronger than LR(0) | Stronger than SLR(1), almost as powerful as LR(1) | Most powerful |
-| **Grammar Class** | LR(0) grammars | SLR(1) grammars | LALR(1) grammars | LR(1) grammars |
-| **State Generation** | Based on LR(0) items | Based on LR(0) items with FOLLOW set to resolve conflicts | Merges compatible LR(1) states | Based on full LR(1) items |
-| **Parser Size** | Smallest | Same as LR(0) | Moderately larger than SLR | Largest |
-| **Shift/Reduce Conflicts** | Poor - requires grammar modification | Better than LR(0) | > SLR, can handle most practical cases | Best - can handle any LR(1) grammar |
-| **Pros** | Simplest to understand; Smallest parser tables | Relatively simple implementation; Same number of states as LR(0); Good balance of power and efficiency | Handles most practical programming languages | Maximum parsing power; Can handle any LR(1) grammar |
-| **Cons** | Cannot handle many useful grammars; Many conflicts | Still has conflicts on many useful grammars; FOLLOW set approximation causes some false conflicts | More complex implementation than SLR; Occasional conflicts | Large parser tables; Slow parser generation |
-
----
-
-## 8. Parser Generator
-
-### 8.1 语法分析器生成器 Yacc
-
-**Yacc**：Yet Another Compiler-Compiler
-
-- 基于 LALR(1)，用 BNF (Backus Naur Form) 形式书写
-- Yacc 的 GNU 版叫做 **Bison**
-
-```
-yacc <options> <filename ending with .y>
-```
-
-![alt text](image-140.png)
-
-
-### 8.2 Lex 和 Yacc 的联系
-
-![alt text](image-141.png)
-
-### 8.3 Yacc 源程序的结构
-
-- 声明
-    - 放置C声明和对词法单元的声明
-- 翻译规则
-    - 指明产生式及相关的语义动作
+- 声明：放置C语言声明和对词法单元的声明
+- 翻译规则：指明产生式以及相关的语义动作
 - 辅助性C语言例程
-    - 被直接拷贝到生成的C语言源程序中
-    - 可以在语义动作中调用
-    - 包括`yylex()`，这个函数返回词法单元，可以由`Lex`生成
+  - 被直接拷贝到生成的C语言源程序中
+  - 可以在语义动作中调用
+  - 包括yylex(),这个函数返回词法单元，可以由Lex生成
 
-### 8.4 Yacc 使用示例
+**yacc中每条语法规则可以写成**`产生式 {语义动作}`
+
+- `exp : exp '+' term {$$ = $1 + $3;}`:当语法分析器使用这条产生式进行归约时，就会执行`{}`
+
+!!! example
 
 ```c
 %{
-    #include <stdio.h>
-    #include <ctype.h>
-    int yylex(void);
-    int yyerror(char *s);
-%}
+#include <stdio.h>
+#include <ctype.h>
+int yylex(void);
+int yyerror(char* s);
+}%
 %token NUMBER
-
 %%
-command: exp {print("%d\n", $1)};
+command: exp {printf("%d\n", $1);
 exp: exp '+' term {$$ = $1 + $3;}
-    | exp '-' term {$$ = $1 - $3;}
-    | term {$$ = $1}
-    ;
+   | exp '-' term {$$ = $1 - $3;}
+   | term {$$ = $1}
+;
+
 term: term '*' factor {$$ = $1 * $3;}
     | factor {$$ = $1;}
-    ;
+;
+
 factor: NUMBER {$$ = $1;}
-    | '(' exp ')' {$$ = $2;}
-    ;
+      | '(' exp ')' {$$ = $2;}
+;
 ```
 
-**语义动作**：
-- `$$ = $1 + $3`：
-    - `$$` 表示和产生式头相关的属性值
-    - $i 表示产生式体中第 i 个文法符号的属性值
-    - Rule {Action Code}：语义动作将在归约发生后执行
+!!!
 
-### 8.5 Yacc 文件格式中的问题
+> `$$`表示与该产生式相关联的属性值
+> `$i`表示产生式右部第i个文法符号
 
-**消除二义性**：为算符指定优先级与结合律
+### 6.4 Yacc文件格式中的几个问题
 
-```c
+- **消除二义性：为算符指定优先级与结合律**
+
+```yacc
 %left '-' '+'
 %left '*' '/'
-%right UMINUS  /* negation--unary minus */
-%right '^'     /* exponentiation */
+%right UMINUS      /* negation -- unary minus */
+%right '^'         /* exponentiation */
 ```
 
-**冲突解决**：
-- **归约/归约冲突**：选择 Yacc 说明中先出现的产生式 $A \rightarrow \alpha, B \rightarrow \beta$
-- **移进/归约冲突**：移进优先
+- **冲突解决**
 
-$$
-I_4:S \rightarrow iS \bullet eS
-$$
+  * **归约 / 归约冲突**：选择 Yacc 声明中 **先出现的产生式**
 
-$$
-S \rightarrow iS \bullet
-$$
+    ```
+    A → α .
+    B → α .
+    ```
 
-更通用的方法：改写文法以消除冲突
+  * **移进 / 归约冲突**：**移进优先**
 
-例如，消除二义性的同时也可能减少了冲突
+    ```
+    I4: S → iS . eS
+        S → iS .
+    ```
 
----
+* **更通用的方法**：改写文法以消除冲突
+  （例如，消除二义性的同时也可能减少冲突）
 
-## 9. 语法分析小结
 
-### 9.1 LL(1) 和 LR(1) 分析对比
+## 语法分析小结
 
-||LL(1)方法|LR(1)|
-|建立分析树|自顶向下|自底而上|
-|归约or推导|最左推导|规范归约(最右推导的逆)|
-|分析表|非终结符×终结符，小|状态×文法符号，大|
-|分析栈|文法符号栈|状态栈，信息更多|
-|向前看机制|First/Follow决定展开哪条展开式|识别完整α后，看1个符号决定归约|
-|处理左递归|不能直接处理|可以处理|
+![LL和LR对比](image-153.png)
 
-- **LL(1)**:向前看下一个根据First,Follow确定使用哪条产生式推导 $A \rightarrow \alpha_1 | \alpha_2 | \alpha_3$
-- **LR(1)**：在识别出整个$\alpha$后，再往前看1个符号，然后确定使用哪条产生式归约 $A\rightarrow \alpha , B\rightarrow \alpha$
+- `LL(1)`:向前看下一个输入根据`First`,`Follow`确定使用哪条产生式推导
+- `LR(1)`:在识别出整个 $\alpha$后，再往前看一个符号，然后确定使用哪条产生式规约
 
-### 9.2 LL(1)、SLR(1)、LR(1) 表达式能力对比
+![LL(1), SLR(1)和LR(1)对比](image-154.png)
 
-![alt text](image-142.png)
-
-### 9.3 练习题
-
-!!! example 练习
-
-1. **LR(0) 在实际中很少使用，为什么？**
-   不进行任何展望(lookahead)，只利用栈顶信息，极易发生冲突
-
-2. **SLR(1) 是怎么在 LR(0) 基础上改进的？**
-   展望(lookahead)一个输入 token：归约时使用 Follow 集
-
-3. **怎么理解 LR 分析中的闭包（Closure）操作？**
-   归类"期待"意义上等价的项目，对非终结符结合产生式不断添加新的项目
-
-4. **Top-down 和 Bottom-up 哪个能覆盖更多的文法？简要解释。**
-   Bottom-up，可以处理左递归和共同前缀
-
-5. **LR(0) 解析表(Parse Table)存放的内容是什么？**
-   Action 和 Goto，Action 是对终结符的动作表，Goto 是非终结符的跳转表
-
-6. **A → BC• 是什么意思？**
-   LR 中的一个完成项目，在解析进展上，已经识别了 BC 生成的 token，可以使用 A → BC 进行归约
-
-!!!
-
----
-
-## 10. 错误恢复（补充）
-
-### 10.1 错误恢复概述
-
-当 parser 在用户输入中发现错误时会发生什么？
-
-1. 立即停止并发出错误信号
-2. 记录错误但尝试继续
-
-- 第一种情况：用户必须修复可能很小的错误后从头开始重新编译
-- 第二种情况：用户可能会被大量错误消息淹没，这些消息本质上都是由同一个问题引起的
-
-### 10.2 错误恢复的定义
-
-**错误恢复**：调整输入流，使 parser 在意外输入后能够继续
-
-**可能的调整**：
-- 删除 tokens
-- 插入 tokens
-- 替换 tokens
-
-**恢复分类**：
-- **本地恢复 (Local Recovery)**：在检测到错误的位置调整输入
-- **全局恢复 (Global Recovery)**：在检测到错误的位置之前调整输入
-
-### 10.3 本地错误恢复 (Local Error Recovery)
-
-#### 基本策略：寻找"同步符号"
-
-在自底向上解析器中，通过向文法添加**错误产生式**来实现：
-
-```
-exp → NUM
-    | exp PLUS exp
-    | ( exp )
-exps → exp
-       | error ; exp    // 语句级错误
-```
-
-#### 恢复步骤
-
-1. **弹出栈**（如有必要）直到达到一个状态，其中错误 token 的动作是移进
-2. **移进**错误 token
-3. **丢弃输入符号**（如有必要）直到达到一个具有非错误动作的状态
-4. **恢复正常解析**
-
-!!! example 本地错误恢复示例
-
-文法：
-```
-exp → NUM
-    | exp PLUS exp
-    | ( exp )
-exps → exp
-       | error ; exp
-```
-
-输入：`NUM PLUS ( NUM PLUS @#$ PLUS NUM ) PLUS NUM`
-
-其中 `@#$` 是一个意外的 token！
-
-**恢复过程**：
-
-1. 弹出栈直到可以移进 "error"
-2. 移进 "error"
-3. 丢弃输入直到可以合法地移进或归约
-4. 移进 `)` 执行归约 `exp ::= ( error )`
-5. 继续正常解析
-
-!!!
-
-#### 本地错误恢复总结
-
-使用**错误产生式**来完成语法错误恢复：
-
-- **错误产生式** A → error α
-  - 例如：stmt → error ;
-  - 定义哪些非终结符号有错误恢复动作
-- 当语法分析器遇到错误时：
-  1. 不断弹出栈中状态，直到栈顶状态包含项 A → × error α
-  2. 分析器将 error 移入栈中
-  3. 如果 α 为空，分析器直接执行归约
-  4. 否则跳过一些符号，找到可以归约为 α 的串为止
-
-### 10.4 全局错误恢复 (Global Error Recovery)
-
-**全局错误恢复**：
-- 确定最小的一组插入、删除或替换操作，使解析能够正确进行
-- 即使这些操作发生在检测到错误之前
-
-#### Burke-Fisher Error Repair
-
-- 尝试在检测到错误的点之前最多 K 个 token 的每个点进行所有可能的单个 token 插入、删除或替换
-- 例如：K = 20；parser 在 token 500 卡住；尝试 token 480-500 之间所有可能的修复
-- **最佳修复** = 最长成功解析
-
-#### 实现机制
-
-parser 必须能够**备份 K 个 token 并重新解析**
-
-- parser 维护**旧栈**和**新栈**
-- 维护 K-token 窗口
-
-```
-K-token window maintained in queue by parser
-K-token window yet to read
-ID := NUM ; ID := ID + ( ID := NUM + ...
-input:
-new stack: S ; ID := ID + (
-old stack: ID := NUM
-```
-
-**old stack 滞后于 new stack K=6 个 token**
-
-#### 复杂度
-
-考虑 Burke-Fisher：
-- K-token 窗口
-- N 种不同的 token 类型
-
-**总修复数 = N + 2K*N**
-- 删除 (K) +
-- 插入 (K + 1)*N +
-- 替换 K*(N-1)
-
-这种复杂性在错误不常见的情况下是可以承受的。
-
----
-
-## 总结
-
-本章主要介绍了：
-
-1. **语法分析概述**
-   - 语法分析器的作用和实现方式
-   - 自顶向下 (LL) vs 自底向上 (LR) 分析
-
-2. **上下文无关文法 (CFG)**
-   - CFG 的形式化定义：G = (T, N, P, S)
-   - 终结符、非终结符、产生式、开始符号
-   - 推导和归约：最左推导，最右推导
-
-3. **分析树 (Parse Tree)**
-   - 推导的图形化表示
-   - 根节点为开始符号，叶子节点为终结符
-
-4. **设计编程语言的文法**
-   - RE vs CFG 的表达能力对比
-   - 二义性文法的消除方法
-   - 优先级和结合性的处理
-
-5. **自顶向下分析**
-   - 递归下降分析：回溯问题
-   - LL(1) 预测分析法：First/Follow 集、预测分析表
-   - 文法改造：提左公因子、消除左递归
-   - 错误恢复策略
-
-6. **自底向上分析**
-   - 移进-规约 (Shift-Reduce) 概述
-   - LR(0) 分析：项 (Item)、自动机构造，分析表构造
-   - SLR(1) 分析：利用 Follow 集解决冲突
-
-7. **LR(1) 分析**
-   - LR(1) 项：包含向前看符号
-   - Closure 和 Goto 操作
-   - 与 LR(0)、SLR(1) 的对比
-
-8. **LALR(1) 分析**
-   - 合并具有相同核心的 LR(1) 状态
-   - 表达力强大，状态数适中
-
-9. **Parser Generator**
-   - Yacc/Bison 的使用
-   - Lex 和 Yacc 的结合
-
-10. **错误恢复**
-    - 本地错误恢复：错误产生式
-    - 全局错误恢复：Burke-Fisher 修复
-
-本章主要介绍了：
-
-1. **语法分析概述**
-   - 语法分析器的作用和实现方式
-   - 自顶向下 (LL) vs 自底向上 (LR) 分析
-
-2. **上下文无关文法 (CFG)**
-   - CFG 的形式化定义：G = (T, N, P, S)
-   - 终结符、非终结符、产生式、开始符号
-   - 推导和归约：最左推导、最右推导
-
-3. **分析树 (Parse Tree)**
-   - 推导的图形化表示
-   - 根节点为开始符号，叶子节点为终结符
-
-4. **设计编程语言的文法**
-   - RE vs CFG 的表达能力对比
-   - 二义性文法的消除方法
-   - 优先级和结合性的处理
-
-5. **自顶向下分析**
-   - 递归下降分析：回溯问题
-   - LL(1) 预测分析法：First/Follow 集、预测分析表
-   - 文法改造：提左公因子、消除左递归
-   - 错误恢复策略
-
-6. **自底向上分析**
-   - 移进-规约 (Shift-Reduce) 概述
-   - LR(0) 分析：项 (Item)、自动机构造、分析表构造
-   - SLR(1) 分析：利用 Follow 集解决冲突
-
----
-
-## 参考资料
-
-- 《编译原理》（龙书）- Alfred V. Aho, Monica S. Lam, Ravi Sethi, Jeffrey D. Ullman
-- 《编译原理与实践》（虎书）- Andrew W. Appel
-- 浙江大学编译原理课程课件
-- rainoftime.github.io
+![练习](image-155.png)
