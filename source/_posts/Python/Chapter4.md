@@ -267,7 +267,7 @@ print(numbers)  # [10, 100, 200, 50]
 
 | 方法 | 语法 | 功能 |
 |------|------|------|
-| `append()` | `ls.append(x)` | 在列表末尾添加**一个元素** |
+| `append()` | `ls.append(x)` | 在列表**末尾**添加**一个元素** |
 | `extend()` | `ls.extend(iterable)` | 将可迭代对象的所有元素逐一添加至末尾 |
 | `insert()` | `ls.insert(i, x)` | 在指定索引 i 处插入元素 |
 
@@ -298,6 +298,15 @@ print(lst)  # [1, 2, 3, 4, 'a', 'b']
 `insert()` 灵活但时间复杂度高，使用频率不如 `append()`
 !!!
 
+!!! warning
+```python
+a = [1,2,3,4]
+a.append([5,6])
+len(a) # 5
+print(a) # [1,2,3,4,[5,6]]
+```
+!!!
+
 #### 删（移除）
 
 | 方法 | 语法 | 功能 |
@@ -324,8 +333,33 @@ print(a)  # []
 ```
 
 !!! warning
-如果要删除的数据不在列表中，则会发生错误
+在使用remove方法的时候，如果**要删除的数据不在列表中**，则会**发生错误**
 !!!
+
+!!! example
+```python
+a = [1,2,3,3,5]
+for i in a:
+    if i == 3:
+        a.remove(i)
+
+print(a) # [1,2,3,5]
+```
+
+- 结果没有删除全部的`3`是因为删掉第一个3之后第二个3会被跳过
+
+```python
+a = [1,2,3,3,5]
+for i in a[:]:
+    if i==3:
+        a.remove(i);
+print(a) # 1,2,5
+```
+
+- 这里我们遍历的对象是`a`的一个副本，而我们每次对`a`本身操作，这避免了对a进行`remove`列表中的元素会出现移动的问题
+!!!
+
+
 
 #### 改/排（变形）
 
@@ -333,6 +367,8 @@ print(a)  # []
 |------|------|------|
 | `sort()` | `ls.sort()` | 对列表元素进行原地排序 |
 | `reverse()` | `ls.reverse()` | 反转列表中元素的顺序 |
+
+> `reverse`方法没有返回值
 
 ```python
 # reverse() - 反转
@@ -349,7 +385,8 @@ print(a)  # [11, 10, 8, 5, 3, 2]
 ```
 
 !!! tip
-`sorted()` 是内置函数，返回新列表；`list.sort()` 是列表方法，原地排序
+- `sorted()` 是内置函数，返回新列表，不会修改原列表；
+- `list.sort()` 是列表方法，原地排序
 !!!
 
 #### 复制
@@ -361,9 +398,41 @@ print(a)  # [11, 10, 8, 5, 3, 2]
 ```python
 original = [1, 2, 3]
 copied = original.copy()
-print(original is copied)  # False
-print(original == copied) # True
+print(original is copied)  # False 说明不是同一个对象
+print(original == copied) # True 值相等
 ```
+
+![列表复制](image-7.png)
+
+!!! note "直接赋值、浅拷贝、深拷贝的差异"
+```python
+# 直接赋值
+a = [1,2,3]
+b = a # b和a指向同一个列表
+b.append(4) # 修改b会影响a
+print(a) # [1,2,3,4]
+```
+![直接赋值](image-8.png)
+
+```python
+a = [[1,2],[3,4]]
+b=a[:] # 浅拷贝(只是对第一层进行浅拷贝)
+b[0].append(5) # 修改嵌套列表会影响a
+print(a) # [[1,2,5],[3,4]]
+```
+
+![浅拷贝](image-9.png)
+
+```python
+import copy
+a = [[1,2],[3,4]]
+b = copy.deepcopy(a)
+b[0].append(5) # 不影响a
+print(a) # [[1,2],[3,4]]
+```
+
+![深拷贝](image-10.png)
+!!!
 
 #### 查（检索）
 
@@ -400,11 +469,15 @@ print(a)  # [[1, 2], [3, 4]]  # 完全不受影响
 
 列表推导式是将某种操作应用到序列，从一个或多个列表快速简洁地创建新列表的方法，又称列表解析。
 
+它还可以将循环和条件判断结合，从而避免语法冗长的代码，同时提高程序性能
+
 #### 基本推导式
 
 ```python
 [expression for item in iterable]
 ```
+
+> 这里的`expression`可以是多种形式，基本表达式、函数、条件表达式等等
 
 ```python
 nl = [2 * number for number in [1, 2, 3, 4, 5]]
@@ -419,12 +492,20 @@ cl = [number if number % 2 else -number for number in range(1, 8)]
 
 #### 条件过滤
 
+添加条件过滤，将原有迭代对象中符合条件的元素找出来形成新列表
+
 ```python
 [expression for item in iterable if condition]
+```
 
+```python
 nl = [number for number in range(1, 8) if number % 2 == 1]
 # 结果: [1, 3, 5, 7]
 ```
+
+!!! warning
+新列表的元素个数一定≤原有列表元素的个数
+!!!
 
 #### 嵌套循环
 
@@ -446,6 +527,7 @@ result = sum([1/i for i in range(1, 21)])
 # 结果: 3.597739657143682
 
 # 多条件文本处理
+# 要求：从word中筛选出同时满足长度大于等于5且以`s`结尾单词，并转为全大写
 words = ['apples', 'Students', 'cats', 'people']
 result = [word.upper() for word in words if len(word) >= 5 and word[-1] == 's']
 # 结果: ['APPLES', 'STUDENTS']
@@ -460,7 +542,7 @@ result = [word.upper() for word in words if len(word) >= 5 and word[-1] == 's']
 
 ### 4.1 元组的概念
 
-元组是不可修改的任意类型的数据序列，其字面量用圆括号 `()` 表示。
+元组是**不可修改的任意类型的数据序列**，其字面量用**圆括号** `()` 表示。
 
 ```python
 # 创建方式
@@ -482,7 +564,7 @@ nums = tuple([1, 2, 3])            # (1, 2, 3)
 
 元组只有序列的通用方法：`index()` 和 `count()`
 
-1. **不可变性（核心特性）**：不支持添加、删除或修改元素，能有效防止数据被意外修改，起到数据保护作用
+1. **不可变性（核心特性）**：不支持添加、删除或修改元素，能**有效防止数据被意外修改**，**起到数据保护作用**
 2. **结构简单**：不需要支持动态扩展等机制，运行开销更低
 3. **内存占用少**：创建时按需分配，不需要预留额外空间，适合大规模数据
 4. **可哈希**：可以作为字典的"键"，也可作为集合的元素
@@ -490,7 +572,7 @@ nums = tuple([1, 2, 3])            # (1, 2, 3)
 !!! note
 在选择数据结构时，更重要的是根据数据是否需要修改来选择合适的数据结构
 !!!
-
+  
 ## 5. 练习题
 
 ### 5.1 打分程序
@@ -503,6 +585,17 @@ nums = tuple([1, 2, 3])            # (1, 2, 3)
 3. 如何去掉这两个分数
 4. 如何计算平均分
 
+```python
+score = list(map{float, input().split()})
+
+slen = len(score)
+smin = min(score)
+smax = max(score)
+
+average = sum(score) / (slen-2)
+print(average)
+```
+
 ### 5.2 排序
 
 在一行中输入若干个整数，至少输入一个整数，整数之间用空格分割，要求将数据按从小到大排序输出。
@@ -510,6 +603,13 @@ nums = tuple([1, 2, 3])            # (1, 2, 3)
 **示例：**
 - 输入：`5 -76 8 345 67 2`
 - 输出：`[-76, 5, 8, 67, 2, 345]`
+
+```python
+nums = input()
+numl = [int(n) for n in nums.split()]
+num.sort()
+print(numl)
+```
 
 ### 5.3 统计单词
 
@@ -520,6 +620,17 @@ nums = tuple([1, 2, 3])            # (1, 2, 3)
 2. 识别元音字母开头
 3. 大小写处理
 
+```python
+s = input()
+tokens = s.split()
+count = len(tokens)
+
+vowels = []
+for t in tokens:
+    if t and t[0].lower() in 'aeiou':
+        vowels.append(t)
+```
+
 ### 5.4 凯撒密码加密
 
 编写一个明文密文转换程序，加密方法为凯撒密码（A→C、B→D…Y→A、Z→B）。
@@ -527,6 +638,14 @@ nums = tuple([1, 2, 3])            # (1, 2, 3)
 **示例：**
 - 输入：`CHINA`
 - 输出：`EJKPC`
+
+```python
+table = [chr(i) for i in range(65, 91)]
+new_table = table[2:] + table[:2] 
+s = input()
+news = [new_table[table.index(i)] for i in s]
+print(''.join(news))
+```
 
 ### 5.5 输出图形
 
