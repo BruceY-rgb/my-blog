@@ -132,3 +132,5 @@ Thumbs.db
 # Build
 public/
 .debug/
+
+.main.py
