@@ -1,6 +1,6 @@
 ---
 title: Chapter 5 Semantic Analysis
-date: 2026-04-21 17:20
+date: 2026-05-5 17:20
 categories:
     - CS课程笔记
     - 编译原理
@@ -1005,3 +1005,915 @@ end
 类型名和变量/函数名分属两个命名空间，所以`type a`和`var a`可以共存；但是变量名和函数名**在同一命名空间**，所以`var a`会遮蔽`function a`
 
 ![不同绑定属于命名空间的例子](image-180.png)
+
+#### Environments for Type Checking
+
+Tiger维护两个环境
+
+- **Type Environment**
+  - 把类型`symbol`映射到它们对应的类型对象:$symbol \rightarrow Ty\_ty$
+
+**类型环境记录**：类型名对应什么**真实类型**
+
+!!! example
+```tiger
+type a = int
+```
+
+那么环境中加入：$a↦Ty\_Int$
+也就是`symbol(a) -> Ty_int`
+
+所以当编译器看到`var(char) : a := 5`,这里的`a`出现在类型位置，编译器就去**类型环境**中查出`a`，得到它代表`int`类型 
+!!!
+
+- **Value Environment**
+  - 把变量`symbol`映射到它们对应的类型对象
+  - 把函数`symbol`映射到它们的参数类型和返回值类型对象：$symbol \rightarrow \{Ty\_tyList formals, Ty\_ty result;\}$
+
+值环境记录**变量和函数的类型**
+
+!!! example
+
+对于变量：
+
+```tiger
+var a : a : = 5
+```
+
+这里**左边第一个`a`是变量名**，**冒号后面的`a`是类型名**
+
+这条声明会在值环境中加入$a \mapsto Ty\_int$
+
+也就是`symbol(a) -> Ty_int`表示变量`a`的类型是`int`。
+!!!
+
+变量环境中存的是：**变量名 -> 变量类型**
+
+对于函数，值环境要保存更多信息
+
+比如函数：
+
+```tiger
+function f(x:int, y:string): int = ...
+```
+
+值环境中药记录
+
+- 参数类型列表
+- 返回值类型
+
+!!! example
+$$
+symbol→struct \{Ty\_tyList formals, Ty\_ty result;\}
+$$
+
+意思是函数名绑定到一个结构体
+
+```c
+struct {
+    Ty_tyList formals;
+    Ty_ty result;
+}
+```
+
+其中：
+
+- `formals`:参数类型列表
+- `result`:返回值类型
+!!!
+
+> 为什么变量环境不映射到类型名symbol（变量名为什么不绑定到类型名`a`这个symbol而是直接绑定到`Ty_ty`类型对象）
+
+**类型名可能是别名，可能还会继续指向别的类型**
+
+!!! example 
+```tiger
+type a = int
+type b = a
+var x : b := 5
+```
+
+如果变量`x`只绑定到类型名symbol `b`，那么之后还要再查：`b -> a -> int`这回增加复杂度
+!!!
+
+所以更好的做法是：变量 **直接绑定到真实类型对象**
+
+$$
+x \mapsto Ty\_Int
+$$
+
+这样类型检查时更方便判断
+
+!!! example
+```tiger
+let type a = int
+    var a : a := 5
+    var b : a := a
+in b+a
+end
+```
+
+这里用到了很多`a`，我们来逐个分析
+
+- `type a = int`:这里的a是类型名，加入类型环境 $type\_env(a) = Ty\_Int$
+- `var a:a`:
+  - 第一个`a`是变量名，属于值环境
+  - 第二个`a`是类型名，属于类型环境
+  - 含义：声明一个变量`a`，它的类型是类型名`a`所代表的类型，也就是`int`
+  - 加入值环境：$value\_env = Ty\_Int$
+- `var b : a := a`
+  - `: a`:是类型名，去类型环境查$type\_env(a) = Ty\_Int$
+  - `:= a`:是表达式中的变量，去值环境查$value\_env = Ty\_Int$
+  - 所以`b`也是`int`
+- `in b+a`:
+  - 这里的`b`和`a`都出现在表达式中，所以都去 **值环境**查找
+  - `a`和`b`的值类型都是`int`
+  - 因此`b+a`是合法的整数加法表达式
+!!!
+
+
+!!! note
+```tiger
+var a : a := 5
+```
+
+- `var`后面的`a`是变量名
+- `:`后面的`a`是类型名
+- `:=`右边表达式里的`a`是变量名
+!!!
+
+#### 值环境条目(environment entry)
+
+主要用于记录
+
+- 变量名绑定到什么类型
+- 函数名绑定到什么参数类型和返回类型
+
+**1. 定义环境条目类型**
+
+```c
+typedef struct E_eventry_ *E_eventry;
+```
+
+这里定义了一个指针类型`E_eventry`，它指向结构体`struct E_enventry_`，也就是说我们可以用`E_eventry x;`表示一个 **环境条目**
+
+**2. 环境条目的具体结构**
+
+```c
+struct E_eventry_ {
+  enum {E_varEntry, E_funEntry} kind; 
+  union {
+    struct {Ty_ty ty;} var; // 变量只需要记录一个信息
+    struct {
+      PTy_tyList formals;
+       Ty_ty result;
+    } fun; // 函数记录两个信息：参数类型列表和返回值类型
+  } u;
+}
+```
+
+- `kind`函数表示条目是 **变量条目**还是 **函数条目**
+
+**3. 构造函数接口**
+
+```c
+E_enventry E_VarEntry(Ty_ty ty);
+```
+
+- 用来创建**变量条目**
+
+```c
+E_enventry E_FunEntry(Ty_tyList formals, Ty_ty result);
+```
+
+- 用来创建 **函数条目**
+
+
+!!! example
+```c
+E_VarEntry(Ty_Int()) //创建一个表示变量类型为int的环境条目
+E_enventry E_FunEntry(Ty_tyList formals, Ty_ty result); // 函数参数类型为 int, string，返回类型为 int
+```
+!!!
+
+```c
+S_table E_base_tenv(void); /*Ty_ty environment*/
+S_table E_base_venv(void); /* E_enventry environment */
+```
+
+- 用于创建基础环境
+- 通常会预先放入`Tiger`内置类型
+
+### 5.3.3 Type-Checking for Tiger
+
+- `Semant`模块(`semant.h`,`semant.c`)对**抽象语法树**进行**语义分析**，包括**类型检查**
+- 语义分析模块包含四个在语法树上递归遍历的函数
+
+```c
+struct expty transVar(S_table venv, S_table tenv, A_var v);
+struct expty transExp(S_table venv, S_table tenv, A_exp a);
+void transDec(S_table venv, S_table tenv, A_dec d);
+Ty_ty transTy(S_table tenv, A_ty a);
+```
+
+- 类型检查器是抽象语法树上的一个递归语法树——`transExp`
+- 这四个函数同时执行类型检查和IR生成
+  - 目前我们只考虑类型检查
+
+#### Type-checking for Expressions
+
+**transExp的输入和输出**
+
+```c
+struct expty transVar(S_table venv, S_table tenv, A_var v);
+struct expty transExp(S_table venv, S_table tenv, A_exp a);
+void transDec(S_table venv, S_table tenv, A_dec d);
+Ty_ty transTy(S_table tenv, A_ty a);
+```
+
+- `transExp`:类型检查表达式；查询并更新环境
+- 参数
+  - 一个值环境`venv`
+  - 一个类型环境`tenv`
+  - 一个表达式`a`
+- 结果：一个翻译后的表达式，以及它在`Tiger`语言中的类型
+ 
+```c
+struct expty {
+  Tr_exp exp; 
+  Ty_ty ty;
+};
+```
+
+> `transExp`接收两个环境`venv`和`tenv`，然后对表达式`AST`递归检查，最后返回一个`struct expty`
+
+!!! example
+```tiger
+a + b
+```
+
+如果查`venv`得到：
+
+```
+a : int
+b : int
+```
+
+那么整个表达式类型就是`int`
+
+所以`transExp(venv, tenv, a+b)`会返回`expty(..., Ty_Int)`
+!!!
+
+#### 加法表达式的类型检查
+`Tiger`对`+`表达式采用**非重载的类型检查**
+
+- 对于`e1+e2`，二者的类型必须都是`int`
+- 整个表达式的类型也是`int`
+
+```c
+struct expty transExp(S_table venv, S_table tenv, A_exp a) {
+  switch(a->kind) {
+    ...
+    case A_opExp: {
+      A_oper oper = a->u.op.oper;
+      struct expty left = transExp(venv tenv, a->u.op.left);
+      struct expty expty_right = transExp(venv, tenv, a->u.op.right);
+
+      if(oper == A_plusOp) {
+        if (left.ty->kind != Ty_int) {
+          EM_error(a->u.op.left->pos, "integer required");
+        }
+        if (right.ty->kind != Ty_int)
+          EM_error(a->u.op.right->pos, "integer required");
+      }
+      return expty expTy(NULL, Ty_Int());
+    }
+  }
+}
+assert(0);
+```
+
+- 代码逻辑
+  - 先递归检查`+`左侧的表达式
+  - 再递归检查右表达式
+  - 然后检查左右是否类型为`int`
+- 规则：
+  $$
+  \frac{e_1:int\ e_2:int}{e_1 + e_2:int}
+  $$
+
+#### Type-Checking Variables, Subscripts(数组下标) and Fields
+
+文法：
+
+```
+lvalue→id
+       lvalue.id
+       lvalue[exp]
+```
+
+- 一个`I-value`是一个位置，它的值可以被**读取或赋值**
+- 变量、过程参数、`record`字段、`array`元素都是`I-value`
+
+```c
+struct expty transVar(S_table venv, S_table tenv, A_var v) {
+    switch(v->kind) {
+
+    case A_simpleVar: {
+        E_enventry x = S_look(venv, v->u.simple); // 在值环境查找变量名
+
+        // 如果找到了并且这个条目是变量
+        if (x && x->kind == E_varEntry)
+            // 返回实际值
+            return expTy(NULL, actual_ty(x->u.var.ty)); //actual_ty的作用是展开类型别名
+
+        else {
+            EM_error(v->pos, "undefined variable %s", S_name(v->u.simple));
+            return expTy(NULL, Ty_Int()); //通过Ty_Int()返回一个默认类型，这是一种错误恢复策略，避免一个错误导致后面全部无法检查
+        }
+    }
+
+    case A_fieldVar:
+        ...
+    }
+}
+```
+
+## 5.4 Type-Checking Declarations
+
+- 环境是由声明构造并扩展的
+- 在`Tiger`中，声明只出现在`let`表达式中：`let decs in body end`
+
+**代码实现表达式同时管理let内部声明的作用域**
+
+核心作用
+
+- 进入let的新作用域
+  - `venv`管变量和函数
+  - `tenv`管类型
+  - 两个环境都要开启新作用域
+
+```c
+S_beginScope(venv);
+S_beginScope(tenv);
+```
+
+- 处理let中的声明decs
+  - 遍历`let`中的所有声明，并逐个处理
+  - `transDec`的作用是：**检查声明是否合法，并把声明产生的新绑定加入环境**
+
+```c
+for (d = a->u.let.decs; d; d = d->tail)
+    transDec(venv, tenv, d->head);
+```
+
+!!! example
+```tiger
+let
+  var x := 1
+  var y := x + 2
+in
+  y
+end
+```
+
+处理`var x := 1`后,`venv`中加入`x -> int`
+
+处理`var y := x + 2`时，就可以查到`x`的类型
+!!!
+
+- 用扩展后的环境检查body
+
+```c
+exp = transExp(venv, tenv, a->u.let.body);
+```
+
+!!! example
+```tiger
+let 
+  var x := 1
+in
+   x + 2
+end
+```
+
+这里的`body`是`x + 2`
+
+由于前面已经把`x -> int`加入`venv`，所以这里可以正确判断`x + 2 : int`
+!!!
+
+- 退出作用域，恢复原来的环境
+  - 把刚才在 let 中声明的局部名字都删掉
+
+```c
+S_endScope(tenv);
+S_endScope(venv);
+```
+
+- 返回`body`的类型
+
+```c
+return exp;
+```
+
+### 5.4.1 Variable Declarations
+
+> 在这里变量声明是一种非递归声明
+
+当我们处理一个 **没有类型约束的变量**的变量声明：`var x := exp`
+
+```c
+void transDec(S_table venv, S_table tenv, A_dec d) {
+    switch(d->kind) {
+        case A_varDec: {
+            struct expty e = transExp(venv, tenv, d->u.var.init);
+            S_enter(venv, d->u.var.var, E_VarEntry(e.ty));
+        }
+        ...
+    }
+    ...
+}
+```
+
+这里因为没有显式给变量`x`写类型，所以编译器会先检查右侧初始化表达式`exp`的类型
+
+```c
+struct expty e = transExp(venv, tenv, d->u.var.init);
+```
+
+`x`的类型取决于`exp`的类型，然后把`x`加入`venv`
+
+```c
+S_enter(venv, d->u.var.var, E_VarEntry);
+```
+
+意思就是：$x \mapsto e.ty$
+
+!!! example 
+```tifer
+var x := 10
+```
+
+右侧10的类型是`int`，所以加入：$x \mapsto int$
+!!!
+
+当我们处理一个 **带有类型约束**的变量声明
+
+$$
+\text{var x : type-id := exp}
+$$
+
+- 必须检查这个类型约束和初始化表达式 **是否兼容**
+- 此外类型为`Ty_Nil`的初始化表达式必须接受到某个`Ty_Record`类型的约束
+
+!!! example
+```tiger
+var x : int := 10
+```
+
+
+这是编译器不能只看`10`，还要看显式写出的类型`int`
+
+流程是
+
+1. 去`venv`中查找`type-id`
+2. 检查**初始化表达式**`exp`的类型
+3. 判断两者是否兼容
+4. 如果兼容，把变量加入`venv`
+
+```tiger
+var x : int := "hello"
+```
+
+左边要求`int`，右边是`string`，不兼容，应该报类型错误
+!!!
+
+### 5.4.2 Type Declaration
+
+- 非递归类型声明：$\text{type type-id = ty}$
+  - `type-id`是类型名，比如`myint`,`point`
+  - `ty`是右边的类型表达式，比如`int`、`{x:int, y:int}`、`array of int`
+- `transTy`:递归地把`A_ty`翻译成`Ty_ty`
+
+```c
+void transDec(S_table venv, S_table tenv, A_dec d) {
+    ...
+    case A_typeDec: {
+        S_enter(tenv, d->u.type->head->name,
+                transTy(d->u.type->head->ty));
+    }
+    ...
+}
+```
+
+> 这个程序片段只处理长度为1的类型声明列表
+
+**代码中的核心是**
+
+```c
+S_enter(tenv, d->u.type->head->name,
+        transTy(d->u.type->head->ty));
+```
+
+- 第一步：`transTy(d->u.type->head->ty)`
+  - 把`AST`中的类型语法`A_ty`翻译成编译器内部的类型对象`Ty_ty`
+  - 例如：
+    - `int`会翻译成`Ty_Int`
+    - `{x:int, y:int}`会翻译成`Ty_Record(...)`
+    - `array of int`会翻译成`Ty_Array(Ty_Int)`
+- 第二步：`S_enter(tenv, name, Ty_ty)`
+  - 把这个类型名加入类型环境`tenv`
+
+!!! example
+```tiger
+type point = {x:int, y:int}
+```
+会加入：
+
+$$
+point↦Ty_Record(x:int, y:int)
+$$
+
+所以之后看到：
+
+```tiger
+var p : point := ...
+```
+
+编译器就能在 tenv 中查到 point 是一个 record 类型。
+!!!
+
+!!! warning
+上述代码 **只有一个类型声明**的情况
+
+它可以处理`type a = int`
+
+但是不能完整处理连续的类型声明组，比如：
+
+```tiger
+type a = {x:b}
+type b = {y:int}
+```
+
+因为这肯呢个涉及互相引用，需要更复杂的两遍处理
+!!!
+
+**非递归类型声明是“先算右边类型，再把类型名加入 tenv”；因此右边不能引用正在定义的类型名**
+
+### 5.4.3 Function Declaration
+
+$$
+\text{function id(tyfields):type-id = exp}
+$$
+
+- `id`:函数名，例如`f`
+- `tyfields`是参数列表，比如`a:int.b:string`
+- `type-id`是返回类型，比如`int`
+- `exp`是函数体
+
+!!! example
+```tiger
+function f(a:int, b:string):int = body
+```
+!!!
+
+```c
+void transDec(S_table venv, S_table tenv, A_dec d) {
+    switch(d->kind) {
+    ...
+    case A_functionDec: {
+        A_fundec f = d->u.function->head;
+
+        Ty_ty resultTy = S_look(tenv, f->result);
+        Ty_tyList formalTys = makeFormalTyList(tenv, f->params);
+
+        S_enter(venv, f->name, E_FunEntry(formalTys, resultTy));
+
+        S_beginScope(venv);
+
+        {
+            A_fieldList l;
+            Ty_tyList t;
+
+            for(l = f->params, t = formalTys; l; l = l->tail, t = t->tail)
+                S_enter(venv, l->head->name, E_VarEntry(t->head));
+        }
+
+        transExp(venv, tenv, d->u.function->body);
+
+        S_endScope(venv);
+        break;
+    }
+    ...
+}
+```
+
+- `makeFormalTyList`:遍历形参列表，并返回这些形参的类型列表
+- 上面的代码是一个非常简化的视线
+  - 它只处理单个函数的情况
+  - 它只处理带返回值的函数
+  - 它没有处理程序错误
+  - 它没有检查**函数体表达式的类型**是否匹配**声明的返回类型**
+
+
+$$
+\text{function f(a:ta, b:tb):rt=body}
+$$
+
+**代码的整体思路**
+
+1. 找到函数付安徽类型
+2. 找到参数类型列表
+3. 把函数名加入`venv`
+4. 进入函数体作用域
+5. 把形参作为局部变量加入`venv`
+6. 检查函数体表达式
+7. 退出函数体作用域
+
+```c
+A_fundec f = d->u.function->head;  
+```
+
+这里取出函数声明列表中的**第一个函数声明**
+
+> 因为这份代码是简化版，只处理一个函数，所以直接取`head`
+
+```c
+Ty_ty resultTy = S_looik(tenv, f->result);
+```
+
+这一步在类型环境`tenv`中查找返回类型
+
+!!! example
+```tiger
+function f(): int = 1
+```
+
+这里`f->result`是`int`，所以`S_look(tenv, int) = Ty_Int`得到函数返回类型`resultTy = Ty_Int`
+!!!
+
+```c
+Ty_tyList formalTys = makeFormalTyList(tenv, f->params);
+```
+
+这一步处理**函数形参列表**，得到**参数类型列表**
+
+!!! example
+```tiger
+function f(a:int,b:string):int = ...
+```
+
+参数列表是：`a:int, b:string`
+
+`makeFormaTyList`会去`tenv`查每个参数的类型，然后返回`[int, string]`
+!!!
+
+```c
+S_enter(venv, f->name, E_FunEntry(formalTys, resultTy))
+```
+
+这一步把函数名加入值环境`venv`
+
+!!! example
+```tiger
+function f(a:int, b:string):int = ...
+```
+
+会加入
+
+```
+f -> E_FunEntry([int, string], int)
+```
+
+也就是：$f \mapsto ([int,string] \rightarrow int)$
+
+这样之后如果遇到函数调用
+
+```tiger
+f(1,"hello")
+```
+
+编译器就可以查`venv`，知道
+
+- `f`需要两个参数
+- 第一个参数是`int`
+- 第二个参数是`stromg`
+- 返回值是`int`
+!!!
+
+```c
+S_beginScope(venv);
+```
+
+进入函数体的新作用域
+
+!!! question
+为什么这里只对`venv`开作用域
+!!!
+
+因为函数参数是变量名，属于值环境。这里不是在声明新的类型名，所以不需要对`tenv`开新作用域
+
+
+```c
+for(l = f->params, t = formalTys; l; l = l->tail, t = t->tail)
+    S_enter(venv, l->head->name, E_VarEntry(t->head));
+```
+
+这一步把每个形参作为局部变量加入`venv`
+
+!!! example
+```tiger
+function f(a:int, b:string):int = a + 1
+```
+
+进入函数体时，加入：
+
+```
+a -> E_VarEntry(int)
+b -> E_VarEntry(string)
+```
+
+所以在函数体`a+1`中，编译器可以查到`a`是`int`
+!!!
+
+```c
+transExp(venv, tenv, d->u.function->body);
+```
+
+检查函数体表达式
+
+!!! example
+```tiger
+function f(a:int):int = a + 1
+```
+
+这里会检查
+
+```tiger
+a + 1
+```
+
+并得出它的类型是`int`
+!!!
+
+!!! warning
+这段代码非常简化，有很多问题并没有处理
+
+**1. 只处理单个函数**
+
+只取了`d->u.function->head`,没有处理函数声明列表中多个函数的情况
+
+但是`Tiger`中可能有：
+
+```tiger
+function f(...) = ...
+function g(...) = ...
+```
+
+**2. 只处理有返回值的函数**
+
+有些函数可能没有显式返回类型，类似过程，返回`void`
+
+简化代码没有处理这种情况
+
+**3. 没有处理程序错误**
+
+比如返回类型不存在：
+
+```tiger
+function f():unknownType = ...
+```
+
+如果`unknownType`不在`tenv`中，应该报错
+
+**4. 没有检查函数体类型是否匹配声明返回类型**
+
+```tiger
+function f(): int = "hello"
+```
+
+声明返回`int`，但是函数体是`string`，这应该报错，但是代码只是`transExp(...)`。没有把返回的`body`类型和`resultTy`比较
+
+正确逻辑应该类似
+
+```c
+struct expty body = transExp(venv, tenv, f->body);
+if (!type_equal(body.ty, resultTy))
+    EM_error(...);
+```
+
+**5. 没有完整处理递归函数**
+
+如果函数可以递归调用自己：
+
+```tiger
+function fact(n:int):int =
+    if n = 0 then 1 else n * fact(n-1)
+```
+
+那么必须在**检查函数体**之前，先把`fact`加入`venv`.这段代码确实先加入了函数名，再检查函数体，所以对单个递归函数有一定支持。
+
+但如果是多个**互相递归函数**：
+
+```tiger
+function even(n:int):int = if n=0 then 1 else odd(n-1)
+function odd(n:int):int = if n=0 then 0 else even(n-1)
+```
+
+就需要更完整的两遍处理：
+
+- 先把所有函数名加入`venv`
+- 再逐个**检查函数体**
+!!!
+
+### 5.4.4 Recursive Declarations
+
+#### 递归类型声明的问题
+
+```tiger
+type list = {first: int, rest: list}
+```
+
+- 如何把这个声明转换成**编译器内部的类型**表示
+- 在把`list`加入类型环境之前，我们需要先处理`{first: int, rest: list}`
+- 问题：处理`{first: int, rest: list}`时，又需要从类型环境中查找`list`
+  - 但此时`list`还没有加入类型环境
+  - 所以会出现`undefined type!`
+
+!!! question
+如何处理这个问题
+!!!
+
+#### 两遍处理
+
+对于上述问题，我们的解决方案是使用 **两遍处理**
+
+1. 先把所有`header`放入环境中，尽管它们的`body`还没有被处理
+
+> 在这个例子中，`header`是`type list =`
+
+    如何把这个`header`放入环境中？
+
+-  `S_enter(tenv, name, Ty_Name(name, NULL));`
+
+> 我知道有一个类型叫`list`，但是它具体等于什么类型暂时还没有处理完
+
+1. 对类型声明的`body`调用`TransTy`,也就是处理record的类型表达式
+
+```tiger
+{first: int, rest: list}
+```
+
+- `transTy`返回的类型随后可以被赋值到`Ty_Name`结构体中的`ty`字段里
+  - `list -> Ty_Name(list, Ty_Record(first:int, rest:list))`
+
+#### 递归调用的合法性限制
+
+- 一组相互递归类型声明中的每一个循环，都必须经过一个`record`或`array`声明
+  - **否则类型检查器永远不会停止**
+
+```tiger
+type a = b
+type b = a
+```
+
+这样纯粹的类型别名循环是不合法的。**没有任何真正的类型结构出现**，只是对两个变量进行展开
+
+每个递归必须经过`record`或`array`，它们相当于给类型结构提供了一个 **实际够构造点**
+
+!!! example "合法例子"
+```tiger
+type a = b
+type b = {i:a}
+```
+
+这里循环是
+
+```
+a -> b -> record field i:a
+```
+
+它经过`record`，所以合法
+!!!
+
+#### 相互递归函数
+
+相互递归函数的典型例子：
+
+```tiger
+function f(x:int):int = g(x)
+function g(x:int):int = f(x)
+```
+
+!!! question
+当我们处理`f`的函数体时，会遇到`g`，但是此时`g`还不能再变量环境中找到
+!!!
+
+**解决方案**
+
+- 第一遍：收集每个函数的`header`信息，包括
+  - 函数名
+  - 形参类型列表
+  - 返回类型
+  - **但是暂时不处理函数体**
+- 第二遍：在已经**扩展好的环境**中处理所有函数体

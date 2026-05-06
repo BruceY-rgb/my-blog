@@ -606,7 +606,7 @@ x + true
 
 ### 3.1 Yacc: Syntax vs Semantics
 
-!!! yacc
+``` yacc
 %{ // declarations of yylex and yyerror
 %}
 %token ID ASSIGN PLUS MINUS AND EQUAL
@@ -626,7 +626,7 @@ be  : be OR be
 
 ae  : ae PLUS ae
     | ID
-!!!
+```
 
 这里有的语言中有两类表达式
 
