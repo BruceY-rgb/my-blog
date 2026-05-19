@@ -1,5 +1,6 @@
 --- 
 title: SMPL Basic
+date: 2026-04-05
 categories: 
     - 科研训练
     - 机器人与大模型
