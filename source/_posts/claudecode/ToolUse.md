@@ -8,7 +8,7 @@ categories:
     - claude code
     - learn-claude-code
     - 工具与执行
-cover: ![claude-code cover](image-1.png)
+cover: source/_posts/claudecode/image-1.png
 ---
 
 ### Tool Dispatch Map

@@ -656,3 +656,231 @@ SEQ(s1, SEQ(s2, ..., SEQ(sn-1, sn)...))
 
 ## 8.2 Taming Conditional Branches
 
+### 8.2.1 Basic Blocks
+
+#### 1. Motivation
+
+- 在判断程序中的跳转应该挑到哪里时，我们其实是在分析程序的`control flow`
+- `control flow`指的是**程序中指令的执行顺序**
+  - 不考虑寄存器和内存中的具体数据值
+  - 不考虑具体的算数计算
+- 我们无法提前知道条件跳转到底会跳转到`true`标签还是`false`标签，所以我们简单地认为这种跳转**可能走任意一个方向**
+- 在分析程序控制流时，任何不是跳转的指令，其行为都没有特别值得关注的地方
+- 因此，我们可以把一串连续的、没有分支的指令合并成一个`basic block`，然后只分析**基本块之间的控制流关系**
+
+#### 2. Definition
+
+- 一个`basic block`是一串语句序列，它总是：*从开头进入，从结尾退出*，也就是说
+  - 第一条语句必须是一个`LABEL`
+  - 最后一条语句必须是一个`JUMP`或`CJUMP`
+  - 中间不能再出现其他`LABEL`,`JUMP`,`CJUMP`
+
+**基本块的形式**：
+
+```
+LABEL XX
+... # no LABELS,JUMPs,CJUMPs
+JUMP/CJUMP
+```
+
+#### 3. Algorithm
+
+- 把一串语句划分成`basic blocks`的算法如下
+  - 从头到尾扫描整个语句序列
+  - 每当遇到一个`LABEL`，就开始一个新的`block`，前一个`block`结束
+  - 每当遇到一个`JUMP`或`CJUMP`，当前`block`结束，并且下一个`block`开始
+  - 如果某个`block`最后没有以`JUMP`或`CJUMP`结尾，那么就在这个`block`后面追加一个跳转到下一个`block`标签的`JUMP`
+  - 如果某个`block`开头没有`LABEL`，就新建一个`label`，并把它放在这个`block`的开头
+
+
+!!! example
+```
+(1)  x := input
+(2)  y := x - 1
+(3)  z := x * y
+(4)  if z < x goto (7)
+(5)  p := x / y
+(6)  q := p + y
+(7)  a := q
+(8)  b := x + a
+(9)  c := a - b
+(10) if p == q goto (12)
+(11) goto (3)
+(12) return
+```
+
+**算法**：
+
+- 从头到尾扫描语句序列
+- 每当遇到一个`LABEL`，就开始一个新的基本块，前一个基本块结束
+- 每当遇到一个`JUMP`或`CJUMP`，当前基本块结束，下一个基本块开始
+- 添加必要的`LABEL`和`JUMP`
+
+**分块**
+
+- 新`block`从`(3),(7),(12)`开始
+- `block`在`(4),(10),(12)`结束
+
+> 这个三地址代码例子里面暂时省略了补`LABEL`和`JUMP`，但是如果是`Tree IR`，应该补上
+
+![如何将程序划分为basic block](image-206.png)
+![更完整的basic block](image-207.png)
+!!!
+
+### 8.2.2 Traces
+
+> 执行轨迹
+
+#### 1. Motivation
+
+基本块可以按照任意顺序，**程序执行结果仍然相同**，因为每一个基本块的最后我们规定了跳转的准确位置
+
+基于这一点，我们可以选择一种基本块排列顺序，使得每个`CJUMP`后面紧跟它的`false label`
+
+```
+CJUMP(op, a, b, t, f)
+label(f)
+```
+
+我们还可以让许多无条件`JUMP`后面紧跟着它们的 **目标标签**，这样就可以**删除这些`jump`**，使编译后的程序运行得稍微快一点
+
+
+!!! example
+例如：
+
+```
+...
+JUMP(NAME next)
+LABEL(next)
+```
+
+可以优化成
+
+```
+...
+LABEL(next)
+```
+
+因为`JUMP`的目标正好就是下一条语句，所以这个`JUMP`没有必要存在
+!!!
+
+#### 2. Definition
+
+- 一个`trace`是一串语句序列，它们在程序执行过程中可能被连续执行，并且可以包含条件分支
+- 一个程序有许多不同的、相互重叠的`traces`
+- 对于我们现在排列`CJUMP`和`false-label`的目的来说，我们希望构造一组`traces`，能够**刚好覆盖整个程序**
+  - 每个`basic block`必须恰好出现在一个`trace`中
+  - 每个`trace`不能包含循环
+- 我们希望覆盖整个程序所需的`trace`数量越少越好
+  - 这样可以减少从一个`trace`跳到另一个`trace`所需要的`JUMP`数量
+
+!!! example
+前面`basic block`已经把程序切成了一块一块的代码：`B1,B2,B3,B4...`
+
+每个`basic block`内部是顺序执行的，只有最后一条可能跳转
+
+现在`trace`的目标是：**把可能连续执行的**`basic blocks`串起来
+
+比如控制流是：
+
+```
+B1->B2->B3
+```
+
+那我们就可以把它们放在同一个`trace`里
+!!!
+
+这样生成代码的时候，`B1`执行完可以自然进入`B2`再进入到`B3`，中间很多`JUMP`就可以省掉
+
+#### 3. Algorithm
+
+如何找到一组覆盖整个程序的`traces`？
+
+- **idea**:从某个`basic block`开始，这个`block`是一条`trace`的开头，然后沿着一条可能的执行路径继续往下走，后面的`block`就构成这条`trace`的剩余部分 
+  - 如果遇见条件跳转，我们要把`false`的分支加入到前一个`trace`中
+
+!!! example
+![构建trace的例子](image-208.png)
+
+如图，像b1,b4,b6就可以构成一个`trace`
+
+同时这里有`CJUMP(cond, b7, b3)`的条件跳转，我们会选择**把`b3`加到当前`trace`中**，并在`b3`后继续寻找后续`trace`
+!!!
+
+```
+while Q is not empty:
+  开始一条新的空trace T
+  从0中取出头部元素b
+  
+  while b 没有做标记:
+    标记b
+    把b追加到当前trace T的末尾
+    检查b的successors，也就是b会跳向的那些block
+
+    如果存在某个没有标记的successors c:
+      b ← c
+
+  当前trace T结束
+```
+
+**整个过程看起来很像是DFS**
+
+- 从某个`block`开始，沿着一串`jump`往下走，标记每个`block`，并把它加入当前`trace`
+- 当走到一个`block`，它的**所有`successors`都已经被标记**时每当前`trace`结束。然后选择一个还诶呦标记的`block`，开始下一条`trace`
+
+
+#### 4. Finishing up
+
+为了简化后续阶段的实现，`Tiger`编译器会把已经排好序的`trace`列表重新展开成一长串语句，燃弧进行一些小的调整
+
+- 如果某个`CJUMP`后面紧跟着它的`false label`，那么保持不变
+- 如果某个`CJUMP`后面紧跟着它的`true label`，那么交换`true label`和`false label`，并且把条件取反
+
+!!! example
+```
+CJUMP(LT, a, b, Ltrue, Lfalse)
+LABEL(Ltrue)
+```
+
+可以改成
+
+```
+CJUMP(GE, a, b, Lfalse, Ltrue)
+LABEL(Ltrue)
+```
+
+**`a<b`为真等价于`a>=b`为假**
+!!!
+- 如果某个`CJUMP(cond, a, b, lt, lf)`后面既不是`true label`也不是`false label`，那么
+  - 新造一个`false label`，记作`lf`
+  - 把一个`CJUMP`改写成三条语句
+  ![改写的形式](image-209.png)
+
+
+#### 5. Optimal Traces
+
+- 任何**经常执行的指令序列**，比如循环体，都应该占据它自己的`trace`
+
+这样做有两个好处
+
+1. 有助于 **最小化无条件跳转的数量**
+2. 有助于其他优化，例如
+  - 寄存器分配
+  - 指令调度
+
+![不同的结构比较](image-210.png)
+
+为了保证有最少的`jump`应该尽量让`loop`自己占据`trace`
+
+!!! note "总结"
+- 问题：中间表示树（IR trees）与机器指令之间存在不匹配
+  - 条件跳转指令（CJUMP）与机器条件跳转指令的差异
+  - 序列求值节点（ESEQ）和函数调用节点（CALL）的子树求值顺序会影响结果
+  - 函数调用（CALL）作为另一个函数调用的参数时，存在求值顺序与副作用问题
+- 解决方法：分三个阶段对树进行转换
+  - 将原始树重写为一组规范树（canonical trees），去除所有序列节点（SEQ）和序列求值节点（ESEQ）
+  - 消除与 ESEQ 和 CALL 相关的不匹配问题
+  - 将这组规范树分组为若干基本块（basic blocks），基本块内部不包含跳转或标签
+  - 将基本块整理为若干迹（traces），在迹中，每一条条件跳转指令（CJUMP）后都紧跟其 “假分支” 的标签
+    - 消除与 CJUMP 相关的不匹配问
+!!!
