@@ -884,3 +884,17 @@ LABEL(Ltrue)
   - 将基本块整理为若干迹（traces），在迹中，每一条条件跳转指令（CJUMP）后都紧跟其 “假分支” 的标签
     - 消除与 CJUMP 相关的不匹配问
 !!!
+
+**Rules for Canonical Tree Construction**
+
+| 原始 Tree 形式                       | 转换后形式                                                     | 作用说明                                                                                                                     |
+| ------------------------------------ | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `ESEQ(s1, ESEQ(s2, e))`              | `ESEQ(SEQ(s1, s2), e)`                                         | 合并嵌套的 `ESEQ`，把两个语句 `s1` 和 `s2` 顺序执行后，再计算表达式 `e`。                                                    |
+| `BINOP(op, ESEQ(s, e1), e2)`         | `ESEQ(s, BINOP(op, e1, e2))`                                   | 如果 `ESEQ` 出现在 `BINOP` 左操作数中，把语句 `s` 提到外面。                                                                 |
+| `MEM(ESEQ(s, e1))`                   | `ESEQ(s, MEM(e1))`                                             | 如果 `ESEQ` 出现在 `MEM` 的地址表达式中，先执行 `s`，再访问 `MEM(e1)`。                                                      |
+| `JUMP(ESEQ(s, e1))`                  | `SEQ(s, JUMP(e1))`                                             | 如果 `ESEQ` 出现在 `JUMP` 目标中，先执行 `s`，再跳转到 `e1`。                                                                |
+| `CJUMP(op, ESEQ(s, e1), e2, l1, l2)` | `SEQ(s, CJUMP(op, e1, e2, l1, l2))`                            | 如果 `ESEQ` 出现在 `CJUMP` 的左比较表达式中，先执行 `s`，再做条件跳转。                                                      |
+| `BINOP(op, e1, ESEQ(s, e2))`         | `ESEQ(MOVE(TEMP t, e1), ESEQ(s, BINOP(op, TEMP t, e2)))`       | 如果 `ESEQ` 出现在 `BINOP` 右操作数中，为了保持求值顺序，先把 `e1` 保存到临时变量 `t`，再执行 `s`，最后计算 `TEMP t op e2`。 |
+| `CJUMP(op, e1, ESEQ(s, e2), l1, l2)` | `SEQ(MOVE(TEMP t, e1), SEQ(s, CJUMP(op, TEMP t, e2, l1, l2)))` | 如果 `ESEQ` 出现在 `CJUMP` 的右比较表达式中，先保存 `e1`，再执行 `s`，最后用保存的 `TEMP t` 和 `e2` 比较。                   |
+| `MOVE(ESEQ(s, e1), e2)`              | `SEQ(s, MOVE(e1, e2))`                                         | 如果 `ESEQ` 出现在赋值目标位置，先执行 `s`，再把 `e2` 存入 `e1`。                                                            |
+| `CALL(f, a)`                         | `ESEQ(MOVE(TEMP t, CALL(f, a)), TEMP t)`                       | 把 `CALL` 从复杂表达式中提升出来：先调用函数并把返回值保存到临时变量 `t`，再用 `TEMP t` 表示调用结果。                       |

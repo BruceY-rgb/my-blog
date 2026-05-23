@@ -8,7 +8,7 @@ categories:
     - claude code
     - learn-claude-code
     - 工具与执行
-cover: source/_posts/claudecode/image-1.png
+cover: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCngfu1iuZbDAg4uR55SBTsD1XF7nL0ezUrQ&s
 ---
 
 > 最小的`agent`内核起始就是`while loop + one tool`
