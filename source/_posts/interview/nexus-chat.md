@@ -88,6 +88,7 @@ Socket.IO 收到 new-message
 
 ## 3. 总体架构：HTTP、WebSocket、MCP 三条链路
 
+![整体关系图](image-6.png)
 ![架构图](image.png)
 
 浏览器通过`HTTP API`完成认证、发消息、查历史、上传附件，通过`Socket.IO`接收实时事件。API 写 `PgSQL`，写库成功之后通过全局`Socket.IO`实例推送到对应`room`
