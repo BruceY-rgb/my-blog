@@ -88,6 +88,8 @@ Socket.IO 收到 new-message
 
 ## 3. 总体架构：HTTP、WebSocket、MCP 三条链路
 
+![架构讲解图](image-7.png)
+
 ![整体关系图](image-6.png)
 ![架构图](image.png)
 
