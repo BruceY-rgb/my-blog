@@ -35,7 +35,7 @@ cover: https://i.pcmag.com/imagery/reviews/07td46ju7p6lLVb0QGwc5VF-30.fit_lim.si
 
 ### 2.2 用数据模型和状态缓存优化实时体验
 
-在这个项目里面，缓存策略主要不是 `Redis`，而是两层：服务端读模型缓存和前端状态缓存。服务端我把高频读取的未读数、线程回复数、最后消息时间反范式到关系表字段里，比如 `ChannelMember.unreadCount`、`DMConversationMember.unreadCount`、`Message.threadReplyCount`、`DMConversation.lastMessageAt`。这样侧边栏、未读徽标、线程入口不需要每次从 `message` 表 count。前端用 `Zustand` 缓存未读数和线程状态，`Socket.IO` 推送到达后直接更新局部状态
+在这个项目里面，缓存策略主要不是 `Redis`，而是两层：服务端读模型缓存和前端状态缓存。服务端我把高频读取的未读数、线程回复数、最后消息时间反范式到关系表字段里，比如 `ChannelMember.unreadCount`、`DMConversationMember.unreadCount`、`Message.threadReplyCount`、`DMConversation.lastMessageAt`。这样侧边栏、未读徽标、线程入口不需要每次从 `message` 表 count。**前端用 `Zustand` 缓存未读数和线程状态，`Socket.IO` 推送到达后直接更新局部状态**
 
 !!! note
 Zustand 就是 React 里的一个轻量级全局状态仓库，用来让多个组件共享和同步状态
@@ -50,7 +50,7 @@ Socket.IO 收到 new-message
 侧边栏未读红点立刻变化
 ```
 
-不用每次都重新请求后端，也不用把状态从父组件一层层传下去。
+**不用每次都重新请求后端，也不用把状态从父组件一层层传下去**。
 !!!
 
 **实时消息延迟的优化点**：
@@ -77,13 +77,34 @@ Socket.IO 收到 new-message
 
 `Traefik`是一个反向代理+网关+自动HTTPS管理工具。
 
+> 反向代理就是客户端不直接访问后端服务，而是先访问代理服务器，代理服务器再转发给真正的后端
+
 用户访问网站的时候，**不是直接访问next.js容器或者MCP容器**，而是先经过`Traefik`，再由其决定请求应该转发到哪一个服务
 
 - **统一入口**：项目中包含主应用、MCP server、数据库管理工具等，它可以作为一个统一的入口，把不同域名或者路径转发到不同的容器中
 - **自动配置了HTTPS**：Traefik 可以自动申请和续期 SSL 证书，也就是让你的服务支持 https://
+  - Traefik 可以自动处理 HTTPS 证书，外部用户通过 HTTPS 访问，Traefik 负责 TLS 终止，然后把请求转发给内部 HTTP 服务。这样应用容器本身不需要单独处理证书逻辑。
 - **支持WebSocket转发**：WebSocket 需要反向代理正确处理 upgrade 请求。Traefik 可以负责把 /socket.io 这类请求正确转发到后端
 - **适合`Dokploy`部署**：Dokploy 底层常用 Traefik 来做服务路由。你部署多个容器时，只需要配置服务对应的域名，Traefik 就能**把外部请求导到正确容器**。
 
+**几个核心概念**
+
+- EntryPoint：入口端口，比如 80 / 443
+- Router：匹配请求规则，比如域名、路径
+- Middleware：中间处理，比如重定向、鉴权、限流
+- Service：真正被转发到的后端服务
+- Provider：服务发现来源，比如 Docker、Kubernetes
+
+**Traefik和Nginx的区别**
+
+- Nginx 更传统，配置通常偏静态；Traefik 更适合容器化和云原生环境，能自动发现 Docker/Kubernetes 服务，并根据 label 或 ingress 配置自动生成路由。
+- 在 Dokploy、Docker Compose 这类部署环境中，Traefik 用起来更方便，因为新增服务时可以通过 labels 自动接入路由。
+
+**负载均衡**
+
+- Traefik 可以把请求分发到多个后端实例（把外部链接分发到不同的app实例）
+- 如果 Next.js app 有多个实例，Traefik 可以做负载均衡，**把请求分发到不同容器**。但对于 WebSocket，需要注意连接是长连接，建立后通常会持续绑定到某个实例。多实例下还需要 Socket.IO Redis Adapter 来做跨实例消息广播。
+- Traefik 解决“请求怎么分发到多个实例”，Redis Adapter 解决“不同实例之间的 socket room 怎么同步”。
 !!!
 
 ## 3. 总体架构：HTTP、WebSocket、MCP 三条链路
@@ -166,7 +187,23 @@ JWT的作用流程大概是：
 
 讲法：
 
-消息表没有拆成 channel_message 和 dm_message 两张表，因为它们的行为非常相似，统一模型能复用编辑、删除、附件、反应、线程、搜索逻辑。通过 nullable 外键区分频道和私信，再在 API 层保证二选一。
+消息表没有拆成 channel_message 和 dm_message 两张表，**因为它们的行为非常相似**，**统一模型能复用编辑、删除、附件、反应、线程、搜索逻辑**。通过 **nullable 外键区分频道和私信**，再在 API 层保证二选一。
+
+!!! example "nullable外键"
+```
+Message
+------------------------------------------------
+id
+content
+senderId
+channelId          可以为空
+dmConversationId   可以为空
+createdAt
+updatedAt
+```
+
+这里的`channelId`和`dmConversation`就是两个`nullable`外键
+!!!
 
 ## 5. 核心链路一：实时消息发送与接收
 
@@ -196,7 +233,7 @@ JWT的作用流程大概是：
 
 回答重点：
 
-即使有人绕过前端直接 emit join 事件，服务端也会查数据库做权限确认。HTTP API 和 WebSocket room 都有权限防线。
+即使有人**绕过前端直接 emit join 事件**，服务端也会**查数据库做权限确认**。HTTP API 和 WebSocket room 都有权限防线。
 
 ### 5.4 如何处理重复和重连
 
@@ -205,6 +242,28 @@ JWT的作用流程大概是：
 - `useWebSocketMessages` 有 room join 重试。
 - 客户端用 `previousMessageIds` 和当前 state 双重去重。
 - 服务端记录一个用户多个 socket id，多标签页只在最后一个 socket 断开时标记离线。
+
+### 5.5 如果实时性出现问题我们怎么排查
+
+我们排查 Socket 延迟时，不会直接认为是 WebSocket 慢，而是先把一条消息链路拆成多个阶段：**发送端点击、HTTP 请求到达后端、JWT 鉴权、权限校验、数据库写入、未读数和通知更新、Socket.IO emit、接收端收到事件、前端状态更新和 UI 渲染**。每个阶段都加时间戳和日志，这样可以判断延迟到底发生在写入链路、广播链路，还是前端渲染链路。
+
+- 如果发送 API 本身很慢，我会重点看 Prisma transaction、消息写入、未读数 updateMany、通知生成这些数据库相关逻辑。
+- 如果 API 很快但接收端慢，我会检查 Socket.IO 的连接状态、room 是否正确 join、重连后有没有重新 join、前端是否重复创建 socket，以及事件是否收到了但被前端过滤或去重逻辑误丢。
+
+另外，我会重点关注广播粒度。早期如果使用全局广播，会导致大量无效事件。优化后应该按 channel:{id}、dm:{id}、user:{id} 这几类 room 定向推送，只把消息发给有权限且需要接收的用户。
+
+如果是多实例部署，还要检查 Socket.IO Redis Adapter，因为单机 room 只存在当前进程内存里。用户连接分布在不同实例时，必须通过 **Redis Pub/Sub 做跨实例广播**。最后再检查网络层，比如 **WebSocket 是否成功 upgrade、ping/pong 延迟、是否频繁重连，以及 Traefik 这类反向代理是否正确转发 /socket.io**。
+
+!!! note "排查工具"
+- 前端问题——优先使用`Chrome DevTools`
+  - 看`NetWork`里面的`HTTP`请求耗时
+  - 看`Network`里面的websocket连接
+  - 看控制台日志
+- 如果 DevTools 的 *WebSocket Frames 里已经能看到 new-message 事件，但页面没有变化*，我会用 **React DevTools 或 Zustand DevTools**看状态有没有更新。这个时候问题通常不在 Socket，而在前端状态同步，比如闭包旧值、去重逻辑、当前频道判断或渲染条件错误。
+- Socket.IO 有 *debug 日志*，开发时可以打开 DEBUG=socket.io:*，用来观察连接、断开、重连、事件发送和 transport 类型。这个对排查连接不稳定、没有成功 upgrade、频繁重连很有帮助。
+- 数据库层我会用 *Prisma query log 和 PostgreSQL 慢查询日志*，看消息发送时具体执行了哪些 SQL，是否存在 N+1 查询、索引缺失、事务过长或者 updateMany 影响范围过大。很多实时延迟实际上来自数据库事务，而不是 WebSocket 本身。
+- 如果问题只在部署环境出现，我会重点看 Traefik 和容器日志。**WebSocket 对反向代理配置比较敏感**，需要确认 /socket.io 路由正确、支持 Upgrade header、连接超时时间合理。如果代理没有正确处理 WebSocket，前端可能会退化成 polling，或者频繁断连重连。
+!!!
 
 ## 6. 核心链路二：未读数与通知
 
@@ -225,7 +284,7 @@ JWT的作用流程大概是：
 
 面试讲法：
 
-未读数不能每次都 `count messages where createdAt > lastReadAt`，因为侧边栏会频繁展示多个频道和私信。把未读数放在成员关系表里，本质是为读场景建立读模型，写消息时付出一次 `updateMany` 成本，换取高频读的 O(1) 查询。
+未读数**不能每次都 `count messages where createdAt > lastReadAt`**，因为侧边栏会频繁展示多个频道和私信。把未读数放在成员关系表里，本质是为读场景建立读模型，写消息时付出一次 `updateMany` 成本，换取高频读的 O(1) 查询。
 
 ### 6.2 通知生成与推送
 
@@ -267,7 +326,7 @@ MCP server 是给 AI 客户端或外部工具使用的能力层，把聊天系�
 
 可讲细节：
 
-MCP 不是直接绕过业务逻辑操作数据库，而是大部分工具通过 APIExecutor 调主应用 API，所以权限校验、数据校验、消息广播这些逻辑仍复用主系统。鉴权上，登录工具返回 JWT，后续工具通过 Bearer token 或参数里的 `userToken` 传入。
+MCP 不是直接绕过业务逻辑操作数据库，而是**大部分工具通过 APIExecutor 调主应用 API**，所以权限校验、数据校验、消息广播这些逻辑仍复用主系统。鉴权上，登录工具返回 JWT，后续工具通过 Bearer token 或参数里的 `userToken` 传入。
 
 部署：
 
@@ -625,6 +684,21 @@ Action：
 Result：
 
 MCP 客户端可以通过标准 tools 调用聊天系统能力；主系统不需要为每个客户端重写一套业务逻辑，权限和数据一致性也保持在同一套 API 中。
+
+
+## 15. STAR故 4：优化 @mention 候选弹窗的触发时机
+
+我们在做 @mention 的时候，遇到的核心问题不是输入 @ 后怎么弹出列表，而是列表什么时候应该及时收起。因为产品上允许用户输入 @ 后立刻出现候选列表，但如果后续输入的内容已经明显不是在搜索用户，列表就不能一直悬浮在输入框上，否则会干扰正常输入。
+
+所以我把这个问题抽象成一个 mention 输入状态机。用户输入 @ 后进入 mention 搜索状态；之后每次输入变化时，不是只判断文本里有没有 @，而是基于当前光标位置往前找最近的 @，然后分析 @ 到光标之间的内容。
+
+如果这段内容是连续的合法搜索词，比如 @al，就继续展示候选列表，并用 al 作为搜索关键词。如果中间出现空格，比如 @alice hello，说明 mention 输入已经结束，就立即收起列表。如果出现 /、#、标点这类不符合用户名搜索的字符，也会退出 mention 状态。如果用户删除了 @，或者光标移动到了 mention 区间之外，也会关闭弹窗。
+
+这样做之后，列表不会因为输入过一个 @ 就一直存在，而是能随着用户输入状态及时出现和消失。这个改动虽然是一个交互细节，但它体现了我在处理复杂输入组件时，不只是做静态 UI，而是会把用户输入过程建模成状态流，针对边界情况做精确控制。
+
+我们后来意识到，@mention 弹窗不能只由“输入框里有没有 @”决定，也不能完全由“搜索有没有结果”决定。更合理的是把它拆成两层：第一层判断用户当前是否还处于 mention 输入状态，第二层才是根据关键词做模糊搜索。
+
+*用户输入 @ 后可以立即进入 mention 状态，后续输入会不断作为关键词去搜索候选用户。如果关键词合法，比如 @al，就持续更新候选列表。如果当前没有匹配用户，我倾向于显示“无匹配用户”，而不是立刻关闭，因为这样用户能明确知道系统仍在处理 mention，只是没有找到结果。但是如果输入内容已经从语义上不再是 mention，比如 @ 后面出现空格、非法字符，或者用户删除了 @、光标移出 mention 区间、按 Esc、选择了候选人，这些情况就应该立即退出 mention 状态并收起列表。所以我的判断逻辑是：@ 是进入状态的触发条件，空格/非法字符/光标变化是退出状态的条件，模糊搜索结果只影响弹窗内容，而不一定直接决定弹窗是否存在*
 
 ## 16. 需要主动暴露的边界和改进
 
