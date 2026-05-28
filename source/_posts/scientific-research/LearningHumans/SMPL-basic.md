@@ -1,4 +1,4 @@
---- 
+---
 title: SMPL Basic
 date: 2026-04-05
 categories: 
@@ -9,7 +9,7 @@ categories:
 tags:
     - SMPL
 cover: https://i-blog.csdnimg.cn/blog_migrate/99a2911a3d66485b0775db5931a7505e.png
---- 
+---
 
 # SMPL 基础
 
@@ -446,4 +446,3 @@ bones = [
     [ 9, 14], [14, 17], [17, 19], [19, 21], [21, 23],  # right arm
 ]
 ```
-

@@ -1,5 +1,6 @@
 ---
 title: Learning Human Project
+date: 2026-03-08 14:37:30
 categories:
     - 科研训练
     - 机器人与大模型

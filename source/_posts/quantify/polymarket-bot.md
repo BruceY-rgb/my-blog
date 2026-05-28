@@ -5,7 +5,7 @@ tags: [Polymarket]
 categories: [量化]
 description: Polymarket是基于Polygn区块链构建的全球最大去中心化预测平台。该笔记将从市场微观结构出发，深入结构二元市场与负风险市场的定价机制，推导无风险套利的数学不等式。详细探讨如何利用 Python 构建高频交易系统，涵盖从 Gamma API 市场发现、WebSocket 实时订单簿维护、到利用 Relayer 实现无 Gas 费交易执行的全流程。特别针对 Polymarket 独特的“合并（Merge）”与“赎回（Redeem）”机制，提供了完整的交互代码范例，解决了官方 CLOB 客户端功能的缺失问题。
 cover: https://stat.theblock.co/cdn-cgi/image/format=webp,q=50/wp/uploads/2024/06/polymarket-news-editorial-1200x675.jpg
---- 
+---
 
 
 > Polymarket是基于Polygn区块链构建的全球最大去中心化预测平台。该笔记将从市场微观结构出发，深入结构二元市场与负风险市场的定价机制，推导无风险套利的数学不等式。详细探讨如何利用 Python 构建高频交易系统，涵盖从 Gamma API 市场发现、WebSocket 实时订单簿维护、到利用 Relayer 实现无 Gas 费交易执行的全流程。特别针对 Polymarket 独特的“合并（Merge）”与“赎回（Redeem）”机制，提供了完整的交互代码范例，解决了官方 CLOB 客户端功能的缺失问题。
@@ -596,4 +596,3 @@ if __name__ == "__main__":
   - 这是 Polygon 链上 USDC 代币合约的地址
   - 在合并（Merge）操作中，合约需要知道你最终想换回哪种资产
   - 它是**真钞（也就是USDC）的防伪标准**
-

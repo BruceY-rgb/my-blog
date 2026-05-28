@@ -5,7 +5,7 @@ tags: [托福听力]
 categories: [英语]
 description: 托福听力逻辑建模指南：解析学术讨论语境下的语言输出矩阵。通过结构化模板与高频词汇包，优化你的考场应试算法，实现高分突破。
 cover: https://www.cheersyou.com/sites/default/files/styles/news_show_2022/public/field/image/woman-girl-technology-music.jpg?itok=ICZSywRJ
---- 
+---
 
 ![alt text](image-1.png)
 
@@ -394,4 +394,3 @@ after basketball game
 - `workout`:锻炼
 - `renovate`:翻修
 - `course sylabus`:课程大纲
-

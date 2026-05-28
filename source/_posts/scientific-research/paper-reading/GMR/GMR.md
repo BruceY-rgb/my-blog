@@ -1,5 +1,6 @@
 ---
 title: General Motion Retargeting for Humanoid Motion Tracking
+date: 2026-03-10 08:27:44
 authors: João Pedro Araújo, Yanjie Ze, Pei Xu, Jiajun Wu, C. Karen Liu
 venue: Stanford University（斯坦福大学）
 category: 
@@ -731,4 +732,3 @@ if self.use_ik_match_table2:
 | `offset_human_data()` | motion_retarget.py | 姿态对齐 |
 | `retarget()` | motion_retarget.py | IK求解 |
 | `solve_ik()` | mink库 | 阻尼最小二乘求解 |
-
