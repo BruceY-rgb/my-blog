@@ -351,7 +351,7 @@ match(n) {
 ```
 MEM
  |
-+
+ +
 / \
 e CONST
 ```
@@ -363,18 +363,488 @@ e CONST
 ```
 MEM
  |
-+
+ +
 / \
 TEMP CONST
 ```
 
-那么它就可以匹配上面的`LOAD` tile，因为`
-- tile`根节点是`MEM`，树根也是`MEM`
+那么它就可以匹配上面的`LOAD` tile，因为`tile`根节点是`MEM`，树根也是`MEM`
 !!!
 
 - 目标：保证`IR Tree`中的每个节点都不需要重复查看两次
-### 9.2.3 Tree Grammer
+
+#### 4. Efficiency of Tiling Algorithms
+
+假设
+
+- `K`:平均每个匹配到的`tile`包含`K`个非叶子结点，也就是带标签的节点
+- `N`:输入`IR Tree`中节点的总数
+- `K'`:为了判断某个子树处有哪些`tile`能匹配，最多需要检查的节点数
+- `T'`：平均每个`tree node`处能匹配到的不同`patterns`,也就是`tile`的数量
+
+`Maximal Munch`的时间开销正比于$(K' + T')N/K$
+
+`Dynamic Programming`的时间开销正比于$(K'+T')N$
+
+如果`K`,`K'`和`T'`都是常数，那么这些算法的运行时间都是线性的
+
+!!! example
+假设有这棵`IR Tree`:`MEM(BINOP(PLUS, TEMP fp, CONST 8))`。它表示 *读取内存地址 fp + 8 处的值*对应机器指令可以是：`LOAD r1 <- M[fp + 8]`
+
+```
+        MEM
+         |
+         +
+       /   \
+    TEMP   CONST
+```
+
+- `N = 4`
+- `K`:平均一个`tile`覆盖多少个非叶子节点
+  - 这里`TEMP`是一个表达式，不算`tile`内部的固定节点，所以这个`tile`覆盖3个非叶子节点
+  - `K`是**整棵树的平均情况**
+- `K'`：为了判断匹配，最多要看多少个节点
+  - 比如要判断当前根节点能否匹配`MEM(+(e, CONST))`，我们需要检查
+    - 当前节点是不是`MEM`
+    - `MEM`的孩子是不是`+`
+    - `+`的右孩子是不是`CONST`
+  - 最多要看三个节点
+  - 可以认为`K' = 3`
+- `T'`：每个节点平均有多少个`pattern`可以尝试。假设当前节点是`MEM`，可能有这些`pattern`
+  - `MEM(e)`
+  - `MEM(+(e, CONST))`
+  - `MEM(+(CONST, e))`
+  - `MEM(CONST)`
+  - 也就是说一个`MEM`节点附近可能有`4`种`tile`可以尝试
+!!!
 
 ## 9.3 CISC Machines
 
+| RISC machine                                           | CISC machine                                                            |
+| ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| 32 个寄存器                                            | 寄存器较少，例如 16 个、8 个或 6 个                                     |
+| 只有一类整数/指针寄存器                                | 寄存器被分成不同类别，有些操作只能在特定寄存器上执行                    |
+| 算术操作只能在寄存器之间进行                           | 算术操作可以通过 addressing modes 访问寄存器或内存                      |
+| 三地址指令形式：`r1 ← r2 ⊕ r3`                         | 二地址指令形式：`r1 ← r1 ⊕ r2`                                          |
+| load 和 store 指令只支持 `M[reg + const]` 这种寻址方式 | 支持多种不同的寻址方式                                                  |
+| 每条指令长度固定，都是 32 bits                         | 指令长度可变，由可变长度的 opcode 和可变长度的寻址方式组成              |
+| 每条指令通常只产生一个结果或效果                       | 指令可能带有副作用，例如 autoincrement addressing modes（自增寻址模式） |
+
+### 9.3.1 Problems and Solutions of CISC
+
+#### 1. 寄存器少
+
+**解决方案**：把中间代码/抽象汇编阶段可以自由地产生`TEMP`节点，然后*假设后面的寄存器分配器(`register allocator`)会把它们处理好*
+
+> 指令选择阶段先生成逻辑上正确的带阿米，寄存器够不够的问题交给寄存器分配阶段
+
+#### 2. 寄存器分类
+
+在`Pentium`上做惩罚时，左操作数必须放在`eax`中，结果的高位会被放在`edx`中。类似的寄存器规则说明`CISC`在很多情况下受到真实机器规则的限制
+
+但是对于`Tiger`程序来说，高位结果没有用
+
+**解决方法**：显式地移动操作数和结果
+
+!!! example
+```asm
+mov eax, t2      /* eax ← t2 */
+mul t3           /* eax ← eax × t3; edx ← garbage */
+mov t1, eax      /* t1 ← eax */
+```
+
+- 第一步把`t2`移动到寄存器`eax`中，因为乘法要求左操作数必须在`eax`
+- 第二步执行乘法操作，`eax = t2 × t3`,同时`edx`会存放高位结果，但是`Tiger`只关心普通整数结果，所以这里说`edx`被污染了
+- 第三步把结果从`eax`移动到临时变量`t1`
+!!!
+
+#### 3. 二地址指令
+
+目标寄存器必须和第一个源寄存器相同
+
+**解决方案**：添加额外的`mov`指令
+
+```asm
+mov t1, t2       /* t1 ← t2 */
+add t1, t3       /* t1 ← t1 + t3 */
+```
+
+我们希望寄存器分配器能够把`t1`和`t2`分配到同一个真是寄存器中，这样这条`mov`指令就可以被删除
+
+#### 4. 算术操作可以直接访问内存
+
+- 指令选择阶段会把每个`TEMP`节点都变成一个 *寄存器*引用。很多这样的寄存器最后实际上可能会变成内存位置
+- **解决方案**：在执行运算之前，把所有操作数都取到寄存器中；运算完成后，再把结果存回内存
+
+!!! example
+下面这两段指令序列计算的是同一件事
+
+```asm
+mov eax, [ebp-8]
+add eax, ecx
+mov [ebp - 8], eax
+```
+
+```asm
+add [ebp - 8], ecx # M[ebp - 8] ← M[ebp - 8] + ecx
+``` 
+
+下面的指令序列虽然更加简洁，但是两种序列的速度差不多
+!!!
+
+虽然上述例子中下面的指令更短，但是机器内部仍然要完成三个动作
+
+1. 从内存`[ebp - 8]`读取值
+2. 和`ecx`相加
+3. 把结果写回`[ebp - 8]`
+
+所以本质上并没有少做这些工作
+
+#### 5. 多种选址方式
+
+- 一个能够完成六件事的寻址方式，通常也需要六个步骤来执行
+  - `CISC`指令看起来很短，但是硬件内部不一定真的只花费一步
+
+!!! example
+```asm
+mov eax, [base + index * 4 + offset]
+```
+
+表面上是一条指令，但是机器内部可能要做
+
+```
+1. 读取 base
+2. 读取 index
+3. 计算 index * 4
+4. 加上 base
+5. 加上 offset
+6. 访问内存
+```
+!!!
+
+- 它有两个优点
+  - 会破坏更少的寄存器(`trash fewer registers`)
+  - 指令编码更短
+- 经过一些额外工作，基于`tree matching`的指令选择器可以选择`CISC`的寻址方式；但是程序使用简单的`RISC-like`指令也可能一样快
+
+#### 6. 变长指令
+
+- 对于编译器来说，这不算真正的问题
+- 一旦指令已经选好，让编译器输出对应的机器编码是一件简单但是繁琐的事情
+
+#### 7. 带副作用的指令
+
+**问题**：有些机器有一种`autoincrement memory fetch instruction`，也就是**自增式内存读取指令**，它的效果是
+
+```asm
+r2 <- M[r1];
+r1 <- r1 + 4
+```
+
+- 这种指令很难用`tree patterns`建模，因为它会产生**两个后果**
+
+!!! note
+这里我们来说明一下，什么是所谓的两个结果
+
+一棵普通的`IR Tree`通常表达的是：**一个表达式树 + 一个计算结果**；但是存在`autoincrement`情况的指令不只是取值还修改了`r1`,这相当于 **一个操作 + 两个效果**，这就是两个结果的来源，因此 **很难用树模式来描述**
+!!!
+
+- 有三种解决方案
+  - 忽略`autoincrement`指令，不使用它们，希望这些复杂指令不会影响整体代码生成
+  - 在`tree pattern-matching code generator`中，用临时的、特殊的方式匹配某些特殊惯用模式(`idom`)
+  - 完全使用另一种指令选择算法，即基于`DAG patterns`，而不是基于`tree patterns`
+
+### 9.3.2 Algorithns for Instructions Selection
+
+- 用于寻找`optimal tiling`算法，比寻找`optimum tiling`的算法更简单
+- 对于`CISC`，`optimum tiling`和`optimal tiling`之间的差别比较明显
+  - 因为有些`CISC`指令一条就可以完成多个操作
+- 对于`RISC`，二者通常没有区别
+  - 因为`RISC`的`tile`通常比较小，而且代价比较统一
+- 因此对于`RISC`，使用更简单的`tiling`算法通常就足够了
+
 ## 9.4 Instruction Selection for the Tiger Compiler
+
+在一棵由指令模式`tiled`的树中**每个`tile`的根节点都会对应某个中间结果**，这个中间结果**保存在寄存器**中
+
+!!! question
+应该使用哪个寄存器？
+!!!
+
+**寄存器分配**的任务，就是给这些需要保存结果的节点**分配具体的寄存器编号**
+
+寄存器分配的很多方面并不依赖于特定目标机器的指令集,本质上更依赖于 **程序中变量的使用关系**
+
+寄存器分配应该在指令之前还是之后进行？
+
+- 如果在指令选择之前进行；甚至还不知道哪些`tree nodes`的结果需要寄存器保存
+- 因此不可能很准确
+- 所以我们会在**指令选择之后进行寄存器分配**
+
+### 9.4.1 Abstract Assembly Language Instructions
+
+!!! note "为什么需要抽象汇编"
+前面我们说过，`instruction selection`会把`IR Tree`翻译成类似汇编的指令，例如
+
+```asm
+add `d0, `s0, `s1
+mov `d0, `s0
+jmp L1
+```
+
+但是这个时候还没有真正决定 *`t1`、`t2`、`t3` 到底对应 eax、ebx、ecx 还是别的寄存器*
+
+所以`Tiger`会先生成一种 **抽象汇编指令结构**。它记录：
+
+- 这条指令长什么样
+-  它读了哪些临时寄存器
+-  它写了哪些临时寄存器
+-  它可能跳转到哪些`label`
+
+后续寄存器分配完成后，再把临时寄存器替换成真实寄存器的名字
+!!!
+
+```cpp
+typedef struct {
+  Temp_labelList labels;
+} *AS_targets;
+
+typedef struct {
+  enum {
+    I_OPER,
+    I_LABEL,
+    I_MOVE
+  } kind;
+  union {
+    struct {
+      string assem;
+      Temp_tempList dst, src;
+      AS_targets jumps;
+    } OPER;
+
+    struct {
+      string assem;
+      Temp_label label;
+    } LABEL;
+
+    struct {
+      string assem;
+      Temp_tempList dst, src;
+    } MOVE;
+  } u;
+} *AS_instr;
+
+void AS_print(FILE *out, AS_instr i, Temp_map m);
+```
+
+- `OPER`包含
+  - `assem`:一条汇编语言指令
+  - `src`:操作数寄存器列表，可以为空
+  - `dst`:结果寄存器列表，可以为空
+  - `jumps`:可能跳转到的目标`label`列表
+    - 如果某条指令总是顺序执行到下一条指令，那么`jumps = NULL`
+
+!!! example
+```asm
+add `d0, `s0, `s1
+```
+
+这是一条加法指令，用抽象汇编语言表示为
+
+```
+assem = "add `d0, `s0, `s1"
+src = [t1, t2]
+dst = [t3]
+jumps = NULL
+```
+!!!
+
+- `LABEL`包含
+  - `assem`:这个`label`在汇编语言程序里长什么样(打印出来给汇编器看的字符串)
+  - `label`:使用的是哪个`label`符号（编译器内部使用的符号对象）
+
+!!! example
+```asm
+L1:
+```
+
+在抽象汇编中，`LABEL`记录的两个东西
+
+```
+assem = "L1:"
+label = L1
+```
+!!!
+
+- `MOVE`类似于`OPER`，但是它只能执行数据传送
+- `AS_print(f, j, m)`会把一条抽象汇编指令`i`格式化成字符串，并打印到文件`f`
+  - `m`是一个`temp mapping`，用来告诉每个`temp`最终被分配到哪个寄存器
+
+### 9.4.2 机器无关性(`Machine-independence`)
+
+- `AS_instr`类型独立于所选择的目标机器汇编语言
+  - 它不是某一种具体机器的最终汇编代码，而是一种统一的数据结构
+  - 其中包含的信息对所有机器都是通用额
+  - 所有指令都可以抽象成 *一段汇编字符串+源寄存器+目标寄存器+跳转目标*
+- 这里使用`Jouette assemnly language`
+
+![使用Jouette assembly language的例子](image-225.png)
+
+- `assem`：汇编模板字符串
+- `dst`：目标临时寄存器列表
+- `src`：源临时寄存器列表
+- `jumps`：跳转目标，这里没有跳转，所以是 NULL
+
+寄存器分配之后，真实的`Jouette`汇编可能是
+
+```asm
+LOAD r1 <- M[r27+8]
+```
+
+- `Assem`指令本身并不知道寄存器分配结果。它用`s0`表示第一个源寄存器，用`d0`表示目标寄存器
+
+!!! example
+![例子的IR Tree](image-226.png)
+
+| assem                    | dst    | src          |
+| ------------------------ | ------ | ------------ |
+| ADDI d0 <- `s0 + 3`    | `t908` | `t87`        |
+| LOAD d0 <- `M[s0 + 0]` | `t909` | `t92`        |
+| MUL d0 <- `s0` * `s1`   | `t910` | `t908, t909` |
+
+> 其中 t908、t909 和 t910 是由指令选择器新选择出来的临时变量。
+
+寄存器分配之后，汇编代码可能变成
+
+```asm
+ADDI    r1 <- r12 + 3
+LOAD    r2 <- M[r13 + 0]
+MUL     r1 <- r1 * r2
+```
+!!!
+
+### 9.4.3 Procedure Calls
+
+- 过程调用（调用没有返回值）表示为：`EXP(CALL(f, args))`
+- 函数调用（有返回值）表示为：`MOVE(TEMP t, CALL(f, args))`
+
+这些`Tree IR`可以被下面这样的`tile`匹配
+
+```cpp
+case EXP(CALL(e, args)) {
+  Temp_temo r = munchExp(e);
+  Temp_tempList l = munchArgs(0, args);
+  emit(AS_Oper("CALL `s0\n", calldefs, L(r,l),NULL));
+}
+```
+
+1. 用`munchExp(e)`生成代码，计算被调用函数的**地址或标签**
+2. 用`munchArgs(0, args)`生成代码，把所有参数放到正确位置
+3. 发射一条抽象汇编`CALL`指令
+
+> `munchArgs`会生成代码，把所有实参移动到它们正确的位置，可能是寄存器，也可能是内存
+
+!!! example
+函数调用前，参数必须按照`calling convention`放到固定位置
+
+对于`CALL(f, [a,b,c,d])`，`munchArgs(0, args)`就负责生成下面的代码
+
+```asm
+MOVE r1 <- a
+MOVE r2 <- b
+MOVE r3 <- c
+STORE d -> stack
+```
+
+所以`munchArgs`的作用不是 **调用函数**，而是：**在调用函数之前，把实参摆放到正确的位置**
+!!!
+
+- 一次`CALL`预计会 **破坏某些寄存器**，例如
+  - `caller-save registers`:调用者保存寄存器
+  - `return-address register`:返回地址寄存器
+  - `return-value register`:返回值寄存器
+
+这些被调用破坏的寄存器列表`calldefs`，应该被列为`CALL`指令的`destination`，其核心作用就是告诉寄存器分配器：**这些寄存器在CALL后会被重新定义，旧值不可靠**
+
+### 9.4.4 If there's no frame 
+
+使用`frame pointer`时，在每次过程调用中
+
+- 栈指针寄存器会被赋值到帧指针寄存器 
+- 栈指针会按照新栈帧的大小进行增加
+
+**Virtual frame pointer**
+
+- 可以节省时间，因为不需要复制指令
+- 可以节省空间，因为多出来一个寄存器可以用于其他目的
+- `codegen`函数必须把所有`FP+k`的引用替换成：`SP+k+fs`
+
+> 原本通过帧指针访问的位置，可以通过栈指针—+一个修正后的偏移访问
+
+> 其中`fs`是`frame size`，也就是当前栈帧的大小
+
+!!! question
+![练习](image-227.png)
+
+**step 1:构建IR树**
+
+1. 根节点是`MOVE`
+2. `MOVE`左操作数是`MEM(...)`，右操作数是`CONST 1`
+3. 内部`MEM`的地址表达式是`+(MEM(+ (CONST a, TEMP fp)), + (TEMP i, CONST 4))`
+4. 拆分加法
+  - 左子树：`MEM(+(CONST a, TEMP fp))`
+  - 右子树：`+(TEMP i, CONST 4)`
+
+最终`IR`树如下(文字表示)：
+
+```
+          MOVE
+         /    \
+      MEM       CONST 1
+       |
+       +
+      / \
+   MEM   +
+   |    / \
+  +   TEMP i CONST 4
+ / \
+CONST a TEMP fp
+```
+
+**step2:使用`Maximal Munch`和`Jouette`架构对`IR`树进行`tiling`**
+
+- 我们按照 **自底向上`Bottom-Up`**的`Maximal Munch`方法，每个节点选择匹配模式`tile`
+- 典型`Jouette`模式
+  - `MEM(TEMP x)`:生成`LOAD`指令
+  - `CONST`:直接使用立即数
+  - `+`：`ADDI`或`ADD`指令
+  - `MOVE`：对一个到存储操作或寄存器赋值
+
+**Bottom-Up分块**
+
+1. 最底层
+  - `+(CONST a, TEMP fp)`→`+(CONST, TEMP)`→使用临时寄存器`t1`
+  - `+(TEMP i, CONST 4)`→`+(TEMP, CONST)`→使用临时寄存器`t2`
+2. 中间层
+  - `MEM(+ (CONST a, TEMP fp))` → 匹配 `MEM(TEMP) → LOAD` 到 `t3`
+  - `+ (t3, t2)` → 匹配 `+(TEMP, TEMP) → ADD → t4`
+3. MOVE
+  - MOVE(MEM(...), CONST 1) → 对最终值 1 赋值到内存 → STORE
+
+**step 3:生成 Jouette 汇编指令序列**
+
+```
+# 计算 MEM(+ (CONST a, TEMP fp)) 到 t3
+ADDI t1 <- fp + a        # t1 = fp + a
+LOAD t3 <- M[t1]         # t3 = MEM(fp + a)
+
+# 计算 +(TEMP i, CONST 4) 到 t2
+ADDI t2 <- i + 4          # t2 = i + 4
+
+# 计算 MEM(...) 的加法
+ADD t4 <- t3 + t2         # t4 = t3 + t2
+
+# 最终 MOVE 到内存
+STORE M[t4] <- 1          # MEM(t4) = 1
+```
+!!!

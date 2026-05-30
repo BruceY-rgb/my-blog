@@ -380,6 +380,286 @@ python会将上述返回表达式打包成`return("Mike", 18, 90)`
 
 ## 5.5 命名空间与作用域
 
+### 5.5.1 命名空间
+
+命名空间：Python程序中每个名字都会在于某一个空间，在这个空间中存在并被操作，互不影响
+
+
+-  局部命名空间（Local）
+-  闭包命名空间（Enclosing）（不要求）
+-  全局命名空间（Global）
+-  内建命名空间（Built-in）  
+
+**加载的顺序**：
+
+- 解释器启动
+- 内建命名空间
+- 加载模块
+- 全局命名空间
+- 函数调用
+- 局部命名空间或闭包命名空间
+
+### 5.5.2 作用域(Scope)
+
+作用域是变量在代码中的 **可见性范围**。由命名空间的层级关系决定。Python遵循 **LEGB规则**(查找顺序)
+
+1. `L(Local)`:当前函数或方法的局部作用域
+2. `Ennclosing`:外层嵌套函数的作用域(闭包场景，不要求)
+3. `G(Global)`:模块级别的全局作用域
+4. `B(Built-in)`:内建作用域
+
+若未找到：触发`NameError`
+
+一个程序中的变量包括两类：全局变量和局部变量 
+
+- **全局变量**
+  - 定义：在函数或类外部定义的变量是全局变量，作用域为当前模块
+  - 作用域：在模块内可以直接读取，函数内修改需要`global`声明；**局部同名变量会屏蔽全局变量**，但是不会影响全局变量的值
+  - 生命周期：从**模块加载**到**程序结束或模块卸载**
+- **局部变量**
+  - 定义：在函数内部定义的变量(包括参数)，只能在函数内部被访问
+  - 作用域：默认限定在它们被定义的函数内部
+  - 生命周期：从函数开始执行时开始到函数执行结束时结束
+
+!!! example
+![全局变量与局部变量的例子](image-35.png)
+!!!
+
+### 5.5.3 参数传递
+
+- 不可变类型：函数内部不能修改原始对象，而是会创建新的对象(如果需要修改的话)
+
+```python
+def modify_string(s):
+    # 尝试修改字符串(实际上是创建了一个新的字符串)
+    s = s + ' world'
+
+my_string = 'hello'
+modify_string(my_string)
+print(my_string) # hello
+```
+
+- 可变类型：函数内部对参数的修改会影响到原始对象
+
+```python
+def modify_list(lst):
+    # 向传入的列表添加元素
+    lst.append(4)
+
+my_list = [1, 2, 3]
+modify_list(my_list)
+print(my_list) # 1, 2, 3, 4
+```
+
+!!! warning
+注意这种差异，它决定了函数是否会改变调用者传入的数据
+
+对于可变类型，如果不希望函数修改原始数据，需要**在函数内部创建数据的副本**
+!!!
+
+!!! example
+![函数对参数本身影响的示例](image-36.png)
+!!!
+
 ## 5.6 模块化编程
 
+> 模块化编程的意义：复用，协作，维护
+
+- 核心思想
+  - 拆分代码为独立单元
+  - 提升复用性与可维护性
+- 应用场景
+  - 大型项目开发
+  - 团队协作
+  - 开源库设计
+
+### 5.6.1 模块(Module)与包(Package)
+
+#### 1. 模块定义
+
+- `.py`文件即模块
+- 包含变量、函数、类
+
+!!! example
+```python
+# math_tools.py
+PI = 3.1415926535
+def circle_area(r):
+    return PI * r * r
+# main.py
+import math_tools
+print(math_tools.PI)
+print(math_tools.circle_area(3))
+```
+!!!
+
+#### 2. 包定义
+
+- 含`__init.py__`的文件夹
+- 多级嵌套包结构
+
+!!! example
+![包的示例](image-37.png)
+!!!
+
+
+### 5.6.2 导入方式
+
+- 全量导入：`import math_tools`
+  - 通过`mrth.tools.PI`调用
+- 精确导入：`from math_tools import PI`
+  - 直接使用`PI`
+- 别名导入：`import math_tools as mt`
+  - 简化模块长度
+- 包内导入：`from tools.math_tools circle_area`
+  - 多级包结构
+
+### 5.6.3 标准模块
+
+![标准模块](image-38.png)
+
+> 直接调用标准库，避免重复造轮子，这也是模块化思维的延伸
+
+## 5.7 随机函数
+
+### 5.7.1 随机函数模块(random)
+
+- **伪随机性**：`random`模块生成的额随机数据基于算法和初始种子值，不是真正的物理随机数(*适合大多数非安全场景*)
+- **可重复性**：随机设置种子(`seed`)，可以复现相同的随机序列(常用于测试和调试)
+- **应用场景**：游戏开发、随机抽样、模拟实验、密码学(非安全场景)
+
+### 5.7.2 随机函数库
+
+![随机函数库](image-39.png)
+
+!!! example
+![random示例](image-40.png)
+
+**扔硬币**
+
+模拟掷硬币实验，统计正面向上的概率是多少？
+
+- 思路：用随机函数模拟投掷硬币的过程；掷10000次硬币，正面向上用1表示，反面向上用0表示。
+
+```python
+import random
+n = int(input("请输入模拟次数："))
+s = 0
+for _ in range(n):
+    i = random.randint(0, 1)
+    s = s + i
+print(f'正面概率：{s/n*100:.2f}%')
+```
+
+**随机抽取扑克**
+
+题目1.模拟抽取一张扑克牌
+
+```python
+import random
+
+suits = ['红桃', '黑桃', '方块', '梅花']
+ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+
+# 生成一副扑克牌
+cards = []
+
+for suit in suits:
+    for rank in ranks:
+        cards.append(suit + rank)
+
+# 随机抽取一张牌
+card = random.choice(cards)
+
+print("抽到的牌是：", card)
+```
+
+题目2.统计抽到红桃的概率
+
+```python
+import random
+
+suits = ['红桃', '黑桃', '方块', '梅花']
+ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+
+cards = []
+
+for suit in suits:
+    for rank in ranks:
+        cards.append(suit + rank)
+
+count_heart = 0
+times = 10000
+
+for i in range(times):
+    card = random.choice(cards)
+
+    if card.startswith('红桃'):
+        count_heart += 1
+
+probability = count_heart / times
+
+print("模拟抽牌次数：", times)
+print("抽到红桃次数：", count_heart)
+print("抽到红桃的概率：", probability)
+```
+
+- 思路：用随机函数模拟抽牌过程，记录并统计
+!!!
+
 ## 5.7 递归
+
+### 5.7.1 递归定义
+
+- 函数调用自身的编程技巧称为递归
+- 函数作为一种代码封装，可以被其他程序调用，当然，也可以被函数内部代码调用。递归在数学和计算机应用上非常强大，能够非常简洁的解决重要问题。
+- 一般来说，递归需要终止条件和递归条件。当终止条件不满足时，递归前进；当终止条件满足时，递归返回。编写递归函数时，必须告诉它何时停止递归，直接返回结果，从而避免形成无限循环。
+
+### 5.7.2 经典示例：阶乘
+
+![阶乘示例](image-41.png)
+
+### 5.7.3 递归调用的过程
+
+![递归调用的过程](image-42.png)
+
+### 5.7.3 设计递归的要点
+
+要和编写循环区别，这是两种不同的思维方式，递归的核心在于 **把问题简化成更简单的问题**
+
+- **找到递归式**：把规模大的问题转化为规模小的 **相似**的子问题来解决，往往是同一个方法
+- **找到递归出口**：存在一个递归调用的**终止条件**每次递归的调用必须 **越来越靠近终止条件**，只有这样递归才能终止，否则是不能使用递归的
+
+### 5.7.4 求和
+
+![求和递归示例](image-43.png)
+
+!!! note "Lambda匿名函数"
+`lambda arg1, arg2, ... arg n:expression`
+
+`lambda`是Python预留的关键字，`arg`和`expression`由用户自定义。通常用于编写简单的、只使用一次 ，而不需要正式定义的一个函数
+
+!!! example
+```python
+def func1(x):
+    y = 2 * x + 5
+    return y
+
+print(func1(10))
+
+func2 = lambda x: 2 * x + 5
+print(func2(10))
+```
+
+```python
+def func1(a, b):
+    y = a + b
+    return y
+
+print(func1(10, 20))
+
+func2 = lambda a, b: a + b
+print(func2(10, 20))
+```
+!!!
+!!!
