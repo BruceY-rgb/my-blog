@@ -154,6 +154,21 @@
     title.dataset.barcaTitleDecorated = 'true';
   }
 
+  function markSection() {
+    var root = document.documentElement;
+    var bodyWrap = document.getElementById('body-wrap');
+    var isTaxonomy = Boolean(
+      document.getElementById('archive') ||
+      (bodyWrap && (bodyWrap.classList.contains('type-tags') || bodyWrap.classList.contains('type-categories')))
+    );
+
+    if (isTaxonomy) {
+      root.setAttribute('data-football-section', 'taxonomy');
+    } else {
+      root.removeAttribute('data-football-section');
+    }
+  }
+
   function applyTheme(themeKey, options) {
     var settings = options || {};
     var normalized = normalizeTheme(themeKey);
@@ -198,6 +213,7 @@
 
   function setup() {
     createButton();
+    markSection();
     decorateHomeTitle();
     applyTheme(readTheme(), { persist: false });
   }

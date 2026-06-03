@@ -686,6 +686,76 @@ html[data-football-kit] #page-header.post-bg #post-meta .post-meta-separator {
   opacity: .58;
 }
 
+html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page {
+  height: clamp(280px, 34vh, 380px);
+  min-height: 280px;
+  background-position: center 38% !important;
+}
+
+html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page::before {
+  background:
+    var(--bui-crest-url) calc(100% - clamp(18px, 8vw, 124px)) 54% / clamp(120px, 19vw, 240px) auto no-repeat,
+    radial-gradient(ellipse at 55% 44%, transparent 0 18%, var(--barca-stadium-soft) 18.2% 18.48%, transparent 18.72% 28%, var(--barca-stadium-line) 28.2% 28.48%, transparent 28.72% 38%, var(--barca-stadium-soft) 38.2% 38.45%, transparent 38.7%),
+    radial-gradient(ellipse at 55% 44%, transparent 0 6.2%, var(--barca-stadium-soft) 6.35% 6.62%, transparent 6.9%),
+    linear-gradient(90deg, color-mix(in srgb, var(--bui-bg), transparent 8%) 0 36%, color-mix(in srgb, var(--bui-bg), transparent 48%) 58%, transparent 100%),
+    radial-gradient(ellipse at 16% -14%, color-mix(in srgb, var(--bui-gold), transparent 58%), transparent 44%),
+    repeating-linear-gradient(112deg, rgba(255, 255, 255, .032) 0 1px, transparent 1px 13px);
+  opacity: .52;
+}
+
+html[data-football-kit="barcelona.2024-2025.away"][data-football-section="taxonomy"] #page-header.not-home-page::before {
+  background:
+    var(--bui-crest-url) calc(100% - clamp(18px, 8vw, 124px)) 54% / clamp(120px, 19vw, 240px) auto no-repeat,
+    radial-gradient(ellipse at 55% 44%, transparent 0 18%, var(--barca-stadium-soft) 18.2% 18.48%, transparent 18.72% 28%, var(--barca-stadium-line) 28.2% 28.48%, transparent 28.72% 38%, var(--barca-stadium-soft) 38.2% 38.45%, transparent 38.7%),
+    radial-gradient(ellipse at 55% 44%, transparent 0 6.2%, var(--barca-stadium-soft) 6.35% 6.62%, transparent 6.9%),
+    linear-gradient(90deg, rgba(246, 255, 231, .86) 0 36%, rgba(246, 255, 231, .54) 58%, rgba(246, 255, 231, .12) 100%),
+    radial-gradient(ellipse at 16% -14%, rgba(255, 255, 255, .64), transparent 44%),
+    repeating-linear-gradient(112deg, rgba(6, 70, 173, .045) 0 1px, transparent 1px 13px);
+  opacity: .58;
+}
+
+html[data-football-kit="barcelona.2024-2025.third"][data-football-section="taxonomy"] #page-header.not-home-page::before {
+  opacity: .48;
+}
+
+html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page::after {
+  height: 62%;
+  background:
+    linear-gradient(to top, var(--bui-bg) 0%, color-mix(in srgb, var(--bui-bg), transparent 28%) 42%, transparent 100%),
+    linear-gradient(90deg, color-mix(in srgb, var(--bui-bg), transparent 10%) 0 34%, transparent 70%);
+}
+
+html[data-football-kit="barcelona.2024-2025.away"][data-football-section="taxonomy"] #page-header.not-home-page::after {
+  background:
+    linear-gradient(to top, rgba(233, 255, 210, .7) 0%, rgba(233, 255, 210, .26) 42%, transparent 100%),
+    linear-gradient(90deg, rgba(246, 255, 231, .68) 0 34%, transparent 72%);
+}
+
+html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #page-site-info {
+  position: absolute;
+  left: clamp(22px, 8vw, 128px);
+  top: 53%;
+  width: min(620px, calc(100vw - 44px));
+  text-align: left;
+  transform: translateY(-36%);
+}
+
+html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #page-site-info::before {
+  display: none;
+}
+
+html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #site-title {
+  font-size: clamp(2.4rem, 6.2vw, 4.7rem);
+  line-height: .95;
+  text-align: left;
+  text-wrap: balance;
+}
+
+html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #site-title::after {
+  width: clamp(86px, 13vw, 160px);
+  margin: 16px 0 0;
+}
+
 html[data-football-kit] #page-header #site-info,
 html[data-football-kit] #page-header #page-site-info {
   position: relative;
@@ -1395,6 +1465,42 @@ html[data-football-kit] #footer a:hover {
   html[data-football-kit] #page-header.post-bg #post-meta {
     font-size: .78rem;
     line-height: 1.45;
+  }
+
+  html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page {
+    height: clamp(230px, 32vh, 300px);
+    min-height: 230px;
+    background-position: center top !important;
+  }
+
+  html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page::before {
+    background:
+      var(--bui-crest-url) calc(100% - 14px) 58% / clamp(86px, 34vw, 132px) auto no-repeat,
+      linear-gradient(90deg, color-mix(in srgb, var(--bui-bg), transparent 6%) 0 66%, transparent 100%),
+      radial-gradient(ellipse at 20% -12%, color-mix(in srgb, var(--bui-gold), transparent 62%), transparent 50%),
+      repeating-linear-gradient(112deg, rgba(255, 255, 255, .032) 0 1px, transparent 1px 13px);
+    opacity: .46;
+  }
+
+  html[data-football-kit="barcelona.2024-2025.away"][data-football-section="taxonomy"] #page-header.not-home-page::before {
+    background:
+      var(--bui-crest-url) calc(100% - 14px) 58% / clamp(86px, 34vw, 132px) auto no-repeat,
+      linear-gradient(90deg, rgba(246, 255, 231, .84) 0 66%, rgba(246, 255, 231, .08) 100%),
+      radial-gradient(ellipse at 20% -12%, rgba(255, 255, 255, .58), transparent 50%),
+      repeating-linear-gradient(112deg, rgba(6, 70, 173, .045) 0 1px, transparent 1px 13px);
+    opacity: .52;
+  }
+
+  html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #page-site-info {
+    left: 22px;
+    top: 56%;
+    width: calc(100vw - 44px);
+  }
+
+  html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #site-title {
+    max-width: calc(100vw - 120px);
+    font-size: clamp(2rem, 11vw, 3.25rem);
+    overflow-wrap: anywhere;
   }
 
   html[data-football-kit="barcelona.2024-2025.away"] body::before {
