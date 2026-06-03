@@ -64,16 +64,16 @@ avatar:
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
+default_top_img: var(--barca-hero-bg)
 
 # The banner image of index page
-index_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
+index_img: var(--barca-hero-bg)
 
 # The banner image of archive page
-archive_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
+archive_img: var(--barca-hero-bg)
 
 # Note: tag page, not tags page
-tag_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
+tag_img: var(--barca-hero-bg)
 
 # The banner image of tag page, you can set the banner image for each tag
 # Format:
@@ -81,22 +81,19 @@ tag_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
 tag_per_img:
 
 # Note: category page, not categories page
-category_img: https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
+category_img: var(--barca-hero-bg)
 # The banner image of category page, you can set the banner image for each category
 # Format:
 #  - category name: xxxxx
 category_per_img:
 
 # The background image of footer
-footer_img: https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920
-
-# https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
+footer_img: var(--barca-footer-bg)
 
 # Website Background
 # Can set it to color, image URL or an array containing colors and/or image URLs
 # If an array is provided, a random background will be selected from the array on each load
 background: 
-# https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800
 
 cover:
   # Disable the cover or not
@@ -1065,6 +1062,7 @@ inject:
   head:
     # 主自定义样式
     - <link rel="stylesheet" href="/css/custom.css">
+    - <link rel="stylesheet" href="/css/barca-theme.css">
 
     # 天气组件样式
     - <link rel="stylesheet" href="/custom_components/weather/weather.css">
@@ -1091,6 +1089,7 @@ inject:
     - <script src="/js/tags-enhance.js"></script>
     # 搜索结果滚动定位修复
     - <script src="/js/search-scroll-fix.js"></script>
+    - <script src="/js/barca-theme-switcher.js"></script>
 
     # 天气组件脚本
     - <script src="/custom_components/weather/weather.js"></script>
