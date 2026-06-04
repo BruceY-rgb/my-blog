@@ -714,7 +714,12 @@ print(''.join(news))
 
 ![字典举例](image-16.png)
 
-- **字典的键**：必须是不可变对象，如数字、字符串、元组(元组内的数据也应该是不可变对象)
+- **字典的键**：必须是**不可变对象**，如数字、字符串、元组(元组内的数据也应该是不可变对象)
+
+!!! warning
+键一定是不可重复的 
+!!!
+
 - **字典的值**：任意类型
 
 > JSON格式：一种与编程语言无关的数据交换格式，结构与字典很相似
@@ -727,6 +732,14 @@ print(''.join(news))
 |显式键值对|`s = {'name':'Alice','age':30}`|需要**复杂键或非字符串键**时|
 |关键字参数|`s = dict(name='Alice',age = 30)`|键是**简单字符串**且**符合标识符规则**|
 |`zip()`组合|`dict(zip(keys,values))`|从两个列表构建键值对|
+
+!!! warning
+**关键字参数不能用于键是整数的情况**
+
+```python
+s = dict(name='Alice',age = 30) # ok
+s = dict(name='Alice',1 = 30) # error
+!!!
 
 如何实现该字典的构建？
 
@@ -817,6 +830,10 @@ response
 | 获取角色信息    | `print(response['choices'][0]['message']['role'])`    |
 
 > `choices`得到的是一个列表
+!!!
+
+!!! warning
+`get()`方法是字典的成员方法，**不是Python全局内置函数**
 !!!
 
 ### 5.4 修改与更新
@@ -953,6 +970,24 @@ fruit={'apple', 'orange', 'apple', 'pear', 'orange'}
   - `pop()`:如果存在删除**任意一个元素并返回**，不存在会**抛出异常**
   - `clear()`:删除所有元素，剩下一个空集合
 
+```python
+s = {10, 20, 30, 40}
+
+for x in s:
+    print(x) # 输出顺序是不确定的
+
+s.add(50)
+s.update([60,70]) # 添加多个元素s = {10,20,30,40,50,60,70}
+s = set()
+s.update("abc") # s = {'a', 'b', 'c'}
+s.discard(10) # ok
+s.discard(80) # ok
+s.remove(10) # ok
+s.remove(80) # 抛出异常
+s.pop() # 删除任意一个元素并返回
+s.clear() # 删除所有元素，剩下一个空集合
+```
+
 ### 6.4 集合的关系运算
 
 如果集合`s1`中的元素，都在集合`s2`中，则称`s1`为`s2`的子集，`s2`则为`s1`的超集
@@ -970,12 +1005,12 @@ s1.issuperset(s1) # True
 
 **使用关系运算符**
 
-如果s1是s2的真子集，则`s1<s2`是True
-如果s1是s2的子集，则`s1<=s2`是True
-如果s1是s2的真超集，则`s1>s2`是True
-如果s1是s2的超集，则`s1>=s2`是True
-如果s1和s2元素相同，则`s1==s2`是True
-如果s1和s2元素不同，则`s1!=s2`是True
+- 如果s1是s2的真子集，则`s1<s2`是True
+- 如果s1是s2的子集，则`s1<=s2`是True
+- 如果s1是s2的真超集，则`s1>s2`是True
+- 如果s1是s2的超集，则`s1>=s2`是True
+- 如果s1和s2元素相同，则`s1==s2`是True
+- 如果s1和s2元素不同，则`s1!=s2`是True
 
 ### 6.5 核心集合运算
 
@@ -984,6 +1019,14 @@ s1.issuperset(s1) # True
 > 假设2个集合：`s1={3,5,7,11},s2={3,4,5,6,7}`
 
 ![核心集合运算](image-24.png)
+
+```python
+s1 = (1,2,3)
+s2 = [4,5,6]
+
+s1 | s2 # error
+s1.union(s2) # {1,2,3,4,5,6}
+```
 
 !!! example "集合运算案例"
 一家科技公司有两个主要项目组
@@ -1009,6 +1052,7 @@ print(f"仅参加一组：{Single_Project_Employees}")
 ```
 !!!
 
+
 !!! note "各容器类型性能比较"
 ![各容器类型性能比较](image-25.png)
 !!!
@@ -1026,10 +1070,18 @@ print(f"仅参加一组：{Single_Project_Employees}")
 
 ```python
 my_dict = {'z':3, 'b':1, 'a':2, 'c': 4}
+s_items_by_key = sorted(my_dict.keys()) # 按照值排序
+s_items_by_item = sorted(my_dict.items()) # 按照键排序
 s_items_by_key = sorted(my_dict.items(), key=lambda item: item[0]) # 默认按照元组的第0项排序，所以也可以省略不写
+s_items_by_value = sorted(my_dict.items(), key=lambda item: item[1])
 ```
 
 - `sorted()`函数：这是`Python`的内置函数，用于对**可迭代对象**(如列表、字典的键值对等)进行排序。它**不会修改原数据**，而是**返回一个新的列表**
+
+!!! warning
+`sorted()`不只可以排列表，元组、字符串、字典、集合全部都能排序，排序结果**统一返回列表**
+!!!
+
 - `dict.items()`方法：字典本身是无序的(`Python 3.7`保持插入顺序)，如果你想对**字典的内容进行排序**，通常需要先调用`.items()`方法。这会将字典转换成一个由(键，值)元组组成的列表
 - `key`参数：这是`sorted()`函数的灵魂。它接受一个函数(通常用`lambda`表达式表示)，告诉`Python`按照什么规则来比较大小
 
@@ -1059,7 +1111,10 @@ poly2 = {5:7, 4:3, 2:-8, 0:10}
 poly3 = {} # 两个多项式的和字典
 deg = set(poly1) | set(poly2) # 多项式可能的指数集合
 for i in deg: # 遍历指数
-  coeff=poly1.get(i,0)
+  coeff=poly1.get(i,0) + poly2.get(i,0)
+
+  if coeff != 0:
+    poly3[i] = coeff
 ```
 
 > get(i, 0)表示：如果字典中有指数`i`，就取对应系数；如果没有，就当做系数是`0`
@@ -1168,3 +1223,37 @@ cost = rate[data[0]][0] + rate[data[0]][1] * (w-1) + rate[data[0]][2][data[2]]
 print(f"cost = {cost:.0f}RMB")
 ```
 
+### 尝试编写程序实现四则运算’
+
+- 分行输入运算对象和运算符
+- 输出运算结果(考虑除数为0的问题)
+
+```python
+num1 = float(input())
+op = input()
+num2 = float(input())
+
+result_menu = {
+  '+': num1 + num2,
+  '-': num1 - num2,
+  '*': num1 * num2,
+  '/': num1 / num2 if num2 != 0 else "除数不能为0"
+}
+
+if op in result_menu:
+  result = result_menu[op]
+else:
+  result = "输入运算符有误"
+```
+
+### 编写一个程序，输入一行字符，求每个字符出现的次数
+
+```python
+s = input()
+d = {}
+for i in s:
+    d[i] = d.get(i, 0) + 1
+# item是(字符,次数)，拆成k,v
+for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True):
+    print(f"{k} : {v}")
+```
