@@ -278,8 +278,205 @@ x.f()
 - 如果`f`是 **动态方法**，根据实际类型`B`调用
 !!!
 
+#### 1. Method Code Generation
+
+- 一个方法实例会像函数一样被编译——它会被编译成位于某个特定地址处的机器代码
+
+在语义分析阶段
+
+- 每个变量的环境条目指向一个**类描述符**
+
+!!! example
+```
+var x: A
+```
+
+编译器在符号表中会记录变量`x`的信息：*x的类型是A*
+!!!
+
+- 每个类描述符记录**父类**和**方法实例表**
+
+!!! example
+```cpp
+class A extends Object {
+    method f() { ... }
+}
+
+class B extends A {
+    method g() { ... }
+}
+```
+
+那么可以理解为
+
+```
+ClassDescriptor(A):
+    parent = Object
+    methods = [A.f]
+
+ClassDescriptor(B):
+    parent = A
+    methods = [B.g]
+```
+!!!
+
+
+- 每个方法实例指向一个**机器代码标签**
+
+!!! example
+```
+A.f → A_f
+B.f → B_f
+```
+!!!
+
+#### 2. Static Method Dispatch
+
+- 当调用`c.f()`时，执行的代码取决于变量`c`的类型
+  - 而不是取决于`c`所引用对象的运行时类型
+- 为了编译`c.f()`，其中`c`属于类`C`
+  1. 在类`C`中查找方法`f`
+  2. 如果没有找到，就查找父类`B`，然后再查`B`的父类，以此类推
+  3. 如果在祖先类`A`中找到，就编译成对标签`A_f`的调用
+
+> 静态方法查找很快，并且可以**在编译时完成解析**。**没有运行时开销**
+
+!!! example
+```cpp
+class Animal extends Object {
+    method makeSound() = print("Generic animal sound")
+    static method describeSpecies() = print("Animal species")
+}
+
+class Dog extends Animal {
+    method makeSound() = print("Woof!")
+    static method describeSpecies() = print("Canis familiaris")
+}
+
+...
+
+// How to compile the following code?
+var a : Animal := new Dog;
+a.describeSpecies()
+```
+
+1. 编译器看到变量`a`的声明类型是`Animal`
+2. 静态方法解析会在`Animal`类中查找`describeSpecies`方法
+3. 这个调用会被编译成堆`Animal_describeSpecies`的直接函数调用
+!!!
+
+> 即使`a`指向的是一个`Dog`对象，被调用的仍然是`Animal`版本的静态方法
+
+### 14.2.3 Dynamic Method Dispatch
+
+#### 1. the VTable
+
+- 每个类描述符都包含一个方法指针数组，这个数组叫做派发向量
+- 继承来的方法保持相同的`slot index`，就像字段前缀策略一样
+- 被**重写的方法会替换该槽位中的方法指针**
+
+!!! example
+```cpp
+class A extends Object {
+    var x := 0
+    method f()
+}
+
+class B extends A {
+    method g()
+}
+
+class C extends B {
+    method g()
+}
+
+class D extends C {
+    var y := 0
+    method f()
+}
+```
+
+继承关系是
+
+```
+Object
+  ↓
+  A
+  ↓
+  B
+  ↓
+  C
+  ↓
+  D
+```
+
+字段和方法分别是
+
+```
+A 新增字段 x，新增方法 f
+B 新增方法 g
+C 重写方法 g
+D 新增字段 y，重写方法 f
+```
+
+![VTable布局](image-294.png)
+!!!
+
+#### 2. Runtime Calling Convention
+
+**为了在运行时执行`obj.f()`**
+
+1. 从对象`obj`的偏移量`0`处取出类描述符指针`d`
+2. 从`d[f_index]`中取出方法指针`p`。`f_index`是一个编译时常量；编译器在编译时虽然不知道`obj`的真实类型，但它知道方法`f`在`VTable`中的槽位编号
+3. 调用`p(obj,args)`，`obj`被绑定为`self`
+
+![动态调用流程图](image-295.png)
+
+!!! note "总结"
+- 字段布局和`VTable`布局都使用相同的原则：子类的布局是在保留父类布局前缀的基础上进行扩展的
+
+![单继承总结](image-296.png)
+!!!
+
 ## 14.3 Multiple Inheritance
 
-## 14.4 Testing Class Membership
+- 一个类可以继承多个父类
+- **前缀策略不再有效**：不能同时把所有父类的字段都放在对象开头
 
-## 14.5 Private Fields and Methods
+![多继承示意图](image-297.png)
+
+### 14.3.1 Graph Coloring
+
+- **Solution**:静态地一起分析所有类，为每个字段找到一个全局一致的偏移量
+- 将其构建一个图着色问题
+  - `Node`:不同的字段名
+  - `Edge`:两个字段同时存在于同一个类中
+  - 颜色就是偏移量`0,1,2...`
+- 两个由边连接的字段必须获得不同的颜色，也就是不同的偏移量
+
+> 这正是寄存器分配中的图着色问题
+
+- **第一步**：构建冲突图
+  - 在同一个类中共存的字段之间要创建边
+
+![Step1](image-298.png)
+![构建冲突边](image-299.png)
+![构建冲突边](image-300.png)
+![构建冲突边](image-301.png)
+
+- **第二步**：着色
+  - 邻接节点必须是颜色不同的
+
+![着色](image-302.png)
+
+- **第三步**：根据编号决定布局
+
+![决定布局](image-303.png)
+
+!!! warning
+这里可能会出现槽浪费的现象
+
+![槽浪费](image-304.png)
+!!!
+
+### 14.3.2 Hashing(不考)
