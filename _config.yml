@@ -129,9 +129,19 @@ marked:
 
 # Markdown-it Configuration
 markdown:
-  html: true
-  linkify: true
-  typographer: true
-  prependRoot: true
+  render:
+    html: true
+    xhtmlOut: false
+    breaks: false
+    linkify: true
+    typographer: true
+    quotes: '“”‘’'
   plugins:
     - name: 'markdown-it-admonition'
+  anchors:
+    level: 2
+    collisionSuffix: ''
+  images:
+    lazyload: false
+    prepend_root: true
+    post_asset: true

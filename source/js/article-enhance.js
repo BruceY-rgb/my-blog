@@ -309,12 +309,90 @@
     }
   }
 
+  // KaTeX 兜底渲染：当构建/部署环境没有把 $$...$$ 转成 HTML 时，在浏览器端补渲染。
+  class MathFallbackRenderer {
+    constructor() {
+      this.cssUrl = 'https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css';
+      this.katexUrl = 'https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js';
+      this.autoRenderUrl = 'https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/contrib/auto-render.min.js';
+    }
+
+    hasRawMath(container) {
+      if (!container) return false;
+      const text = container.textContent || '';
+      return /\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|(^|[^\$])\$[^\s$][\s\S]*?[^\s$]\$/.test(text);
+    }
+
+    ensureStyle() {
+      if (document.querySelector(`link[href="${this.cssUrl}"]`)) {
+        return Promise.resolve();
+      }
+
+      return new Promise(resolve => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = this.cssUrl;
+        link.onload = resolve;
+        link.onerror = resolve;
+        document.head.appendChild(link);
+      });
+    }
+
+    ensureScript(url, globalName) {
+      if (window[globalName]) return Promise.resolve();
+
+      const existing = document.querySelector(`script[src="${url}"]`);
+      if (existing) {
+        return new Promise(resolve => {
+          existing.addEventListener('load', resolve, { once: true });
+          existing.addEventListener('error', resolve, { once: true });
+        });
+      }
+
+      return new Promise(resolve => {
+        const script = document.createElement('script');
+        script.src = url;
+        script.defer = true;
+        script.onload = resolve;
+        script.onerror = resolve;
+        document.head.appendChild(script);
+      });
+    }
+
+    async render() {
+      const container = document.querySelector('#article-container');
+      if (!container || !this.hasRawMath(container)) return;
+
+      await this.ensureStyle();
+      await this.ensureScript(this.katexUrl, 'katex');
+      await this.ensureScript(this.autoRenderUrl, 'renderMathInElement');
+
+      if (!window.renderMathInElement) return;
+
+      window.renderMathInElement(container, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '\\[', right: '\\]', display: true },
+          { left: '\\(', right: '\\)', display: false },
+          { left: '$', right: '$', display: false }
+        ],
+        ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        ignoredClasses: ['katex', 'katex-display', 'no-katex'],
+        throwOnError: false,
+        strict: 'ignore'
+      });
+
+      container.querySelectorAll('.katex').forEach(el => el.classList.add('katex-show'));
+    }
+  }
+
   // 阅读体验增强器
   class ReadingExperienceEnhancer {
     constructor() {
       this.progressBar = null;
       this.toastManager = null;
       this.copyEnhancer = null;
+      this.mathFallbackRenderer = new MathFallbackRenderer();
       this.init();
     }
 
@@ -340,6 +418,7 @@
       this.toastManager = new ToastManager();
       this.progressBar = new ReadingProgressBar();
       this.copyEnhancer = new CopyEnhancer(this.toastManager);
+      this.mathFallbackRenderer.render();
 
       // 添加键盘快捷键
       this.bindKeyboardShortcuts();
@@ -353,6 +432,8 @@
     isArticlePage() {
       return document.body.classList.contains('post-bg') ||
              document.querySelector('article.post') !== null ||
+             document.querySelector('#article-container') !== null ||
+             document.querySelector('#post') !== null ||
              window.location.pathname.includes('/posts/');
     }
 
@@ -404,10 +485,17 @@
   // 初始化阅读体验增强器
   const enhancer = new ReadingExperienceEnhancer();
 
+  document.addEventListener('pjax:complete', () => {
+    if (enhancer.isArticlePage()) {
+      enhancer.mathFallbackRenderer.render();
+    }
+  });
+
   // 暴露到全局（用于调试）
   window.articleEnhancer = {
     toast: () => enhancer.toastManager,
     progressBar: () => enhancer.progressBar,
+    renderMath: () => enhancer.mathFallbackRenderer.render(),
     destroy: () => enhancer.destroy()
   };
 

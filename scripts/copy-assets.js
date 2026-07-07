@@ -17,27 +17,42 @@ const PUBLIC_DIR = path.join(BASE_DIR, 'public');
 const SOURCE_DIR = path.join(BASE_DIR, 'source');
 const POSTS_DIR = path.join(SOURCE_DIR, '_posts');
 
-console.log('Copying post assets...');
+function walkFiles(dir, predicate, results = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const entryPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkFiles(entryPath, predicate, results);
+      continue;
+    }
 
-if (!fs.existsSync(POSTS_DIR)) {
-  console.log('No _posts directory found.');
-  process.exit(0);
+    if (!predicate || predicate(entryPath)) {
+      results.push(entryPath);
+    }
+  }
+
+  return results;
 }
 
-// Find all subdirectories in _posts
-const subDirs = fs.readdirSync(POSTS_DIR);
+function copyFile(sourcePath, targetPath) {
+  fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+  fs.copyFileSync(sourcePath, targetPath);
+}
 
-for (const subDir of subDirs) {
-  const subDirPath = path.join(POSTS_DIR, subDir);
+function shouldCopyArticleAsset(file) {
+  const name = path.basename(file);
+  return !file.endsWith('.md') && name !== '.DS_Store';
+}
 
-  // Skip if not a directory
-  if (!fs.statSync(subDirPath).isDirectory()) continue;
+function copyPostAssets() {
+  if (!fs.existsSync(POSTS_DIR)) {
+    console.log('No _posts directory found.');
+    return 0;
+  }
 
-  // Find markdown files in this directory
-  const mdFiles = fs.readdirSync(subDirPath).filter(f => f.endsWith('.md'));
+  let copied = 0;
+  const mdFiles = walkFiles(POSTS_DIR, file => file.endsWith('.md'));
 
-  for (const mdFile of mdFiles) {
-    const mdFilePath = path.join(subDirPath, mdFile);
+  for (const mdFilePath of mdFiles) {
     const mdContent = fs.readFileSync(mdFilePath, 'utf-8');
 
     // Extract date from frontmatter
@@ -45,34 +60,32 @@ for (const subDir of subDirs) {
     if (!dateMatch) continue;
 
     const [, year, month, day] = dateMatch;
+    const articleDir = path.dirname(mdFilePath);
+    const relativeMdPath = path
+      .relative(POSTS_DIR, mdFilePath)
+      .replace(/\\/g, '/')
+      .replace(/\.md$/, '');
+    const targetDir = path.join(PUBLIC_DIR, year, month, day, relativeMdPath);
 
-    // Get the article name (without .md extension)
-    const articleName = mdFile.replace(/\.md$/, '');
-
-    // The URL path includes the parent directory name
-    // e.g., toffel/toffel-write
-    const urlPath = subDir + '/' + articleName;
-
-    // Target directory in public: /year/month/day/toffel/articleName/
-    const targetDir = path.join(PUBLIC_DIR, year, month, day, urlPath);
-
-    // Create target directory if it doesn't exist
-    if (!fs.existsSync(targetDir)) {
-      fs.mkdirSync(targetDir, { recursive: true });
-    }
-
-    // Copy all non-markdown files from the source subdirectory
-    const files = fs.readdirSync(subDirPath);
-    for (const file of files) {
-      if (file.endsWith('.md')) continue;
-
-      const sourcePath = path.join(subDirPath, file);
-      const targetPath = path.join(targetDir, file);
-
-      fs.copyFileSync(sourcePath, targetPath);
-      console.log(`  Copied: ${file} -> ${year}/${month}/${day}/${urlPath}/`);
+    for (const assetPath of walkFiles(articleDir, shouldCopyArticleAsset)) {
+      const relativeAssetPath = path.relative(articleDir, assetPath);
+      const targetPath = path.join(targetDir, relativeAssetPath);
+      copyFile(assetPath, targetPath);
+      copied += 1;
     }
   }
+
+  return copied;
 }
 
-console.log('Done!');
+function copyAssets() {
+  console.log('Copying post assets...');
+  const postAssets = copyPostAssets();
+  console.log(`Done. Copied ${postAssets} post assets.`);
+}
+
+if (typeof hexo !== 'undefined' && hexo.extend) {
+  hexo.extend.filter.register('after_generate', copyAssets);
+} else {
+  copyAssets();
+}

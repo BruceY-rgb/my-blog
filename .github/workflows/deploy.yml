@@ -39,9 +39,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Build
-        run: |
-          hexo clean
-          hexo generate
+        run: npm run build
         env:
           NODE_ENV: production
 
