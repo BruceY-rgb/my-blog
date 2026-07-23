@@ -1511,3 +1511,468 @@ html[data-football-kit] #footer a:hover {
     opacity: .58;
   }
 }
+
+/* Spain 2026: a celebratory reading skin built from the supplied materials.
+ * The imagery stays in the framing layers; cards and article surfaces remain
+ * deliberately quiet so long-form posts are still comfortable to read.
+ */
+html[data-football-kit="spain.2026.champions-dream"] {
+  --bui-bg: #260806;
+  --bui-bg-soft: #3b0d0a;
+  --bui-surface: #35100d;
+  --bui-surface-raised: #4b1711;
+  --bui-surface-strong: #67231a;
+  --bui-text: #fff2d2;
+  --bui-text-muted: #e7cca5;
+  --bui-line: rgba(235, 188, 102, .22);
+  --bui-blue: #22193c;
+  --bui-blue-strong: #302351;
+  --bui-garnet: #8e1213;
+  --bui-garnet-strong: #b91d19;
+  --bui-gold: #e5b85c;
+  --bui-grass: #6f8f42;
+  --bui-danger: #ff8a76;
+  --global-bg: var(--bui-bg);
+  --font-color: var(--bui-text-muted);
+  --card-bg: rgba(53, 16, 13, .94);
+  --card-meta: color-mix(in srgb, var(--bui-text-muted), transparent 10%);
+  --sidebar-bg: var(--bui-surface);
+  --sidebar-menu-bg: var(--bui-surface-raised);
+  --btn-bg: var(--bui-garnet-strong);
+  --btn-color: var(--bui-text);
+  --btn-hover-color: #2b0706;
+  --text-bg-hover: rgba(229, 184, 92, .16);
+  --text-highlight-color: var(--bui-text);
+  --blockquote-color: var(--bui-text-muted);
+  --blockquote-bg: rgba(229, 184, 92, .09);
+  --hr-border: rgba(229, 184, 92, .32);
+  --hr-before-color: var(--bui-gold);
+  --search-bg: var(--bui-surface-raised);
+  --search-input-color: var(--bui-text);
+  --search-a-color: var(--bui-text);
+  --tab-border-color: var(--bui-line);
+  --tab-button-bg: var(--bui-surface);
+  --tab-button-color: var(--bui-text-muted);
+  --tab-button-hover-bg: var(--bui-surface-strong);
+  --tab-button-active-bg: var(--bui-surface-raised);
+  --toc-link-color: var(--bui-text-muted);
+  --scrollbar-color: var(--bui-gold);
+  --default-bg-color: var(--bui-garnet-strong);
+  --card-box-shadow: 0 16px 44px rgba(28, 4, 3, .34);
+  --card-hover-box-shadow: 0 21px 58px rgba(28, 4, 3, .46);
+  --barca-action-bg: linear-gradient(104deg, #8c0e10 0 49%, #e5b85c 49% 56%, #3d1010 56% 100%);
+  --barca-action-hover-bg: linear-gradient(104deg, #e5b85c 0 44%, #8c0e10 44% 74%, #6f8f42 74% 100%);
+  --barca-action-color: #fff2d2;
+  --barca-action-hover-color: #290807;
+  --barca-control-shadow: 0 13px 30px rgba(21, 4, 3, .3);
+  --barca-panel-bg: rgba(57, 15, 12, .84);
+  --barca-panel-bg-strong: rgba(73, 20, 15, .94);
+  --barca-muted-surface: rgba(229, 184, 92, .07);
+  --barca-table-stripe: rgba(229, 184, 92, .08);
+  --barca-title-shadow: 0 16px 44px rgba(12, 2, 2, .5);
+  --barca-code-bg: #210907;
+  --barca-code-color: #fff0cc;
+  --barca-stadium-line: rgba(229, 184, 92, .18);
+  --barca-stadium-soft: rgba(185, 29, 25, .15);
+  --barca-hero-bg:
+    linear-gradient(90deg, rgba(30, 3, 4, .78) 0 29%, rgba(30, 3, 4, .44) 51%, rgba(30, 3, 4, .1) 77%, rgba(30, 3, 4, .36) 100%),
+    linear-gradient(0deg, rgba(38, 8, 6, .7), transparent 47%),
+    url("../img/spain-2026-theme/spain-champions-hero.jpg") center 38% / cover no-repeat,
+    #260806;
+  --barca-footer-bg:
+    repeating-linear-gradient(113deg, rgba(229, 184, 92, .07) 0 1px, transparent 1px 17px),
+    linear-gradient(122deg, #250705 0%, #59130e 54%, #2b0a08 100%);
+  --barca-note-info: #ffd173;
+  --barca-note-success: #9dc46e;
+  --barca-note-warning: #e5b85c;
+  --barca-note-danger: #ff8a76;
+  --barca-note-example: #e5a9cb;
+  --border-color: var(--bui-line);
+  --code-bg: var(--barca-code-bg);
+  --hl-bg: var(--barca-code-bg);
+  --hl-color: var(--barca-code-color);
+  --hltools-bg: rgba(33, 9, 7, .88);
+  --hltools-color: var(--bui-text-muted);
+  --hlnumber-bg: rgba(33, 9, 7, .54);
+  --hlnumber-color: rgba(255, 240, 204, .5);
+  --hlscrollbar-bg: var(--bui-surface-strong);
+  --hlexpand-bg: linear-gradient(180deg, rgba(33, 9, 7, .38), rgba(33, 9, 7, .96));
+}
+
+html[data-football-kit="spain.2026.champions-dream"] body::before {
+  background:
+    radial-gradient(ellipse at 68% 17%, transparent 0 16%, rgba(229, 184, 92, .1) 16.2% 16.5%, transparent 16.8% 26%, rgba(229, 184, 92, .08) 26.2% 26.5%, transparent 26.8% 35%),
+    radial-gradient(circle at 21% 12%, rgba(229, 184, 92, .14), transparent 24%),
+    linear-gradient(105deg, rgba(137, 14, 16, .25) 0 35%, transparent 35% 64%, rgba(229, 184, 92, .12) 64% 100%),
+    repeating-linear-gradient(94deg, rgba(255, 242, 210, .026) 0 1px, transparent 1px 17px),
+    linear-gradient(146deg, #260806 0%, #3d0d0a 53%, #260806 100%);
+  background-size: auto, auto, auto, 34px 34px, auto;
+  opacity: .58;
+}
+
+html[data-football-kit="spain.2026.champions-dream"] #footer::after {
+  right: clamp(18px, 6vw, 90px);
+  width: clamp(112px, 17vw, 184px);
+  height: clamp(112px, 17vw, 184px);
+  border-radius: 50%;
+  background: url("../img/spain-2026-theme/spain-heritage-poster.jpg") center 42% / 130% auto no-repeat;
+  opacity: .15;
+}
+
+html[data-football-kit="spain.2026.champions-dream"] .barca-crest-mark::before {
+  border-radius: 50%;
+  background: url("../img/spain-2026-theme/spain-heritage-poster.jpg") center 37% / 132% auto no-repeat;
+}
+
+html[data-football-kit="spain.2026.champions-dream"] #page-header.full_page #site-title .barca-title-main {
+  font-family: "Noto Serif SC", "Songti SC", Georgia, serif;
+  letter-spacing: -.035em;
+}
+
+html[data-football-kit="spain.2026.champions-dream"] #page-header.full_page #site-title .barca-title-script {
+  color: #f4c86a;
+  font-family: "Bodoni 72", Didot, "Noto Serif SC", serif;
+  font-size: clamp(3.1rem, 8.6vw, 7.5rem);
+  font-style: italic;
+  letter-spacing: .025em;
+  text-transform: uppercase;
+  transform: none;
+  text-shadow: 0 6px 0 rgba(94, 14, 12, .28), 0 18px 44px rgba(0, 0, 0, .5);
+}
+
+html[data-football-kit="spain.2026.champions-dream"] #page-header.full_page #site-title::after {
+  width: clamp(140px, 20vw, 252px);
+  background: linear-gradient(90deg, transparent, #e5b85c 18% 82%, transparent);
+}
+
+/* Navigation-first theme gallery.  Each option is a direct material preview,
+ * replacing the former one-at-a-time floating cycle button. */
+#menus .theme-gallery-menu {
+  display: inline-flex;
+  align-items: center;
+}
+
+#menus .theme-gallery-trigger,
+#sidebar-menus .theme-sidebar-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: .36rem;
+  min-height: 34px;
+  margin: 0;
+  padding: 0 .45rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+#menus .theme-gallery-trigger {
+  border-radius: 999px;
+  transition: background-color .2s ease, color .2s ease, transform .2s ease;
+}
+
+#menus .theme-gallery-trigger:hover,
+#menus .theme-gallery-trigger[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--bui-gold), transparent 84%);
+  color: var(--bui-text);
+}
+
+.theme-trigger__label {
+  font-weight: 700;
+}
+
+.theme-trigger__current {
+  max-width: 4.5em;
+  overflow: hidden;
+  color: var(--bui-gold);
+  font-size: .72em;
+  font-weight: 800;
+  letter-spacing: .02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#sidebar-menus .theme-sidebar-menu {
+  margin-top: .3rem;
+}
+
+#sidebar-menus .theme-sidebar-trigger {
+  width: 100%;
+  padding: .54rem 1.25rem;
+  color: var(--font-color);
+  text-align: left;
+}
+
+.theme-gallery {
+  --theme-gallery-top: 74px;
+  --theme-gallery-left: 16px;
+  position: fixed;
+  z-index: 10001;
+  top: var(--theme-gallery-top);
+  left: var(--theme-gallery-left);
+  width: min(632px, calc(100vw - 32px));
+  max-height: min(680px, calc(100dvh - var(--theme-gallery-top) - 18px));
+  overflow: auto;
+  padding: clamp(16px, 2.4vw, 24px);
+  border: 1px solid color-mix(in srgb, var(--bui-gold), transparent 67%);
+  border-radius: 16px 4px 16px 4px;
+  background:
+    linear-gradient(130deg, color-mix(in srgb, var(--bui-surface-raised), transparent 4%), color-mix(in srgb, var(--bui-surface), transparent 2%)),
+    var(--barca-panel-bg-strong);
+  box-shadow: 0 28px 72px rgba(7, 3, 8, .38), inset 0 1px 0 color-mix(in srgb, #fff, transparent 91%);
+  backdrop-filter: blur(18px) saturate(1.1);
+  opacity: 0;
+  transform: translateY(-8px) scale(.985);
+  transform-origin: top right;
+  transition: opacity .22s ease, transform .22s cubic-bezier(.16, 1, .3, 1);
+}
+
+.theme-gallery[hidden] {
+  display: none;
+}
+
+.theme-gallery.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.theme-gallery__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.theme-gallery__eyebrow {
+  margin: 0 0 5px;
+  color: var(--bui-gold);
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .16em;
+}
+
+.theme-gallery__header h2 {
+  margin: 0;
+  color: var(--bui-text);
+  font-family: "Noto Serif SC", "Songti SC", Georgia, serif;
+  font-size: clamp(1.3rem, 2.6vw, 1.68rem);
+  line-height: 1.2;
+}
+
+.theme-gallery__hint {
+  max-width: 36rem;
+  margin: 7px 0 0;
+  color: var(--bui-text-muted);
+  font-size: .78rem;
+  line-height: 1.55;
+}
+
+.theme-gallery__close {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--bui-line);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--bui-surface-raised), transparent 14%);
+  color: var(--bui-text);
+  cursor: pointer;
+  transition: color .2s ease, background-color .2s ease, transform .2s ease;
+}
+
+.theme-gallery__close:hover {
+  background: var(--bui-gold);
+  color: var(--bui-bg);
+  transform: rotate(8deg);
+}
+
+.theme-gallery__cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.theme-gallery__card {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--bui-line), transparent 8%);
+  border-radius: 10px 2px 10px 2px;
+  background: var(--bui-surface);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  isolation: isolate;
+  transition: border-color .22s ease, box-shadow .22s ease, transform .22s cubic-bezier(.16, 1, .3, 1);
+}
+
+.theme-gallery__card:hover {
+  border-color: color-mix(in srgb, var(--bui-gold), transparent 28%);
+  box-shadow: 0 14px 26px color-mix(in srgb, var(--bui-bg), transparent 52%);
+  transform: translateY(-3px);
+}
+
+.theme-gallery__card.is-selected {
+  border-color: var(--bui-gold);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--bui-gold), transparent 66%), 0 16px 30px color-mix(in srgb, var(--bui-bg), transparent 48%);
+}
+
+.theme-gallery__art {
+  display: block;
+  aspect-ratio: 2.35 / 1;
+  background-position: center;
+  background-size: cover;
+  transition: transform .35s cubic-bezier(.16, 1, .3, 1);
+}
+
+.theme-gallery__card:hover .theme-gallery__art {
+  transform: scale(1.045);
+}
+
+.theme-gallery__card--home .theme-gallery__art {
+  background:
+    linear-gradient(100deg, rgba(5, 8, 20, .28), transparent 65%),
+    url("../img/barca-bg/final/camp-nou-sketch-home-kit-bg.png") center / cover no-repeat,
+    linear-gradient(90deg, #7f1136, #061a44);
+}
+
+.theme-gallery__card--away .theme-gallery__art {
+  background:
+    linear-gradient(105deg, rgba(246, 255, 231, .16), transparent 70%),
+    url("../img/barca-bg/final/camp-nou-sketch-home-bg.png") center / cover no-repeat,
+    linear-gradient(90deg, #e9ffd2, #0646ad);
+}
+
+.theme-gallery__card--third .theme-gallery__art {
+  background:
+    linear-gradient(105deg, rgba(6, 11, 24, .15), transparent 68%),
+    url("../img/barca-bg/final/camp-nou-sketch-third-kit-bg.png") center / cover no-repeat,
+    linear-gradient(90deg, #071f4d, #d04a2d 63%, #d9a441);
+}
+
+.theme-gallery__card--spain .theme-gallery__art {
+  background:
+    linear-gradient(100deg, rgba(37, 5, 5, .18), transparent 65%),
+    url("../img/spain-2026-theme/spain-trophy-poster.jpg") center 42% / cover no-repeat,
+    linear-gradient(90deg, #680b0d, #e5b85c);
+}
+
+.theme-gallery__card-copy {
+  display: grid;
+  gap: 3px;
+  padding: 11px 13px 12px;
+}
+
+.theme-gallery__card-name {
+  overflow: hidden;
+  color: var(--bui-text);
+  font-size: .88rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-gallery__card-detail {
+  overflow: hidden;
+  color: var(--bui-text-muted);
+  font-size: .7rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-gallery__card-state {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  display: none;
+  padding: 4px 7px;
+  border: 1px solid color-mix(in srgb, #fff, transparent 64%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bui-bg), transparent 16%);
+  color: var(--bui-text);
+  font-size: .64rem;
+  font-weight: 800;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+}
+
+.theme-gallery__card.is-selected .theme-gallery__card-state {
+  display: inline-flex;
+}
+
+@media (max-width: 768px) {
+  #menus .theme-gallery-menu {
+    display: none;
+  }
+
+  .theme-gallery {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: min(77dvh, 650px);
+    padding: 18px 16px max(18px, env(safe-area-inset-bottom));
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 20px 20px 0 0;
+    transform: translateY(18px);
+    transform-origin: bottom center;
+  }
+
+  .theme-gallery.is-open {
+    transform: translateY(0);
+  }
+
+  .theme-gallery__header {
+    margin-bottom: 15px;
+  }
+
+  .theme-gallery__header h2 {
+    font-size: 1.25rem;
+  }
+
+  .theme-gallery__hint {
+    max-width: 28rem;
+    font-size: .72rem;
+  }
+
+  .theme-gallery__cards {
+    gap: 9px;
+  }
+
+  .theme-gallery__art {
+    aspect-ratio: 1.7 / 1;
+  }
+
+  .theme-gallery__card-copy {
+    padding: 9px 10px 10px;
+  }
+
+  .theme-gallery__card-name {
+    font-size: .79rem;
+  }
+
+  .theme-gallery__card-detail {
+    font-size: .64rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-gallery,
+  .theme-gallery__card,
+  .theme-gallery__art,
+  #menus .theme-gallery-trigger,
+  .theme-gallery__close {
+    transition: none;
+  }
+}
