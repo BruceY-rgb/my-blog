@@ -1,16 +1,16 @@
 ---
-title: About
+title: 关于
 date: 2025-01-01 12:00:00
-description: 关于我 - Terminal 风格个人主页
+description: 关于 BruceY：学习、研究、开发与足球
 top_img: false
 aside: false
 comments: false
 ---
 
 {% raw %}
-<div class="term-container">
+<div class="term-container" role="region" aria-label="BruceY 的个人介绍">
   <div class="term-header">
-    <div class="term-buttons">
+    <div class="term-buttons" aria-hidden="true">
       <span class="term-btn close"></span>
       <span class="term-btn minimize"></span>
       <span class="term-btn maximize"></span>
@@ -26,11 +26,11 @@ comments: false
       </div>
       <div class="term-output">
         <div class="avatar-section">
-          <img src="/img/AI.jpg" alt="Avatar" class="term-avatar">
+          <img src="/img/AI.jpg" alt="BruceY 的插画头像" class="term-avatar" decoding="async">
           <div class="intro-text">
             <p class="name">BruceY</p>
             <p class="title">学生 | 全栈开发者 | 技术爱好者</p>
-            <p class="location">📍 Hangzhou China</p>
+            <p class="location">📍 Hangzhou, China</p>
           </div>
         </div>
       </div>
@@ -42,11 +42,11 @@ comments: false
         <span class="term-command">cat ~/about/</span>
       </div>
       <div class="term-output">
-        <p>Hello！我是 BruceYang，目前是浙江大学本科三年级的学生，一位热爱技术的开发者。</p>
-        <p>目前正在参与 Web 全栈开发的相关实习，并参与了大量与muli-agent相关的项目。</p>
-        <p>在学校参与的项目中，主要涉及机器学习与机器人模型训练的相关项目
+        <p>Hello！我是 BruceYang，目前是浙江大学本科三年级学生，也是一名热爱技术的开发者。</p>
+        <p>目前正在参与 Web 全栈开发相关实习，并参与了多个 multi-agent 项目。</p>
+        <p>在学校参与的项目中，主要涉及机器学习与机器人模型训练。</p>
         <p>这个博客用于记录我的技术笔记、项目经验和课程笔记。</p>
-        <p>欢迎大家！也可以随时来我的仓库给出建议🫡</p>
+        <p>欢迎阅读，也欢迎到我的 GitHub 仓库提出建议。</p>
       </div>
     </div>
 
@@ -98,8 +98,8 @@ comments: false
       </div>
       <div class="term-output">
         <div class="projects-grid">
-          <a href="https://github.com/BruceY-rgb/my-blog" class="project-card" target="_blank">
-            <div class="project-icon">📝</div>
+          <a href="https://github.com/BruceY-rgb/my-blog" class="project-card" target="_blank" rel="noopener noreferrer">
+            <div class="project-icon" aria-hidden="true">📝</div>
             <div class="project-name">my-blog</div>
             <div class="project-desc">基于 Hexo 的个人博客系统</div>
             <div class="project-tags">
@@ -107,8 +107,8 @@ comments: false
               <span class="project-tag">Butterfly</span>
             </div>
           </a>
-          <a href="https://github.com/BruceY-rgb" class="project-card" target="_blank">
-            <div class="project-icon">🚀</div>
+          <a href="https://github.com/BruceY-rgb" class="project-card" target="_blank" rel="noopener noreferrer">
+            <div class="project-icon" aria-hidden="true">🚀</div>
             <div class="project-name">Awesome-Projects</div>
             <div class="project-desc">个人项目集合与学习笔记</div>
             <div class="project-tags">
@@ -126,13 +126,9 @@ comments: false
       </div>
       <div class="term-output">
         <div class="social-links">
-          <a href="https://github.com/BruceY-rgb" class="social-link" target="_blank">
+          <a href="https://github.com/BruceY-rgb" class="social-link" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-github"></i>
             <span>GitHub</span>
-          </a>
-          <a href="mailto:brucey@example.com" class="social-link">
-            <i class="fas fa-envelope"></i>
-            <span>Email</span>
           </a>
         </div>
       </div>
@@ -148,5 +144,4 @@ comments: false
 </div>
 
 <link rel="stylesheet" href="/css/term-about.css">
-<script src="/js/term-about.js"></script>
 {% endraw %}

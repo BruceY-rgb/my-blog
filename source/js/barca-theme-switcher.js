@@ -5,6 +5,7 @@
   var LEGACY_STORAGE_KEY = 'barca-kit-theme';
   var PANEL_ID = 'theme-gallery-panel';
   var NAV_BUTTON_ID = 'theme-gallery-toggle';
+  var lastThemeTrigger = null;
   var THEMES = {
     home: {
       id: 'barcelona.2024-2025.home',
@@ -14,7 +15,7 @@
       shortLabel: '主场',
       name: '巴塞罗那 · 主场',
       detail: '24/25 · 深海红蓝',
-      badge: 'Barcelona · Home kit'
+      badge: '巴塞罗那 · 主场球衣'
     },
     away: {
       id: 'barcelona.2024-2025.away',
@@ -24,7 +25,7 @@
       shortLabel: '客场',
       name: '巴塞罗那 · 客场',
       detail: '24/25 · 绿茵晨光',
-      badge: 'Barcelona · Away kit'
+      badge: '巴塞罗那 · 客场球衣'
     },
     third: {
       id: 'barcelona.2024-2025.third',
@@ -34,7 +35,7 @@
       shortLabel: '第三',
       name: '巴塞罗那 · 第三球衣',
       detail: '24/25 · 午夜海军蓝',
-      badge: 'Barcelona · Third kit'
+      badge: '巴塞罗那 · 第三球衣'
     },
     spain: {
       id: 'spain.2026.champions-dream',
@@ -44,7 +45,7 @@
       shortLabel: '西班牙',
       name: '西班牙 · 冠军之梦',
       detail: '2026 · 酒红与冠军金',
-      badge: 'España · Champions dream'
+      badge: '西班牙 · 冠军之梦'
     }
   };
   var ORDER = ['home', 'away', 'third', 'spain'];
@@ -156,23 +157,50 @@
     title.dataset.barcaTitleDecorated = 'true';
   }
 
-  function markSection() {
-    var root = document.documentElement;
-    var bodyWrap = document.getElementById('body-wrap');
-    var isTaxonomy = Boolean(
-      document.getElementById('archive') ||
-      (bodyWrap && (bodyWrap.classList.contains('type-tags') || bodyWrap.classList.contains('type-categories')))
-    );
-
-    if (isTaxonomy) {
-      root.setAttribute('data-football-section', 'taxonomy');
-    } else {
-      root.removeAttribute('data-football-section');
-    }
-  }
-
   function themeIcon() {
     return '<i class="fas fa-swatchbook fa-fw" aria-hidden="true"></i>';
+  }
+
+  function makeKeyboardClickable(control, label) {
+    if (!control || control.dataset.keyboardReady === 'true') return;
+
+    control.dataset.keyboardReady = 'true';
+    control.setAttribute('role', 'button');
+    control.setAttribute('tabindex', '0');
+    control.setAttribute('aria-label', label);
+    control.addEventListener('keydown', function (event) {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      control.click();
+    });
+  }
+
+  function ensureAccessibilityChrome() {
+    var main = document.getElementById('content-inner');
+    if (main) main.setAttribute('tabindex', '-1');
+
+    if (main && !document.querySelector('.skip-to-content')) {
+      var skipLink = document.createElement('a');
+      skipLink.className = 'skip-to-content';
+      skipLink.href = '#content-inner';
+      skipLink.textContent = '跳到主要内容';
+      document.body.insertBefore(skipLink, document.body.firstChild);
+    }
+
+    makeKeyboardClickable(
+      document.querySelector('#search-button .site-page'),
+      '打开站内搜索'
+    );
+    makeKeyboardClickable(
+      document.querySelector('#toggle-menu .site-page'),
+      '打开导航菜单'
+    );
+
+    var searchClose = document.querySelector('.search-close-button');
+    if (searchClose) {
+      searchClose.type = 'button';
+      searchClose.setAttribute('aria-label', '关闭站内搜索');
+    }
   }
 
   function createThemeTrigger(id, className) {
@@ -291,13 +319,19 @@
     var currentTrigger = getOpenTrigger();
     if (currentTrigger && currentTrigger !== trigger) currentTrigger.setAttribute('aria-expanded', 'false');
 
+    lastThemeTrigger = trigger;
     panel.hidden = false;
     positionThemeGallery(trigger);
-    window.requestAnimationFrame(function () { panel.classList.add('is-open'); });
     trigger.setAttribute('aria-expanded', 'true');
+    window.requestAnimationFrame(function () {
+      panel.classList.add('is-open');
+      var selectedCard = panel.querySelector('.theme-gallery__card.is-selected');
+      var focusTarget = selectedCard || panel.querySelector('.theme-gallery__close');
+      if (focusTarget) focusTarget.focus({ preventScroll: true });
+    });
   }
 
-  function closeThemeGallery() {
+  function closeThemeGallery(restoreFocus) {
     var panel = document.getElementById(PANEL_ID);
     if (!panel || panel.hidden) return;
 
@@ -305,6 +339,10 @@
     panel.hidden = true;
     var trigger = getOpenTrigger();
     if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    if (restoreFocus !== false && lastThemeTrigger && document.contains(lastThemeTrigger)) {
+      lastThemeTrigger.focus({ preventScroll: true });
+    }
+    lastThemeTrigger = null;
   }
 
   function toggleThemeGallery(trigger) {
@@ -349,14 +387,14 @@
     document.documentElement.dataset.themeGalleryBound = 'true';
 
     document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape') closeThemeGallery();
+      if (event.key === 'Escape') closeThemeGallery(true);
     });
 
     document.addEventListener('click', function (event) {
       var panel = document.getElementById(PANEL_ID);
       if (!panel || panel.hidden) return;
       if (panel.contains(event.target) || event.target.closest('[aria-controls="' + PANEL_ID + '"]')) return;
-      closeThemeGallery();
+      closeThemeGallery(false);
     });
 
     window.addEventListener('resize', function () {
@@ -372,7 +410,7 @@
     createNavThemeTrigger();
     createSidebarThemeTrigger();
     ensureThemeGallery();
-    markSection();
+    ensureAccessibilityChrome();
     decorateHomeTitle();
     bindGlobalEvents();
     applyTheme(readTheme(), { persist: false });

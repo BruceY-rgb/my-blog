@@ -1,5 +1,5 @@
 ---
-title: FinTrace: Holistic Trajectory-Level Evaluation of LLM Tool Calling for Long-Horizon Financial Tasks
+title: "FinTrace: Holistic Trajectory-Level Evaluation of LLM Tool Calling for Long-Horizon Financial Tasks"
 date: 2026-07-08 10:00:00
 authors: Shijing Hu, Liang Liu, Zhu Meng, Zhicheng Zhao
 venue: arXiv

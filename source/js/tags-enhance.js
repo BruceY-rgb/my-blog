@@ -1,21 +1,19 @@
 /**
- * Tags Page Enhancement - Search & Category Grouping
- * 赛博朋克风格标签页增强
+ * Tags page enhancement: accessible search and category filters.
  */
 (function () {
   'use strict';
 
-  // Only run on tags page
-  const pageEl = document.getElementById('page');
-  if (!pageEl || !document.querySelector('.type-tags')) return;
+  var pageEl = document.getElementById('page');
+  var tagsPage = document.querySelector('.type-tags');
+  if (!pageEl || !tagsPage) return;
 
-  const tagCloud = pageEl.querySelector('.tag-cloud-list');
-  if (!tagCloud) return;
+  var tagCloud = pageEl.querySelector('.tag-cloud-list');
+  if (!tagCloud || tagCloud.dataset.enhanced === 'true') return;
+  tagCloud.dataset.enhanced = 'true';
+  tagCloud.id = tagCloud.id || 'tag-collection';
 
-  // Tag -> categories mapping (extracted from site data embedded by Hexo)
-  // We build this from the DOM: each tag <a> has an href like /tags/xxx/
-  // We'll use a static mapping based on the blog's known structure
-  const TAG_CATEGORIES = {
+  var tagCategories = {
     '编译原理': 'CS课程笔记',
     '词法分析': 'CS课程笔记',
     'NLP': 'CS课程笔记',
@@ -37,100 +35,128 @@
     'MCP': '开发工具'
   };
 
-  const ALL_CATEGORIES = ['全部', ...new Set(Object.values(TAG_CATEGORIES))];
-
-  // Collect all tag elements
-  const allTags = Array.from(tagCloud.querySelectorAll('a'));
-
-  // Get tag name from element
-  function getTagName(el) {
-    return el.textContent.trim();
-  }
-
-  // Get category for a tag
-  function getCategory(tagName) {
-    return TAG_CATEGORIES[tagName] || '其他';
-  }
-
-  // --- Build UI ---
-
-  // 1. Search bar
-  const searchWrap = document.createElement('div');
-  searchWrap.className = 'tags-search-wrap';
-  searchWrap.innerHTML =
-    '<i class="fas fa-search search-icon"></i>' +
-    '<input type="text" placeholder="搜索标签..." />';
-
-  // 2. Category tabs
-  const tabsWrap = document.createElement('div');
-  tabsWrap.className = 'tags-category-tabs';
-
-  // Ensure '其他' is included if any tags fall outside known categories
-  const usedCategories = new Set();
-  allTags.forEach(function (el) {
-    usedCategories.add(getCategory(getTagName(el)));
-  });
-  const categories = ['全部'];
-  ALL_CATEGORIES.forEach(function (c) {
-    if (c !== '全部' && usedCategories.has(c)) categories.push(c);
-  });
-  if (usedCategories.has('其他')) categories.push('其他');
-
-  categories.forEach(function (cat) {
-    var tab = document.createElement('span');
-    tab.className = 'tags-category-tab' + (cat === '全部' ? ' active' : '');
-    tab.textContent = cat;
-    tab.dataset.category = cat;
-    tabsWrap.appendChild(tab);
-  });
-
-  // 3. No result message
-  const noResult = document.createElement('div');
-  noResult.className = 'tags-no-result';
-  noResult.textContent = '没有找到匹配的标签';
-
-  // Insert UI before tag cloud
-  tagCloud.parentNode.insertBefore(searchWrap, tagCloud);
-  tagCloud.parentNode.insertBefore(tabsWrap, tagCloud);
-  tagCloud.parentNode.insertBefore(noResult, tagCloud.nextSibling);
-
-  // --- Filter logic ---
+  var categoryOrder = ['全部', 'CS课程笔记', '科研训练', '量化', '英语', '开发工具', '其他'];
+  var allTags = Array.from(tagCloud.querySelectorAll('a'));
   var activeCategory = '全部';
   var searchQuery = '';
 
-  function filterTags() {
-    var visibleCount = 0;
-    allTags.forEach(function (el) {
-      var name = getTagName(el);
-      var cat = getCategory(name);
-      var matchCategory = activeCategory === '全部' || cat === activeCategory;
-      var matchSearch = !searchQuery || name.toLowerCase().indexOf(searchQuery) !== -1;
-      if (matchCategory && matchSearch) {
-        el.classList.remove('tag-hidden');
-        visibleCount++;
-      } else {
-        el.classList.add('tag-hidden');
-      }
-    });
-    noResult.style.display = visibleCount === 0 ? 'block' : 'none';
+  function getTagName(element) {
+    return element.textContent.trim();
   }
 
-  // Search input handler
+  function getCategory(tagName) {
+    return tagCategories[tagName] || '其他';
+  }
+
+  var usedCategories = new Set(
+    allTags.map(function (element) {
+      return getCategory(getTagName(element));
+    })
+  );
+
+  var searchWrap = document.createElement('div');
+  searchWrap.className = 'tags-search-wrap';
+  searchWrap.innerHTML =
+    '<label class="visually-hidden" for="tags-search-input">搜索标签</label>' +
+    '<i class="fas fa-search search-icon" aria-hidden="true"></i>' +
+    '<input id="tags-search-input" type="search" inputmode="search" autocomplete="off" ' +
+      'placeholder="输入标签名称" aria-controls="' + tagCloud.id + '" aria-describedby="tags-results-status">' +
+    '<button class="tags-search-clear" type="button" aria-label="清空标签搜索" hidden>' +
+      '<i class="fas fa-times" aria-hidden="true"></i>' +
+    '</button>';
+
+  var tabsWrap = document.createElement('div');
+  tabsWrap.className = 'tags-category-tabs';
+  tabsWrap.setAttribute('role', 'group');
+  tabsWrap.setAttribute('aria-label', '按主题筛选标签');
+
+  categoryOrder.forEach(function (category) {
+    if (category !== '全部' && !usedCategories.has(category)) return;
+
+    var tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'tags-category-tab' + (category === '全部' ? ' active' : '');
+    tab.textContent = category;
+    tab.dataset.category = category;
+    tab.setAttribute('aria-pressed', String(category === '全部'));
+    tabsWrap.appendChild(tab);
+  });
+
+  var resultStatus = document.createElement('p');
+  resultStatus.id = 'tags-results-status';
+  resultStatus.className = 'tags-results-status';
+  resultStatus.setAttribute('role', 'status');
+  resultStatus.setAttribute('aria-live', 'polite');
+
+  var noResult = document.createElement('div');
+  noResult.className = 'tags-no-result';
+  noResult.textContent = '没有找到匹配的标签。请尝试缩短关键词或切换分类。';
+  noResult.hidden = true;
+
+  tagCloud.parentNode.insertBefore(searchWrap, tagCloud);
+  tagCloud.parentNode.insertBefore(tabsWrap, tagCloud);
+  tagCloud.parentNode.insertBefore(resultStatus, tagCloud);
+  tagCloud.parentNode.insertBefore(noResult, tagCloud.nextSibling);
+
   var searchInput = searchWrap.querySelector('input');
+  var clearButton = searchWrap.querySelector('.tags-search-clear');
+
+  function updatePressedState() {
+    tabsWrap.querySelectorAll('.tags-category-tab').forEach(function (tab) {
+      var selected = tab.dataset.category === activeCategory;
+      tab.classList.toggle('active', selected);
+      tab.setAttribute('aria-pressed', String(selected));
+    });
+  }
+
+  function filterTags() {
+    var visibleCount = 0;
+
+    allTags.forEach(function (element) {
+      var name = getTagName(element);
+      var category = getCategory(name);
+      var normalizedName = name.toLocaleLowerCase('zh-CN');
+      var matchesCategory = activeCategory === '全部' || category === activeCategory;
+      var matchesSearch = !searchQuery || normalizedName.includes(searchQuery);
+      var visible = matchesCategory && matchesSearch;
+
+      element.classList.toggle('tag-hidden', !visible);
+      element.setAttribute('aria-hidden', String(!visible));
+      if (visible) visibleCount += 1;
+    });
+
+    noResult.hidden = visibleCount !== 0;
+    clearButton.hidden = searchQuery.length === 0;
+    resultStatus.textContent = '显示 ' + visibleCount + ' 个标签，共 ' + allTags.length + ' 个';
+  }
+
   searchInput.addEventListener('input', function () {
-    searchQuery = this.value.trim().toLowerCase();
+    searchQuery = this.value.trim().toLocaleLowerCase('zh-CN');
     filterTags();
   });
 
-  // Category tab click handler
-  tabsWrap.addEventListener('click', function (e) {
-    var tab = e.target.closest('.tags-category-tab');
-    if (!tab) return;
-    tabsWrap.querySelectorAll('.tags-category-tab').forEach(function (t) {
-      t.classList.remove('active');
-    });
-    tab.classList.add('active');
-    activeCategory = tab.dataset.category;
+  searchInput.addEventListener('keydown', function (event) {
+    if (event.key !== 'Escape' || !this.value) return;
+    this.value = '';
+    searchQuery = '';
     filterTags();
   });
+
+  clearButton.addEventListener('click', function () {
+    searchInput.value = '';
+    searchQuery = '';
+    filterTags();
+    searchInput.focus();
+  });
+
+  tabsWrap.addEventListener('click', function (event) {
+    var tab = event.target.closest('.tags-category-tab');
+    if (!tab) return;
+
+    activeCategory = tab.dataset.category;
+    updatePressedState();
+    filterTags();
+  });
+
+  filterTags();
 })();

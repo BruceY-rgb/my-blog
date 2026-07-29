@@ -15,14 +15,14 @@ nav:
   display_title: true
   display_post_title: true
   # Whether to fix navigation bar
-  fixed: false
+  fixed: true
 
 menu:
-  Home: / || fas fa-home
-  Archive: /archives/ || fas fa-archive
-  Tags: /tags/ || fas fa-tags
-  Categories: /categories/ || fas fa-folder
-  About: /about/ || fas fa-user
+  首页: / || fas fa-home
+  归档: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-folder
+  关于: /about/ || fas fa-user
 
 # --------------------------------------
 # Code Blocks Settings
@@ -184,7 +184,7 @@ index_layout: 3
 index_post_content:
   method: 3
   # If you set method to 2 or 3, the length need to config
-  length: 500
+  length: 260
 
 # --------------------------------------
 # Post Settings
@@ -288,11 +288,11 @@ aside:
     button:
       enable: true
       icon: fab fa-github
-      text: Follow Me
+      text: 访问 GitHub
       link: https://github.com/BruceY-rgb
   card_announcement:
     enable: true
-    content: "🎉 欢迎来到我的博客！<br>✨ 分享技术、记录生活<br>💡 每日更新精彩内容<br>🌟 让我们一起成长"
+    content: "欢迎来到 BruceY's Blog。这里记录技术学习、研究实践，也收藏一点足球热爱。"
   card_recent_post:
     enable: true
     # If set 0 will show all
@@ -382,7 +382,7 @@ readmode: true
 darkmode:
   enable: true
   # Toggle Button to switch dark/light mode
-  button: true
+  button: false
   # Switch dark/light mode automatically
   # autoChangeMode: 1  Following System Settings, if the system doesn't support dark mode, it will switch dark mode between 6 pm to 6 am
   # autoChangeMode: 2  Switch dark mode between 6 pm to 6 am
@@ -406,7 +406,7 @@ rightside_item_order:
   show:
 
 # Animation for the bottom right config button
-rightside_config_animation: true
+rightside_config_animation: false
 
 # --------------------------------------
 # Global Settings
@@ -802,7 +802,7 @@ preloader:
   pace_css_url:
 
 # Page Transition
-enter_transitions: true
+enter_transitions: false
 
 # Default display mode - light (default) / dark
 display_mode: light
@@ -1013,9 +1013,9 @@ instantpage: false
 lazyload:
   enable: true
   # Use browser's native lazyload instead of vanilla-lazyload
-  native: false
+  native: true
   # Specify the field to use lazyload (site or post)
-  field: post
+  field: site
   placeholder:
   blur: false
 
@@ -1060,45 +1060,25 @@ css_prefix: true
 # inject:start - 请勿删除此标记，管理脚本将根据此标记自动更新配置
 inject:
   head:
+    # 在首屏 CSS 计算前恢复阅读主题，避免非首页 Hero 闪烁或高度跳变
+    - <script src="/js/football-theme-init.js"></script>
     # 主自定义样式
     - <link rel="stylesheet" href="/css/custom.css">
     - <link rel="stylesheet" href="/css/barca-theme.css">
+    - <link rel="stylesheet" href="/css/categories-index.css">
 
-    # 天气组件样式
-    - <link rel="stylesheet" href="/custom_components/weather/weather.css">
-    # 时钟组件样式
-    - <link rel="stylesheet" href="/custom_components/clock/clock.css">
-    # 待办事项组件样式
-    - <link rel="stylesheet" href="/custom_components/todo/todo.css">
-    # 数据分析组件样式
-    - <link rel="stylesheet" href="/custom_components/analytics/analytics.css">
     # Pyodide Runner 可执行代码块样式
     - <link rel="stylesheet" href="/css/pyodide-runner.css">
     # inject:end
 
   bottom:
-    # 粒子背景脚本
-    - <script src="/js/particle-bg.js"></script>
-    # 文章页增强脚本
-    - <script src="/js/article-enhance.js"></script>
-    # 全局效果脚本
-    - <script src="/js/global-effects.js"></script>
-    # 运行时间统计脚本
-    - <script src="/js/runtime-counter.js"></script>
     # 标签页增强脚本（搜索+分类筛选）
     - <script src="/js/tags-enhance.js"></script>
     # 搜索结果滚动定位修复
     - <script src="/js/search-scroll-fix.js"></script>
     - <script src="/js/barca-theme-switcher.js"></script>
+    - <script src="/js/categories-index.js"></script>
 
-    # 天气组件脚本
-    - <script src="/custom_components/weather/weather.js"></script>
-    # 时钟组件脚本
-    - <script src="/custom_components/clock/clock.js"></script>
-    # 待办事项组件脚本
-    - <script src="/custom_components/todo/todo.js"></script>
-    # 数据分析组件脚本
-    - <script src="/custom_components/analytics/analytics.js"></script>
     # Pyodide Runner 可执行代码块脚本
     - <script src="/js/pyodide-runner.js"></script>
     # inject:end

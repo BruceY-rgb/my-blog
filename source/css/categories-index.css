@@ -1,0 +1,532 @@
+/*
+ * Category index — editorial research shelf
+ *
+ * This stylesheet is deliberately scoped to Butterfly's `.type-categories`
+ * page so category archives and every other route retain their existing
+ * layout. The generated category tree remains readable without JavaScript.
+ */
+
+html[data-football-kit] .type-categories #page-header.not-home-page {
+  height: clamp(190px, 58vw, 240px);
+  min-height: 190px;
+  background-position: 66% 36% !important;
+}
+
+html[data-football-kit] .type-categories #page-header.not-home-page::before {
+  background:
+    repeating-linear-gradient(
+      112deg,
+      rgba(255, 255, 255, .022) 0 1px,
+      transparent 1px 16px
+    ),
+    radial-gradient(
+      ellipse at 82% 8%,
+      color-mix(in srgb, var(--bui-gold), transparent 78%),
+      transparent 36%
+    );
+  opacity: .72;
+}
+
+html[data-football-kit] .type-categories #page-header.not-home-page::after {
+  height: 100%;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--bui-bg), transparent 2%) 0 28%,
+      color-mix(in srgb, var(--bui-bg), transparent 36%) 52%,
+      color-mix(in srgb, var(--bui-bg), transparent 78%) 78%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to top,
+      color-mix(in srgb, var(--bui-bg), transparent 2%) 0%,
+      color-mix(in srgb, var(--bui-bg), transparent 58%) 48%,
+      transparent 82%
+    );
+}
+
+html[data-football-kit] .type-categories #page-header.not-home-page #page-site-info {
+  top: auto;
+  bottom: 22px;
+  left: clamp(20px, 6vw, 88px);
+  width: min(680px, calc(100vw - 40px));
+  transform: none;
+}
+
+html[data-football-kit] .type-categories #page-header.not-home-page #site-title {
+  max-width: none;
+  margin: 0;
+  color: var(--bui-text);
+  font-family: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  font-size: clamp(2.4rem, 12vw, 3.7rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: .92;
+  text-align: left;
+  text-shadow: 0 12px 34px color-mix(in srgb, var(--bui-bg), transparent 20%);
+}
+
+html[data-football-kit] .type-categories #page-header.not-home-page #site-title::after {
+  width: clamp(72px, 22vw, 120px);
+  height: 2px;
+  margin: 12px 0 0;
+  background: var(--bui-gold);
+}
+
+.category-index__hero-label {
+  margin: 0 0 8px;
+  color: var(--bui-gold);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.type-categories #content-inner.layout {
+  width: min(1180px, calc(100% - 32px));
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: clamp(38px, 7vw, 80px) 0 clamp(64px, 10vw, 116px);
+}
+
+.type-categories #page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.type-categories .category-lists {
+  width: 100%;
+}
+
+.category-index__masthead {
+  display: grid;
+  gap: 18px;
+  margin-bottom: clamp(42px, 7vw, 72px);
+  padding: 22px 0 24px;
+  border-top: 1px solid var(--bui-line);
+  border-bottom: 1px solid var(--bui-line);
+}
+
+.category-index__eyebrow {
+  margin: 0 0 9px;
+  color: var(--bui-gold);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.category-index__title {
+  max-width: 13ch;
+  margin: 0;
+  color: var(--bui-text);
+  font-family: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  font-size: clamp(1.9rem, 8.5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+.category-index__summary {
+  display: grid;
+  align-content: end;
+  gap: 12px;
+}
+
+.category-index__description {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--bui-text-muted);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.category-index__ledger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 16px;
+  margin: 0;
+  color: var(--bui-text-muted);
+  font-size: .82rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .015em;
+  line-height: 1.5;
+}
+
+.category-index__ledger span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.category-index__ledger span + span::before {
+  content: "/";
+  margin-right: 9px;
+  color: color-mix(in srgb, var(--bui-text-muted), transparent 52%);
+}
+
+.category-index__ledger strong {
+  color: var(--bui-text);
+  font-family: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.type-categories .category-lists ul,
+.type-categories .category-lists li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.type-categories .category-lists li::before,
+.type-categories .category-lists li::after {
+  display: none !important;
+}
+
+.type-categories .category-lists > .category-list {
+  margin: 0;
+}
+
+.type-categories .category-lists > .category-list > .category-list-item {
+  position: relative;
+  margin-bottom: 38px;
+  padding-top: 14px;
+  border-top: 1px solid var(--bui-line);
+  break-inside: avoid;
+}
+
+.category-index__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  min-height: 44px;
+  column-gap: 10px;
+}
+
+.category-index__row--top {
+  grid-template-columns: 38px minmax(0, 1fr) auto auto;
+  min-height: 54px;
+}
+
+.category-index__number {
+  align-self: start;
+  padding-top: 6px;
+  color: var(--bui-gold);
+  font-family: "Bodoni 72 Smallcaps", "Iowan Old Style", Georgia, serif;
+  font-size: .78rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1.4;
+}
+
+html[data-football-kit]
+  .type-categories
+  .category-lists
+  .category-list
+  .category-list-link {
+  display: block;
+  min-width: 0;
+  width: auto;
+  padding: 0;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--bui-text) !important;
+  box-shadow: none !important;
+  overflow-wrap: anywhere;
+  text-decoration-color: transparent;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .22em;
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+
+.type-categories .category-list > .category-list-item > .category-index__row .category-list-link {
+  font-family: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  font-size: clamp(1.28rem, 4.8vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -.025em;
+  line-height: 1.24;
+}
+
+html[data-football-kit]
+  .type-categories
+  .category-lists
+  .category-list
+  .category-list-link:hover {
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--bui-gold) !important;
+  box-shadow: none !important;
+  text-decoration-color: currentColor;
+}
+
+html[data-football-kit]
+  .type-categories
+  .category-lists
+  .category-list
+  .category-list-link:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--bui-gold);
+  outline-offset: 4px;
+  text-decoration-color: currentColor;
+}
+
+html[data-football-kit] .type-categories .category-list-count {
+  min-width: 2ch;
+  margin: 0;
+  color: var(--bui-text-muted);
+  font-size: .76rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1;
+  text-align: right;
+}
+
+html[data-football-kit] .type-categories .category-list-count::before,
+html[data-football-kit] .type-categories .category-list-count::after {
+  content: none;
+}
+
+.type-categories
+  .category-list
+  > .category-list-item
+  > .category-index__row
+  > .category-list-count::after {
+  content: " 篇";
+  font-weight: 500;
+}
+
+html[data-football-kit]
+  .type-categories
+  .category-list
+  > .category-list-item
+  > .category-index__row
+  > .category-list-count {
+  color: var(--bui-gold);
+}
+
+.type-categories .category-list-child {
+  margin: 13px 0 0 18px;
+  padding-left: 18px;
+  border-left: 1px solid color-mix(in srgb, var(--bui-line), var(--bui-gold) 18%);
+}
+
+.type-categories .category-list-child .category-list-child {
+  margin-top: 2px;
+  margin-left: 11px;
+  padding-left: 14px;
+}
+
+.type-categories .category-list-child > .category-list-item {
+  position: relative;
+}
+
+.type-categories .category-list-child > .category-list-item > .category-index__row::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 22px;
+  display: block !important;
+  width: 10px;
+  height: 1px;
+  background: color-mix(in srgb, var(--bui-line), var(--bui-gold) 18%);
+}
+
+.type-categories .category-list-child .category-list-child > .category-list-item > .category-index__row::before {
+  left: -14px;
+  width: 8px;
+}
+
+.type-categories .category-list-child .category-index__row {
+  min-height: 44px;
+}
+
+.type-categories .category-list-child .category-list-link {
+  padding-block: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.type-categories .category-list-child .category-list-count {
+  color: color-mix(in srgb, var(--bui-text-muted), transparent 14%);
+  font-size: .72rem;
+}
+
+.category-index__toggle {
+  position: relative;
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  margin: 0 -8px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--bui-text-muted);
+  cursor: pointer;
+  place-items: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.category-index__toggle::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform .22s cubic-bezier(.22, 1, .36, 1), color .18s ease;
+}
+
+.category-index__toggle[aria-expanded="true"]::before {
+  transform: translateY(2px) rotate(225deg);
+}
+
+.category-index__toggle:hover {
+  color: var(--bui-gold);
+}
+
+.category-index__toggle:active {
+  background: color-mix(in srgb, var(--bui-gold), transparent 88%);
+}
+
+.category-index__toggle:focus-visible {
+  outline: 2px solid var(--bui-gold);
+  outline-offset: 1px;
+}
+
+.category-index--enhanced
+  .category-index__branch.is-collapsed
+  > .category-list-child {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  html[data-football-kit] .type-categories #page-header.not-home-page {
+    height: clamp(240px, 25vw, 300px);
+    min-height: 240px;
+    background-position: center 36% !important;
+  }
+
+  html[data-football-kit] .type-categories #page-header.not-home-page #page-site-info {
+    bottom: clamp(28px, 4vw, 46px);
+  }
+
+  html[data-football-kit] .type-categories #page-header.not-home-page #site-title {
+    font-size: clamp(3.2rem, 6vw, 4.6rem);
+  }
+
+}
+
+@media (min-width: 769px) {
+  .type-categories .category-lists > .category-list {
+    column-count: 2;
+    column-gap: clamp(42px, 7vw, 88px);
+    column-rule: 1px solid color-mix(in srgb, var(--bui-line), transparent 18%);
+  }
+
+  .type-categories .category-lists > .category-list > .category-list-item {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 48px;
+  }
+
+  .category-index__toggle {
+    display: none;
+  }
+
+  .category-index--enhanced .category-index__branch > .category-list-child {
+    display: block !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .category-index__masthead {
+    grid-template-columns: minmax(300px, .86fr) minmax(360px, 1.14fr);
+    gap: clamp(48px, 7vw, 92px);
+    padding-block: 28px 30px;
+  }
+
+  .category-index__summary {
+    padding-bottom: 3px;
+  }
+}
+
+@media (max-width: 768px) {
+  .type-categories #content-inner.layout {
+    width: min(100% - 28px, 680px);
+  }
+
+  .category-index__masthead {
+    margin-bottom: 38px;
+  }
+
+  .type-categories .category-lists > .category-list > .category-list-item {
+    margin-bottom: 34px;
+  }
+
+  .category-index__row--top {
+    grid-template-columns: 34px minmax(0, 1fr) auto auto;
+  }
+
+  .type-categories .category-list-child {
+    margin-left: 14px;
+    padding-left: 16px;
+  }
+
+  .type-categories .category-list-child > .category-list-item > .category-index__row::before {
+    left: -16px;
+    width: 9px;
+  }
+}
+
+@media (max-width: 430px) {
+  .category-index__ledger {
+    display: grid;
+    gap: 5px;
+  }
+
+  .category-index__ledger span + span::before {
+    content: none;
+  }
+
+  .type-categories
+    .category-list
+    > .category-list-item
+    > .category-index__row
+    > .category-list-count::after {
+    content: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .type-categories .category-list-child > .category-list-item:hover > .category-index__row {
+    background:
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--bui-gold), transparent 92%),
+        transparent 78%
+      );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .type-categories .category-list-link,
+  .category-index__toggle::before {
+    transition: none;
+  }
+}

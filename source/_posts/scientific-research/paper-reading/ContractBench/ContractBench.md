@@ -1,5 +1,5 @@
 ---
-title: ContractBench: Can LLM Agents Preserve Observation Contracts?
+title: "ContractBench: Can LLM Agents Preserve Observation Contracts?"
 date: 2026-07-13 10:00:00
 authors: icheng Wang，Yifeng He，Zili Wang，Hanwen Xing，Arkaprava De，Hao Chen
 venue: arXiv

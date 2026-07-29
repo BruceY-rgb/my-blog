@@ -30,6 +30,7 @@
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Consolas', monospace;
+  font-size: 15px;
   background: var(--nord0);
 }
 
@@ -112,6 +113,7 @@
   padding-left: 24px;
   color: var(--nord6);
   line-height: 1.8;
+  overflow-wrap: anywhere;
 }
 
 /* 头像区域 */
@@ -143,9 +145,10 @@
 }
 
 .intro-text .location {
-  color: var(--nord3);
+  color: var(--nord4);
   font-size: 0.9em;
   margin: 0;
+  opacity: .78;
 }
 
 /* 技能标签 */
@@ -163,7 +166,7 @@
   border-radius: 20px;
   font-size: 13px;
   border: 1px solid var(--nord2);
-  transition: all 0.3s ease;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 .skill-tag:hover {
@@ -235,9 +238,10 @@
 }
 
 .timeline-desc {
-  color: var(--nord3);
+  color: var(--nord4);
   font-size: 13px;
   line-height: 1.6;
+  opacity: .82;
 }
 
 /* 项目卡片 */
@@ -254,7 +258,7 @@
   border-radius: 8px;
   padding: 16px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
   display: block;
 }
 
@@ -277,9 +281,10 @@
 }
 
 .project-desc {
-  color: var(--nord3);
+  color: var(--nord4);
   font-size: 13px;
   margin-bottom: 12px;
+  opacity: .82;
 }
 
 .project-tags {
@@ -313,7 +318,8 @@
   background: var(--nord1);
   border-radius: 8px;
   border: 1px solid var(--nord2);
-  transition: all 0.3s ease;
+  min-height: 44px;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 .social-link:hover {
@@ -332,7 +338,7 @@
   width: 8px;
   height: 16px;
   background: var(--nord8);
-  animation: blink 1s step-end infinite;
+  opacity: .82;
 }
 
 @keyframes blink {
@@ -340,22 +346,9 @@
   50% { opacity: 0; }
 }
 
-/* 打字机效果 - 逐行显示 */
+/* 内容立即可读；终端造型不应延迟正文出现。 */
 .term-section {
-  opacity: 0;
-  animation: fadeIn 0.5s ease forwards;
-}
-
-.term-section:nth-child(1) { animation-delay: 0.1s; }
-.term-section:nth-child(2) { animation-delay: 0.3s; }
-.term-section:nth-child(3) { animation-delay: 0.5s; }
-.term-section:nth-child(4) { animation-delay: 0.7s; }
-.term-section:nth-child(5) { animation-delay: 0.9s; }
-.term-section:nth-child(6) { animation-delay: 1.1s; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  opacity: 1;
 }
 
 /* 暗色主题适配 */
@@ -366,12 +359,13 @@
 /* 响应式设计 */
 @media (max-width: 768px) {
   .term-container {
-    border-radius: 0;
-    margin: 0 -20px;
+    width: 100%;
+    margin: 0;
+    border-radius: 8px;
   }
 
   .term-body {
-    padding: 16px;
+    padding: 18px 16px;
   }
 
   .avatar-section {
@@ -385,5 +379,13 @@
 
   .social-links {
     flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-tag,
+  .project-card,
+  .social-link {
+    transition: none;
   }
 }

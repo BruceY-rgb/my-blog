@@ -1,5 +1,5 @@
 ---
-title: ToolFailBench: Diagnosing Tool-Use Failures in LLM Agents
+title: "ToolFailBench: Diagnosing Tool-Use Failures in LLM Agents"
 date: 2026-07-09 10:00:00
 authors: Harsh Soni
 venue: ICML 2026 Workshops
@@ -205,4 +205,4 @@ cover: https://pic2.zhimg.com/v2-5028304e998fa00e06e673036e25e873_1440w.jpg
 
 - **单轮交互限制**：`ToolFailBench`旨在作为一种诊断工具，而不是对已经部署智能体的完整模拟。它采用了单轮(`Single-turn`)格式以更容易地隔离具体的失败模式，但是这也意味着它无法捕捉多轮`muli-turn`任务中的复杂问题，比如工具链调用、从早期错误中恢复的能力或者跨交互的状态更新
 - **特定领域限制**：该基准测试目前仅涵盖五个专业领域。如果在代码生成、科学文献、电子商务、履行或企业工作流等其他场景中测试，绝对的失败率可能会有多变化
-- **评估体系的盲区**：虽然采用了 **确定性规则分类器+两个独立的LLM裁判**的机制来提高评估的稳健性，但是这些裁判依然可能存在共同的评估盲区 
+- **评估体系的盲区**：虽然采用了 **确定性规则分类器+两个独立的LLM裁判**的机制来提高评估的稳健性，但是这些裁判依然可能存在共同的评估盲区

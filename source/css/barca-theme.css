@@ -436,8 +436,41 @@ html[data-football-kit="barcelona.2024-2025.third"] #page-header.full_page::befo
   opacity: .84;
 }
 
-html[data-football-kit] #page-header.post-bg,
-html[data-football-kit] #page-header.not-home-page {
+/*
+ * Non-home heroes must have their geometry on the first paint. The theme
+ * script adds data-football-* attributes near the end of the document; if
+ * height is gated by those attributes, Butterfly animates from its default
+ * size and the whole page visibly jumps.
+ *
+ * Taxonomy pages reuse the same full-bleed background treatment as the home
+ * hero. This keeps the image visually continuous across the whole header
+ * instead of turning it into a separate poster-like panel.
+ */
+#page-header.not-home-page {
+  height: clamp(560px, 100svh, 960px);
+  min-height: 560px;
+}
+
+#page-header.post-bg {
+  height: clamp(360px, 38vh, 420px);
+  min-height: 360px;
+}
+
+#page-header.not-home-page,
+#page-header.post-bg {
+  transition: background-color .35s ease, background-position .35s ease, filter .35s ease;
+}
+
+#page-header.not-home-page #page-site-info {
+  position: absolute;
+  left: clamp(22px, 8vw, 128px);
+  top: 53%;
+  width: min(620px, calc(100vw - 44px));
+  text-align: left;
+  transform: translateY(-36%);
+}
+
+html[data-football-kit] #page-header.post-bg {
   background: var(--barca-hero-bg) !important;
   background-color: var(--bui-bg) !important;
   background-position: center !important;
@@ -445,8 +478,14 @@ html[data-football-kit] #page-header.not-home-page {
   background-attachment: scroll !important;
 }
 
+html[data-football-kit] #page-header.not-home-page {
+  background: var(--barca-hero-bg) !important;
+  background-color: var(--bui-bg) !important;
+  background-attachment: scroll !important;
+}
+
 html[data-football-kit] #page-header.post-bg {
-  height: clamp(360px, 38vh, 460px);
+  height: clamp(360px, 38vh, 420px);
   min-height: 360px;
 }
 
@@ -602,7 +641,7 @@ html[data-football-kit] #page-header.post-bg #post-info {
   top: auto;
   left: clamp(18px, 6vw, 88px);
   right: clamp(18px, 6vw, 88px);
-  bottom: clamp(28px, 6vh, 58px);
+  bottom: 28px;
   width: auto;
   max-width: min(1060px, calc(100vw - 36px));
   padding: clamp(16px, 2.4vw, 26px);
@@ -686,72 +725,52 @@ html[data-football-kit] #page-header.post-bg #post-meta .post-meta-separator {
   opacity: .58;
 }
 
-html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page {
-  height: clamp(280px, 34vh, 380px);
-  min-height: 280px;
-  background-position: center 38% !important;
+html[data-football-kit] #page-header.not-home-page {
+  height: clamp(560px, 100svh, 960px);
+  min-height: 560px;
 }
 
-html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page::before {
+html[data-football-kit] #page-header.not-home-page::before {
+  inset: 0;
+  z-index: 0;
+  width: auto;
+  height: auto;
   background:
-    var(--bui-crest-url) calc(100% - clamp(18px, 8vw, 124px)) 54% / clamp(120px, 19vw, 240px) auto no-repeat,
-    radial-gradient(ellipse at 55% 44%, transparent 0 18%, var(--barca-stadium-soft) 18.2% 18.48%, transparent 18.72% 28%, var(--barca-stadium-line) 28.2% 28.48%, transparent 28.72% 38%, var(--barca-stadium-soft) 38.2% 38.45%, transparent 38.7%),
-    radial-gradient(ellipse at 55% 44%, transparent 0 6.2%, var(--barca-stadium-soft) 6.35% 6.62%, transparent 6.9%),
-    linear-gradient(90deg, color-mix(in srgb, var(--bui-bg), transparent 8%) 0 36%, color-mix(in srgb, var(--bui-bg), transparent 48%) 58%, transparent 100%),
-    radial-gradient(ellipse at 16% -14%, color-mix(in srgb, var(--bui-gold), transparent 58%), transparent 44%),
-    repeating-linear-gradient(112deg, rgba(255, 255, 255, .032) 0 1px, transparent 1px 13px);
-  opacity: .52;
+    repeating-linear-gradient(112deg, rgba(255, 255, 255, .025) 0 1px, transparent 1px 16px),
+    radial-gradient(ellipse at 78% 12%, color-mix(in srgb, var(--bui-gold), transparent 82%), transparent 34%);
+  filter: none;
+  opacity: 1;
 }
 
-html[data-football-kit="barcelona.2024-2025.away"][data-football-section="taxonomy"] #page-header.not-home-page::before {
+html[data-football-kit] #page-header.not-home-page::after {
+  height: 100%;
   background:
-    var(--bui-crest-url) calc(100% - clamp(18px, 8vw, 124px)) 54% / clamp(120px, 19vw, 240px) auto no-repeat,
-    radial-gradient(ellipse at 55% 44%, transparent 0 18%, var(--barca-stadium-soft) 18.2% 18.48%, transparent 18.72% 28%, var(--barca-stadium-line) 28.2% 28.48%, transparent 28.72% 38%, var(--barca-stadium-soft) 38.2% 38.45%, transparent 38.7%),
-    radial-gradient(ellipse at 55% 44%, transparent 0 6.2%, var(--barca-stadium-soft) 6.35% 6.62%, transparent 6.9%),
-    linear-gradient(90deg, rgba(246, 255, 231, .86) 0 36%, rgba(246, 255, 231, .54) 58%, rgba(246, 255, 231, .12) 100%),
-    radial-gradient(ellipse at 16% -14%, rgba(255, 255, 255, .64), transparent 44%),
-    repeating-linear-gradient(112deg, rgba(6, 70, 173, .045) 0 1px, transparent 1px 13px);
-  opacity: .58;
+    linear-gradient(to top, var(--bui-bg) 0%, color-mix(in srgb, var(--bui-bg), transparent 58%) 20%, color-mix(in srgb, var(--bui-bg), transparent 90%) 46%, transparent 66%),
+    linear-gradient(90deg, color-mix(in srgb, var(--bui-bg), transparent 8%) 0 24%, color-mix(in srgb, var(--bui-bg), transparent 38%) 40%, color-mix(in srgb, var(--bui-bg), transparent 76%) 58%, transparent 78%);
 }
 
-html[data-football-kit="barcelona.2024-2025.third"][data-football-section="taxonomy"] #page-header.not-home-page::before {
-  opacity: .48;
-}
-
-html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page::after {
-  height: 62%;
-  background:
-    linear-gradient(to top, var(--bui-bg) 0%, color-mix(in srgb, var(--bui-bg), transparent 28%) 42%, transparent 100%),
-    linear-gradient(90deg, color-mix(in srgb, var(--bui-bg), transparent 10%) 0 34%, transparent 70%);
-}
-
-html[data-football-kit="barcelona.2024-2025.away"][data-football-section="taxonomy"] #page-header.not-home-page::after {
-  background:
-    linear-gradient(to top, rgba(233, 255, 210, .7) 0%, rgba(233, 255, 210, .26) 42%, transparent 100%),
-    linear-gradient(90deg, rgba(246, 255, 231, .68) 0 34%, transparent 72%);
-}
-
-html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #page-site-info {
+html[data-football-kit] #page-header.not-home-page #page-site-info {
   position: absolute;
   left: clamp(22px, 8vw, 128px);
   top: 53%;
+  z-index: 3;
   width: min(620px, calc(100vw - 44px));
   text-align: left;
   transform: translateY(-36%);
 }
 
-html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #page-site-info::before {
+html[data-football-kit] #page-header.not-home-page #page-site-info::before {
   display: none;
 }
 
-html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #site-title {
+html[data-football-kit] #page-header.not-home-page #site-title {
   font-size: clamp(2.4rem, 6.2vw, 4.7rem);
   line-height: .95;
   text-align: left;
   text-wrap: balance;
 }
 
-html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #site-title::after {
+html[data-football-kit] #page-header.not-home-page #site-title::after {
   width: clamp(86px, 13vw, 160px);
   margin: 16px 0 0;
 }
@@ -1422,6 +1441,16 @@ html[data-football-kit] #footer a:hover {
     opacity: .68;
   }
 
+  #page-header.not-home-page {
+    height: clamp(560px, 100svh, 900px);
+    min-height: 560px;
+  }
+
+  #page-header.post-bg {
+    height: clamp(360px, 46vh, 420px);
+    min-height: 360px;
+  }
+
   html[data-football-kit] #page-header.full_page #site-info {
     left: 22px;
     top: 54%;
@@ -1445,8 +1474,8 @@ html[data-football-kit] #footer a:hover {
   }
 
   html[data-football-kit] #page-header.post-bg {
-    height: clamp(340px, 46vh, 430px);
-    min-height: 340px;
+    height: clamp(360px, 46vh, 420px);
+    min-height: 360px;
   }
 
   html[data-football-kit] #page-header.post-bg #post-info {
@@ -1467,38 +1496,32 @@ html[data-football-kit] #footer a:hover {
     line-height: 1.45;
   }
 
-  html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page {
-    height: clamp(230px, 32vh, 300px);
-    min-height: 230px;
-    background-position: center top !important;
+  html[data-football-kit] #page-header.not-home-page {
+    height: clamp(560px, 100svh, 900px);
+    min-height: 560px;
+    background-position: 72% center !important;
   }
 
-  html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page::before {
+  html[data-football-kit="spain.2026.champions-dream"] #page-header.not-home-page {
+    background-position: center 38% !important;
+  }
+
+  html[data-football-kit] #page-header.not-home-page::after {
     background:
-      var(--bui-crest-url) calc(100% - 14px) 58% / clamp(86px, 34vw, 132px) auto no-repeat,
-      linear-gradient(90deg, color-mix(in srgb, var(--bui-bg), transparent 6%) 0 66%, transparent 100%),
-      radial-gradient(ellipse at 20% -12%, color-mix(in srgb, var(--bui-gold), transparent 62%), transparent 50%),
-      repeating-linear-gradient(112deg, rgba(255, 255, 255, .032) 0 1px, transparent 1px 13px);
-    opacity: .46;
+      linear-gradient(to top, var(--bui-bg) 0%, color-mix(in srgb, var(--bui-bg), transparent 42%) 24%, color-mix(in srgb, var(--bui-bg), transparent 82%) 48%, transparent 70%),
+      linear-gradient(90deg, color-mix(in srgb, var(--bui-bg), transparent 20%) 0%, color-mix(in srgb, var(--bui-bg), transparent 58%) 58%, transparent 100%);
   }
 
-  html[data-football-kit="barcelona.2024-2025.away"][data-football-section="taxonomy"] #page-header.not-home-page::before {
-    background:
-      var(--bui-crest-url) calc(100% - 14px) 58% / clamp(86px, 34vw, 132px) auto no-repeat,
-      linear-gradient(90deg, rgba(246, 255, 231, .84) 0 66%, rgba(246, 255, 231, .08) 100%),
-      radial-gradient(ellipse at 20% -12%, rgba(255, 255, 255, .58), transparent 50%),
-      repeating-linear-gradient(112deg, rgba(6, 70, 173, .045) 0 1px, transparent 1px 13px);
-    opacity: .52;
-  }
-
-  html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #page-site-info {
+  html[data-football-kit] #page-header.not-home-page #page-site-info {
     left: 22px;
-    top: 56%;
+    top: auto;
+    bottom: 34px;
     width: calc(100vw - 44px);
+    transform: none;
   }
 
-  html[data-football-kit][data-football-section="taxonomy"] #page-header.not-home-page #site-title {
-    max-width: calc(100vw - 120px);
+  html[data-football-kit] #page-header.not-home-page #site-title {
+    max-width: 100%;
     font-size: clamp(2rem, 11vw, 3.25rem);
     overflow-wrap: anywhere;
   }
@@ -1973,6 +1996,432 @@ html[data-football-kit="spain.2026.champions-dream"] #page-header.full_page #sit
   .theme-gallery__art,
   #menus .theme-gallery-trigger,
   .theme-gallery__close {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Production polish: resilient layout, accessible controls and reading rhythm
+   ========================================================================== */
+
+html[data-football-kit] {
+  min-width: 320px;
+  background: var(--bui-bg);
+  color-scheme: dark;
+}
+
+html[data-football-kit="barcelona.2024-2025.away"] {
+  color-scheme: light;
+}
+
+html[data-football-kit] body {
+  min-width: 320px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: clip;
+  background-color: var(--bui-bg);
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+
+html[data-football-kit] #body-wrap {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  flex-direction: column;
+}
+
+html[data-football-kit] #content-inner {
+  width: 100%;
+  flex: 1 0 auto;
+}
+
+html[data-football-kit] #footer {
+  width: 100%;
+  margin-top: auto;
+  padding-bottom: env(safe-area-inset-bottom);
+  flex: 0 0 auto;
+}
+
+html[data-football-kit] :where(
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  [role="button"],
+  [tabindex]:not([tabindex="-1"])
+):focus-visible {
+  outline: 3px solid var(--bui-gold);
+  outline-offset: 3px;
+}
+
+.skip-to-content {
+  position: fixed;
+  z-index: 20000;
+  top: max(10px, env(safe-area-inset-top));
+  left: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--bui-gold, #edbb00);
+  border-radius: 6px;
+  background: var(--bui-surface-raised, #121f42);
+  color: var(--bui-text, #fff2d7);
+  font-weight: 800;
+  line-height: 1.25;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 24px));
+  transition: transform .18s cubic-bezier(.16, 1, .3, 1);
+}
+
+.skip-to-content:focus {
+  color: var(--bui-text, #fff2d7);
+  transform: translateY(0);
+}
+
+html[data-football-kit] #page-header.post-bg .post-title {
+  display: block;
+  max-width: min(980px, 100%);
+  overflow: visible;
+  text-overflow: clip;
+  -webkit-box-orient: initial;
+  -webkit-line-clamp: unset;
+}
+
+html[data-football-kit] #article-container {
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+html[data-football-kit] #article-container :is(p, li, dd, td, th) {
+  overflow-wrap: anywhere;
+}
+
+html[data-football-kit] #article-container :is(p, ul, ol, dl) {
+  text-wrap: pretty;
+}
+
+html[data-football-kit] #article-container a {
+  text-decoration-thickness: .08em;
+  text-underline-offset: .18em;
+}
+
+html[data-football-kit] #article-container .table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  border-radius: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+html[data-football-kit] #article-container :is(.katex-display, .MathJax_Display) {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 4px;
+  overscroll-behavior-inline: contain;
+}
+
+html[data-football-kit] #article-container img {
+  height: auto;
+}
+
+html[data-football-kit] :is(
+  #menus .theme-gallery-trigger,
+  #sidebar-menus .theme-sidebar-trigger,
+  .theme-gallery__close
+) {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+html[data-football-kit] .theme-gallery__card:focus-visible {
+  border-color: var(--bui-gold);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bui-gold), transparent 62%);
+}
+
+/* Tags page: one calm, searchable collection instead of an unstructured cloud. */
+.tags-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.tags-search-wrap .search-icon {
+  position: absolute;
+  left: 15px;
+  z-index: 1;
+  color: var(--bui-text-muted);
+  pointer-events: none;
+}
+
+.tags-search-wrap input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 44px 10px 42px;
+  border: 1px solid var(--bui-line);
+  border-radius: 8px;
+  background: var(--barca-muted-surface);
+  color: var(--bui-text);
+  font: inherit;
+  line-height: 1.35;
+  transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
+}
+
+.tags-search-wrap input::placeholder {
+  color: color-mix(in srgb, var(--bui-text-muted), transparent 10%);
+  opacity: 1;
+}
+
+.tags-search-wrap input::-webkit-search-cancel-button {
+  display: none;
+  appearance: none;
+}
+
+.tags-search-wrap input:focus {
+  border-color: var(--bui-gold);
+  background: var(--bui-surface-raised);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bui-gold), transparent 76%);
+}
+
+.tags-search-clear {
+  position: absolute;
+  right: 6px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--bui-text-muted);
+  cursor: pointer;
+}
+
+.tags-search-clear:hover {
+  background: var(--barca-muted-surface);
+  color: var(--bui-text);
+}
+
+.tags-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tags-category-tab {
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 1px solid var(--bui-line);
+  border-radius: 999px;
+  background: var(--barca-muted-surface);
+  color: var(--bui-text-muted);
+  font: inherit;
+  font-size: .86rem;
+  font-weight: 750;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: border-color .18s ease, background-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+.tags-category-tab:hover {
+  border-color: color-mix(in srgb, var(--bui-gold), var(--bui-line) 48%);
+  color: var(--bui-text);
+  transform: translateY(-1px);
+}
+
+.tags-category-tab.active {
+  border-color: var(--bui-gold);
+  background: color-mix(in srgb, var(--bui-gold), transparent 82%);
+  color: var(--bui-text);
+}
+
+.tags-results-status {
+  margin: -8px 0 16px;
+  color: var(--bui-text-muted);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+
+html[data-football-kit] #page .tag-cloud-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  text-align: left;
+}
+
+html[data-football-kit] #page .tag-cloud-list > a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  margin: 0;
+  padding: 8px 12px;
+  border-color: var(--bui-line);
+  border-radius: 7px;
+  background: var(--barca-muted-surface) !important;
+  color: var(--bui-text) !important;
+  box-shadow: none;
+  font-size: .92rem !important;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+html[data-football-kit] #page .tag-cloud-list > a:hover {
+  border-color: color-mix(in srgb, var(--bui-gold), transparent 28%);
+  background: var(--barca-action-bg) !important;
+  color: var(--barca-action-color) !important;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--bui-blue), transparent 82%);
+  transform: translateY(-2px);
+}
+
+.tag-hidden,
+.tags-no-result[hidden],
+.tags-search-clear[hidden] {
+  display: none !important;
+}
+
+.tags-no-result {
+  margin: 24px 0 6px;
+  padding: 20px;
+  border: 1px dashed var(--bui-line);
+  border-radius: 8px;
+  color: var(--bui-text-muted);
+  text-align: center;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 900px) {
+  html[data-football-kit] #nav #menus .menus_items {
+    display: none;
+  }
+
+  html[data-football-kit] #nav #toggle-menu {
+    display: inline-block !important;
+  }
+
+  html[data-football-kit] #nav #search-button span:not(.site-page) {
+    display: none;
+  }
+
+  html[data-football-kit] #nav :is(
+    #search-button .site-page,
+    #toggle-menu .site-page
+  ) {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  html[data-football-kit] #blog-info .nav-site-title {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  html[data-football-kit] #post,
+  html[data-football-kit] #page,
+  html[data-football-kit] #archive,
+  html[data-football-kit] #tag,
+  html[data-football-kit] #category {
+    padding: 28px 16px;
+  }
+
+  html[data-football-kit] #page-header.post-bg {
+    height: clamp(360px, 46vh, 420px);
+    min-height: 360px;
+  }
+
+  html[data-football-kit] #page-header.post-bg #post-info {
+    bottom: 20px;
+  }
+
+  html[data-football-kit] #page-header.post-bg .post-title {
+    font-size: clamp(1.55rem, 7.7vw, 2.15rem);
+    line-height: 1.14;
+  }
+
+  html[data-football-kit] #article-container {
+    font-size: 1rem;
+    line-height: 1.82;
+  }
+
+  html[data-football-kit] #article-container .table-wrap > table {
+    min-width: 34rem;
+  }
+
+  html[data-football-kit] #sidebar-menus .site-page,
+  html[data-football-kit] #sidebar-menus .theme-sidebar-trigger {
+    min-height: 44px;
+    padding-top: .68rem;
+    padding-bottom: .68rem;
+  }
+
+  html[data-football-kit] .article-meta__categories {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    padding-inline: 3px;
+  }
+
+  .theme-gallery__close {
+    width: 44px;
+    height: 44px;
+  }
+
+  .tags-category-tab,
+  html[data-football-kit] #page .tag-cloud-list > a {
+    min-height: 44px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  html[data-football-kit] :is(
+    #search-button .site-page,
+    #toggle-menu .site-page,
+    #rightside button,
+    #pagination a
+  ) {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+
+  .skip-to-content {
     transition: none;
   }
 }
