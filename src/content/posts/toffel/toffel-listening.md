@@ -1,0 +1,394 @@
+---
+title: 托福听力
+date: '2026-02-09 12:30:00'
+tags:
+  - 托福听力
+categories:
+  - 英语
+description: 托福听力逻辑建模指南：解析学术讨论语境下的语言输出矩阵。通过结构化模板与高频词汇包，优化你的考场应试算法，实现高分突破。
+cover: >-
+  https://www.cheersyou.com/sites/default/files/styles/news_show_2022/public/field/image/woman-girl-technology-music.jpg?itok=ICZSywRJ
+published: true
+legacyPath: 2026/02/09/toffel/toffel-listening
+sourcePath: toffel/toffel-listening.md
+---
+
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-1.png)
+
+## 1. Intro
+
+- 考试时间：18-25分钟
+- 题目数量：35-45 （在自适应阶段会变化）
+- 自适应考试:Multistage Adaptive Listening 
+  - Stage 1:Common set of tasks
+  - Stage 2:Next set adjusts in difficulty based on performance
+
+
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-2.png)
+
+## 2. Listen and choose the best response
+
+### 2.1 解题原则
+
+- 建立意识、快问快答
+- 确保听到，注意四词
+  - 疑问词优先：what/why/how...
+  - **话题词**相关
+  - **时间词**辅助
+  - **人称词**
+- 识别语用，识别答案
+  - `asking for help`
+  - `decline politely`:婉拒
+  - `offering suggestions`
+  - `showing uncertainty`
+  - `giving confirmation`
+  - `information check`
+  - `clarification`
+  - `apology`
+  - `request`
+  - `complain`
+  - `invitation`
+  - `hesitation&doubt`
+  - `empathy`
+- 语气时态，辅助排除
+
+> 记笔记的时候记什么：疑问词+话题词+时间词+人称词
+
+### 2.2 The main features of a response for a question
+
+- direct or indirect
+- on-topic
+- fap-filling:its primary purpose os to provide the missing knowledge or details that the question sought
+
+### 2.3 句型与语用
+
+#### 1. 反义疑问句
+
+> 寻求共情+表达不确定性
+
+- 个人观点+反义疑问句/反问句——寻求共情
+  - That movie was fantastic, wasn't it?
+- 事件+反义疑问句/反问句——表达不确定性
+  - Isn't the library hosting an event today?
+
+<aside class="admonition example">
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-13.png)
+
+B 个人观点——寻求共情
+
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-14.png)
+
+A 事件描述——表达不确定性
+</aside>
+#### 2. 陈述句
+
+- 通知
+  - 要点信息
+    - 事件+时间
+  - 答案要点
+    - 时态对应（将来时 情态动词(can may must should could)+动词）
+    - 事件相关（表示收到、不知道、评价、进一步询问相关信息）
+- 建议
+- 更改计划
+  - 表达自己无法赴约
+    - 询问可以更改的时间——优先找询问时间的疑问句
+    - 表达理解(No worries, No problem. Thanks for letting me know.All good! Another tie then. it is understandable)
+- 个人观点
+- 提议
+  - `Let's + do sth`
+  - `subject + should/could/might + do sth`
+  - `why don't we...`
+  - 回答
+    - 同意`that sounds fun, good idea`
+    - 拒绝提议`I can't make it/I have another plans`
+    - 新建议 `How about thae cafeteria on campus instead?`
+
+
+<aside class="admonition example">
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-15.png)
+~~C~~ B C是一种在得知信息之后不礼貌的说辞，表示不知道**一定要用过去式**
+</aside>
+#### 3. 一般疑问句
+
+- 基础回答：`Yes`+`No`
+  - 肯定回答：Yes + 主语 + 问号引导词(系动词/情态动词/助动词)
+  - 否定回答：No + 主语 + not (可缩写)
+
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-16.png)
+
+**答题**
+
+- 直接呼应型：选项是Yes/No
+- 动作呼应型：选项是为了确认核心而做的合理动作
+  - 如真题选项C查日程表->因为日程表有 会议地点，动作能帮确认核心疑问
+
+<aside class="admonition example">
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-17.png)
+~~B~~ A 题目中问的是shirt，但是B选项中的答案是pants
+
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-18.png)
+~~D~~ B一定要注意时态，题目问的是过去式的是否完成
+</aside>
+#### 4. 特殊疑问句
+
+- 问原因
+    - 常见疑问词：`Why/How come`
+    - 正确选项的特点：直接、合理地解释原因
+    - 常见陷阱选项
+      - 提供解决方案
+      - 表达个人感受
+      - 无关信息
+- 问方式方法
+  - 常见疑问词：`How do I...?How can I...?What's the way to...?`
+  - 正确选项特点：提供**清晰的步骤、指令或操作位置**
+  - 常见陷阱选项
+    - 回答地点(The admin building is next to the library,没有回答怎么去)
+    - 回答原因(It's out of paper.解释为什么不能用，但是没有回答怎么用)
+    - 关键词干扰
+- 问地点/位置
+  - 常见疑问词`where`
+  - 正确选项特点：指出具体地点、方位或者主动提供引导
+  - 常见陷阱选项
+    - 回答时间
+    - 描述物品（描述地点本身不能指明具体位置）
+    - 关键词干扰
+- 请求帮助
+  - 常见表达：`can you help me with... ?I`. `I'm having trouble with...`,`What should I do about...?`
+  - 正确选项特点
+    - 主动提供帮助
+    - 基础解决方案
+    - 分担任务
+  - 常见陷阱
+    - 表示同情——无实际帮助
+    - 询问细节——没有首先表示帮助的意愿
+    - 无关建议
+
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-19.png)
+
+## 3. Conversation
+
+### 3.1 意外发生型
+
+- 提出 **事件**
+- 意外 + **原因**
+- 事件细节描述*
+- **解决方案**
+
+<aside class="admonition note">
+**信息分类**
+
+- 提出**事件**
+- 意外+**原因**
+- 事件细节描述 
+- **解决方案**
+</aside>
+<aside class="admonition example">
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-54.png)
+
+- 事件：`concert`
+- 原因：`help cousin move into her apartment`
+- 解决方案：`will be at spring festival`
+</aside>
+### 3.2 评价分析型 
+
+- 提出**事件**
+- 事件细节描述/**评价**
+- **未来计划**
+
+
+### 3.3 求助建议型
+
+- 提出**事件**
+- 给出**建议**
+- 接受建议
+
+<aside class="admonition note">
+主要考点：**建议是什么**或 **对建议的态度**
+</aside>
+visit new coffee
+surprise
+best
+after basketball game
+
+### 3.4 信息分享型
+
+- 询问**事件**
+- 信息给出
+- 附加信息
+
+<aside class="admonition example">
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-55.png)
+</aside>
+### 3.5 任务催促型
+
+- 提出**事件**
+- 未做**理由**
+- 说服完成(原因)
+- **承诺时间**
+
+## 3. Lecture
+
+### 3.2 常见结构
+
+#### 1. 并列型
+
+- 主旨
+- 主讲术语：术语本身
+- 对比术语：目的
+- 定义核心：关键词
+- 分论点：关键词+例子
+- 评价
+  - 优点
+  - 缺点
+  - 重要性
+- next（预告）
+
+<aside class="admonition note">
+- 定义：纯解释
+- 并列结构：
+  - 1.
+  - 2.
+  - 3.
+- 评价
+  - 优缺点
+  - 重要性
+</aside>
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-47.png)
+
+#### 2. 术语型
+
+- 主旨：`today...`
+- 主讲术语：术语本身
+- 对比术语：目的
+- 定义核心：关键词
+- 例子：从一个方向重点论述
+- 评价：有优点、缺点（`however`,`but`）重要性
+- next（预告）
+
+#### 3. 机制过程型（step by step）
+
+- 主旨
+- 背景
+- 机制过程
+- 评价
+  - 优缺点
+  - 重要性
+
+![alt text](/my-blog/2026/02/09/toffel/toffel-listening/image-48.png)
+
+### 3.3 记笔记技巧
+
+- 挑词：名词、形容词、实词
+- 缩写+符号
+- 可用汉语
+
+### 3.4 常见考点
+
+- 例子
+  - `for example`, `for instance`, `let's say`, `say`, `think about`, `such as`, `including`
+  - 目的：前面的理论
+  - 细节
+- 术语定义
+  - 对比术语：帮助理解术语本身
+  - 核心意思
+- 主旨
+- 评价
+  - 优缺点分析
+  - 重要性
+- next
+
+## 4. 听力高频词
+
+### 4.1 工作场合话题
+
+- `resume`:简历
+- `recruit`:招聘
+- `promote`：晋升，推广
+- `resign`:主动辞职(quit)
+  - `fair` = `leave  off` ：被动离职
+- `pension`:退休金
+- `commission`:佣金
+- `work overtime`:加班
+- `overworked`:过度劳累的
+- `leave`:休假（短假）
+- `contract`:合同
+- `negotiate`:谈判、协商；砍价
+- `client`,`customer`, `consumer`
+- `feedback` = `review`
+- `complaint`:投诉
+- `performance`:业绩
+- `shift`: 轮班
+  - `work the night shift`
+- `intern`:实习生
+- `qualification`：资格，学历
+- `centificate`:证书（学历证书）
+- `diploma`：文凭
+- `appointment`:预约
+- `work remotely`=`telecommute` 远程工作
+- `layoff`:裁员
+- `economic downturn`:经济下行
+- `bankruptcy`:破产
+- `merger`:合并
+- `budget` = `schedule` = `arrange`
+
+### 3.2 商业话题
+
+- `venture`:风险投资
+- `firm` = `business` = `company` = `cooperation`
+  - `setup`:初创公司
+- `commercial`:商业的，商业广告
+- `retail`:零售
+- `wholesale`:批发
+- `asset`：资产
+- `liability`:负债
+- `invoice`:发票
+- `receipt`:收据
+- `contract` = `agreement`:合同
+- `partnership`:合作关系
+- `franchise`: 特许经营权，加盟店、连锁店
+- `intellectual property`:知识产权
+- `patent`:专利
+- `copyright`:版权
+- `trademark`:商标（有形的）
+- `merger`:合并
+- `acquisition`:收购
+- `monopoly`:垄断
+- `stock`:库存，股票
+- `shareholder`:股东
+- `board of directions`:董事会 
+- `target audience`:目标受众
+- `e-commerce`:电子商务
+- `logistics`:物流  
+- `outsourcing`:外包
+
+
+
+## 词汇积累
+
+- `get back to sb on that`:稍后回复某人，属于**通用答案**，基本上都可以使用
+- `sidetrack`:偏离
+- `exercise mat`:瑜伽垫
+- `wear out`:磨损、损耗、疲惫不堪
+- `decent`:得体的、相当好的
+- `auction`:拍卖
+- `be thriied to do sth`:很想做某事,很高兴做某事
+- `ethnocentrism`:民族中心主义
+- `laptop`:笔记本电脑
+- `craft`:工艺
+- `improvisation`:即兴
+- `power outage`:停电
+- `garage`:车库
+- `recipe`:菜谱
+- `I can help with that`：我自己能行
+- `appetizer`:开胃菜
+- `be thrilled to do`:很激动地做某事
+- `proceed`:收益
+- `criteria`:标准(单数：`criterion`)
+- `anthropologist`:人类学家
+- `book fair`:书展
+- `not at all`:完全不(would you mind doing ...的固定回答)
+- `webinar`：直播，在线会议
+- `lobby`:大堂
+- `workout`:锻炼
+- `renovate`:翻修
+- `course sylabus`:课程大纲
