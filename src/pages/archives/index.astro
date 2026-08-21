@@ -1,0 +1,37 @@
+---
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import PostList from "../../components/PostList.astro";
+import Base from "../../layouts/Base.astro";
+import { getPublishedPosts } from "../../utils/posts";
+
+const posts = await getPublishedPosts();
+const byYear = Map.groupBy(posts, (post) => String(post.data.date.getFullYear()));
+---
+
+<Base title="归档 | BruceY's Blog">
+  <Header />
+  <main id="main-content">
+    <section class="shell page-intro">
+      <span class="eyebrow">Archive</span><h1>归档</h1><p>按年份回看全部公开记录。</p>
+    </section>
+    <section class="shell content-section">
+      {
+        Array.from(byYear.entries())
+          .sort(([a], [b]) => b.localeCompare(a))
+          .map(([year, entries]) => (
+            <section>
+              <>
+                <h2>
+                  {year}
+                  <small> · {entries.length}</small>
+                </h2>
+                <PostList posts={entries} />
+              </>
+            </section>
+          ))
+      }
+    </section>
+  </main>
+  <Footer />
+</Base>

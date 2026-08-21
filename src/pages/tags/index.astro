@@ -1,0 +1,33 @@
+---
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import Base from "../../layouts/Base.astro";
+import { getPublishedPosts, getTerms } from "../../utils/posts";
+import { termPath } from "../../utils/site";
+
+const posts = await getPublishedPosts();
+const tags = getTerms(posts, "tags");
+---
+
+<Base title="标签 | BruceY's Blog"
+  ><Header /><main id="main-content">
+    <section class="shell page-intro">
+      <span class="eyebrow">Index</span><h1>标签</h1><p>更细粒度的知识索引。</p>
+    </section><section class="shell content-section">
+      <ul class="term-list">
+        {
+          tags.map((tag) => (
+            <li>
+              <>
+                <a href={termPath("tags", tag)}>#{tag}</a>
+                <small>
+                  {posts.filter((post) => post.data.tags.includes(tag)).length}
+                </small>
+              </>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main><Footer /></Base
+>

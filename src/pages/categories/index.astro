@@ -1,0 +1,39 @@
+---
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import Base from "../../layouts/Base.astro";
+import { getPublishedPosts, getTerms } from "../../utils/posts";
+import { termPath } from "../../utils/site";
+
+const posts = await getPublishedPosts();
+const categories = getTerms(posts, "categories");
+---
+
+<Base title="分类 | BruceY's Blog">
+  <Header />
+  <main id="main-content">
+    <section class="shell page-intro">
+      <span class="eyebrow">Topics</span><h1>分类</h1><p>按学习主题与内容脉络浏览。</p>
+    </section>
+    <section class="shell content-section">
+      <ul class="term-list">
+        {
+          categories.map((category) => (
+            <li>
+              <>
+                <a href={termPath("categories", category)}>{category}</a>
+                <small>
+                  {
+                    posts.filter((post) => post.data.categories.includes(category))
+                      .length
+                  }
+                </small>
+              </>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+  <Footer />
+</Base>

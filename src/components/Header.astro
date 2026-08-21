@@ -1,0 +1,53 @@
+---
+import { site } from "../../astro-paper.config";
+import { withBase } from "../utils/site";
+---
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <a class="wordmark" href={withBase()}>{site.title}</a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-menu"
+    >
+      菜单
+    </button>
+    <nav id="site-menu" aria-label="主导航">
+      <a href={withBase()}>首页</a>
+      <a href={withBase("posts/")}>文章</a>
+      <a href={withBase("archives/")}>归档</a>
+      <a href={withBase("categories/")}>分类</a>
+      <a href={withBase("tags/")}>标签</a>
+      <a href={withBase("search/")}>搜索</a>
+      <a href={withBase("about/")}>关于</a>
+      <button
+        class="theme-toggle"
+        type="button"
+        aria-label="切换深浅色模式"
+        title="切换深浅色模式"
+      >
+        ◐
+      </button>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const menuButton = document.querySelector<HTMLButtonElement>(".menu-toggle");
+  const nav = document.querySelector<HTMLElement>("#site-menu");
+  const themeButton = document.querySelector<HTMLButtonElement>(".theme-toggle");
+
+  menuButton?.addEventListener("click", () => {
+    const expanded = menuButton.getAttribute("aria-expanded") === "true";
+    menuButton.setAttribute("aria-expanded", String(!expanded));
+    nav?.classList.toggle("open", !expanded);
+  });
+
+  themeButton?.addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem("theme", next);
+  });
+</script>

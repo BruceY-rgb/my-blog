@@ -132,5 +132,8 @@ Thumbs.db
 # Build
 public/
 .debug/
+dist/
+.astro/
+astro-public/
 
 .main.py

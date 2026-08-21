@@ -1,0 +1,44 @@
+---
+import type { Post } from "../utils/posts";
+import { getPostUrl } from "../utils/posts";
+import { termPath } from "../utils/site";
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+const formatter = new Intl.DateTimeFormat("zh-CN", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+---
+
+<ul class="post-list">
+  {
+    posts.map((post) => (
+      <li>
+        <article class="post-row">
+          <time datetime={post.data.date.toISOString()}>
+            {formatter.format(post.data.date)}
+          </time>
+          <div>
+            <h2>
+              <a href={getPostUrl(post)}>{post.data.title}</a>
+            </h2>
+            {post.data.description && <p>{post.data.description}</p>}
+            <div class="taxonomy">
+              {post.data.categories.map((category) => (
+                <a href={termPath("categories", category)}>{category}</a>
+              ))}
+              {post.data.tags.slice(0, 4).map((tag) => (
+                <a href={termPath("tags", tag)}>#{tag}</a>
+              ))}
+            </div>
+          </div>
+        </article>
+      </li>
+    ))
+  }
+</ul>

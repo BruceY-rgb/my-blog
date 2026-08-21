@@ -1,0 +1,12 @@
+---
+import { site } from "../../astro-paper.config";
+import { withBase } from "../utils/site";
+---
+
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span>© 2025–{new Date().getFullYear()} {site.author}</span>
+    <span>AstroPaper · 专注阅读</span>
+    <a href={withBase("rss.xml")}>RSS</a>
+  </div>
+</footer>

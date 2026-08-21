@@ -1,33 +1,34 @@
 {
-  "name": "hexo-site",
-  "version": "0.0.0",
+  "name": "brucey-blog",
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "description": "BruceY's AstroPaper-based personal blog",
   "scripts": {
-    "clean": "hexo clean",
-    "build": "hexo clean && hexo generate",
-    "deploy": "hexo deploy",
-    "server": "hexo server",
-    "g": "hexo clean && hexo generate"
-  },
-  "hexo": {
-    "version": "8.1.2"
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "migrate:content": "bun scripts/migrate-hexo-content.mjs",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "format:check": "prettier --check astro.config.ts astro-paper.config.ts src scripts/migrate-hexo-content.mjs package.json tsconfig.json .prettierrc.json .github/workflows/deploy.yml MIGRATION_NOTES.md ASTROPAPER_BASE.md",
+    "format": "prettier --write astro.config.ts astro-paper.config.ts src scripts/migrate-hexo-content.mjs package.json tsconfig.json .prettierrc.json .github/workflows/deploy.yml MIGRATION_NOTES.md ASTROPAPER_BASE.md",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
   },
   "dependencies": {
-    "cheerio": "^1.2.0",
-    "hexo": "^8.1.2",
-    "hexo-generator-archive": "^2.0.0",
-    "hexo-generator-category": "^2.0.0",
-    "hexo-generator-index": "^4.0.0",
-    "hexo-generator-search": "^2.4.3",
-    "hexo-generator-tag": "^2.0.0",
-    "hexo-renderer-ejs": "^2.0.0",
-    "hexo-renderer-markdown-it-katex": "^3.4.4",
-    "hexo-renderer-pug": "^3.0.0",
-    "hexo-renderer-stylus": "^3.0.1",
-    "hexo-server": "^3.0.0",
-    "hexo-theme-butterfly": "^5.5.4",
-    "hexo-theme-landscape": "^1.0.0",
-    "markdown-it": "^14.2.0",
-    "markdown-it-admonition": "^1.0.4"
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.0.3",
+    "gray-matter": "^4.0.3",
+    "pagefind": "^1.5.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@types/node": "^24.0.0",
+    "prettier": "3.9.3",
+    "prettier-plugin-astro": "0.14.1",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.12.0",
+    "bun": ">=1.3.0"
   }
 }

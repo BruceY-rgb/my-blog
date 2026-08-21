@@ -1,4 +1,4 @@
-name: Deploy Hexo site to GitHub Pages
+name: Deploy Astro site to GitHub Pages
 
 on:
   push:
@@ -27,26 +27,30 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "22"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.14"
 
       - name: Install dependencies
-        run: |
-          rm -rf node_modules package-lock.json
-          npm install -g hexo-cli
-          npm install
+        run: bun install --frozen-lockfile
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Build
-        run: npm run build
+        run: |
+          bun run migrate:content
+          bun run build
         env:
           NODE_ENV: production
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./dist
 
   deploy:
     needs: setup

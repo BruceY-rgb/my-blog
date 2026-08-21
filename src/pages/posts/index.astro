@@ -1,0 +1,23 @@
+---
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import PostList from "../../components/PostList.astro";
+import Base from "../../layouts/Base.astro";
+import { getPublishedPosts } from "../../utils/posts";
+
+const allPosts = await getPublishedPosts();
+---
+
+<Base
+  title="全部文章 | BruceY's Blog"
+  description="BruceY 的全部技术文章、课程笔记与研究记录。"
+>
+  <Header />
+  <main id="main-content">
+    <section class="shell page-intro">
+      <span class="eyebrow">Writing</span><h1>全部文章</h1><p>按发布日期倒序排列。</p>
+    </section>
+    <section class="shell content-section"><PostList posts={allPosts} /></section>
+  </main>
+  <Footer />
+</Base>

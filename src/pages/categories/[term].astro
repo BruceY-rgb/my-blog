@@ -1,0 +1,30 @@
+---
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import PostList from "../../components/PostList.astro";
+import Base from "../../layouts/Base.astro";
+import { getPublishedPosts, getTerms } from "../../utils/posts";
+import { termSlug } from "../../utils/site";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return getTerms(posts, "categories").map((term) => ({
+    params: { term: termSlug(term) },
+    props: { term, posts: posts.filter((post) => post.data.categories.includes(term)) },
+  }));
+}
+
+const { term, posts } = Astro.props;
+---
+
+<Base title={`${term} | 分类 | BruceY's Blog`}
+  ><Header /><main id="main-content">
+    <section class="shell page-intro">
+      <span class="eyebrow">Category</span><h1>{term}</h1><p>
+        {posts.length} 篇公开文章。
+      </p>
+    </section><section class="shell content-section">
+      <PostList posts={posts} />
+    </section>
+  </main><Footer /></Base
+>

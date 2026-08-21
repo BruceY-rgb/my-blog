@@ -1,0 +1,62 @@
+---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Base from "../layouts/Base.astro";
+import { withBase } from "../utils/site";
+
+const pagefindUrl = withBase("pagefind/pagefind.js");
+---
+
+<Base title="搜索 | BruceY's Blog" description="搜索 BruceY 的文章与笔记。">
+  <Header />
+  <main id="main-content">
+    <section class="shell page-intro">
+      <span class="eyebrow">Search</span><h1>搜索</h1><p>
+        在文章标题与正文中查找内容。
+      </p>
+    </section><section class="shell content-section">
+      <input
+        id="search-input"
+        class="search-box"
+        type="search"
+        placeholder="输入关键词"
+        autocomplete="off"
+        data-pagefind-url={pagefindUrl}
+      /><ul id="search-results" class="search-results" aria-live="polite"></ul>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<script is:inline>
+  const input = document.querySelector("#search-input");
+  const list = document.querySelector("#search-results");
+  let pagefind;
+  async function getPagefind() {
+    const url = input?.dataset.pagefindUrl;
+    if (!url) throw new Error("Pagefind 尚未生成，请先执行生产构建。");
+    pagefind ??= await import(/* @vite-ignore */ url);
+    return pagefind;
+  }
+  input?.addEventListener("input", async (event) => {
+    const query = event.target.value.trim();
+    if (!query) {
+      list.innerHTML = "";
+      return;
+    }
+    list.innerHTML = "<li>搜索中…</li>";
+    const search = await getPagefind();
+    const result = await search.search(query);
+    const data = await Promise.all(
+      result.results.slice(0, 20).map((item) => item.data()),
+    );
+    list.innerHTML = data.length
+      ? data
+          .map(
+            (item) =>
+              `<li><a href="${item.url}">${item.meta.title}</a><p>${item.excerpt}</p></li>`,
+          )
+          .join("")
+      : "<li>未找到匹配内容。</li>";
+  });
+</script>

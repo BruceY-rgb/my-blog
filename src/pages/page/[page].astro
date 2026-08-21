@@ -1,0 +1,42 @@
+---
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import PostList from "../../components/PostList.astro";
+import Base from "../../layouts/Base.astro";
+import { getPublishedPosts } from "../../utils/posts";
+import { withBase } from "../../utils/site";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return Array.from({ length: Math.ceil(posts.length / 10) }, (_, index) => {
+    const page = index + 1;
+    return {
+      params: { page: String(page) },
+      props: { page, posts: posts.slice(index * 10, page * 10) },
+    };
+  });
+}
+
+const { page, posts } = Astro.props;
+const pageCount = Math.ceil((await getPublishedPosts()).length / 10);
+---
+
+<Base title={`第 ${page} 页 | BruceY's Blog`}
+  ><Header /><main id="main-content">
+    <section class="shell page-intro">
+      <span class="eyebrow">Archive</span><h1>文章，第 {page} 页</h1><p>
+        保留原 Hexo 分页 URL。
+      </p>
+    </section><section class="shell content-section">
+      <PostList posts={posts} /><nav class="pagination" aria-label="分页">
+        {
+          page > 1 && (
+            <a href={page === 2 ? withBase() : withBase(`page/${page - 1}/`)}>
+              ← 上一页
+            </a>
+          )
+        }{page < pageCount && <a href={withBase(`page/${page + 1}/`)}>下一页 →</a>}
+      </nav>
+    </section>
+  </main><Footer /></Base
+>
