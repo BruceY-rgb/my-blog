@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://brucey-rgb.github.io",
@@ -8,6 +9,9 @@ export default defineConfig({
   outDir: "./dist",
   publicDir: "./astro-public",
   integrations: [sitemap()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   markdown: {
     shikiConfig: {
       themes: {

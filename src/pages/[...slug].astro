@@ -55,26 +55,38 @@ const schema = {
     /></Fragment
   >
   <Header />
-  <main id="main-content">
-    <header class="shell article-header">
-      <span class="eyebrow">{post.data.categories[0] ?? "文章"}</span>
-      <h1>{post.data.title}</h1>
-      <div class="article-meta">
+  <main id="main-content" class="app-layout flex-1">
+    <header class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">
+        {post.data.categories[0] ?? "文章"}
+      </p>
+      <h1 class="max-w-3xl text-3xl leading-tight font-semibold sm:text-5xl">
+        {post.data.title}
+      </h1>
+      <div class="mt-5 text-sm text-muted-foreground">
         <time datetime={post.data.date.toISOString()}
           >{formatter.format(post.data.date)}</time
         >{post.data.authors && ` · ${post.data.authors}`}{
           post.data.venue && ` · ${post.data.venue}`
         }
       </div>
-      <div class="taxonomy">
+      <div class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground">
         {
           post.data.categories.map((category) => (
-            <a href={termPath("categories", category)}>{category}</a>
+            <a class="hover:text-accent" href={termPath("categories", category)}>
+              {category}
+            </a>
           ))
-        }{post.data.tags.map((tag) => <a href={termPath("tags", tag)}>#{tag}</a>)}
+        }{
+          post.data.tags.map((tag) => (
+            <a class="hover:text-accent" href={termPath("tags", tag)}>
+              #{tag}
+            </a>
+          ))
+        }
       </div>
     </header>
-    <article class="shell article"><Content /></article>
+    <article class="article mx-auto max-w-3xl py-10 sm:py-14"><Content /></article>
   </main>
   <Footer />
 </Base>

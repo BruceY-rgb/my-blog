@@ -9,18 +9,23 @@ const posts = await getPublishedPosts();
 const tags = getTerms(posts, "tags");
 ---
 
-<Base title="标签 | BruceY's Blog"
-  ><Header /><main id="main-content">
-    <section class="shell page-intro">
-      <span class="eyebrow">Index</span><h1>标签</h1><p>更细粒度的知识索引。</p>
-    </section><section class="shell content-section">
-      <ul class="term-list">
+<Base title="标签 | BruceY's Blog">
+  <Header />
+  <main id="main-content" class="app-layout flex-1">
+    <section class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">Index</p><h1 class="page-title">
+        标签
+      </h1><p class="page-copy">更细粒度的知识索引。</p>
+    </section><section class="py-8 sm:py-10">
+      <ul class="grid gap-x-12 sm:grid-cols-2">
         {
           tags.map((tag) => (
-            <li>
+            <li class="border-border border-b py-3">
               <>
-                <a href={termPath("tags", tag)}>#{tag}</a>
-                <small>
+                <a class="hover:text-accent" href={termPath("tags", tag)}>
+                  #{tag}
+                </a>
+                <small class="text-muted-foreground">
                   {posts.filter((post) => post.data.tags.includes(tag)).length}
                 </small>
               </>
@@ -29,5 +34,5 @@ const tags = getTerms(posts, "tags");
         }
       </ul>
     </section>
-  </main><Footer /></Base
->
+  </main><Footer />
+</Base>

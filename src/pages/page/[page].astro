@@ -22,20 +22,32 @@ const pageCount = Math.ceil((await getPublishedPosts()).length / 10);
 ---
 
 <Base title={`第 ${page} 页 | BruceY's Blog`}
-  ><Header /><main id="main-content">
-    <section class="shell page-intro">
-      <span class="eyebrow">Archive</span><h1>文章，第 {page} 页</h1><p>
-        保留原 Hexo 分页 URL。
-      </p>
-    </section><section class="shell content-section">
-      <PostList posts={posts} /><nav class="pagination" aria-label="分页">
+  ><Header /><main id="main-content" class="app-layout flex-1">
+    <section class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">Archive</p><h1 class="page-title">
+        文章，第 {page} 页
+      </h1><p class="page-copy">保留原 Hexo 分页 URL。</p>
+    </section><section class="py-8 sm:py-10">
+      <PostList posts={posts} /><nav class="mt-8 flex gap-5 text-sm" aria-label="分页">
         {
           page > 1 && (
-            <a href={page === 2 ? withBase() : withBase(`page/${page - 1}/`)}>
+            <a
+              class="text-accent decoration-dashed underline-offset-4 hover:underline"
+              href={page === 2 ? withBase() : withBase(`page/${page - 1}/`)}
+            >
               ← 上一页
             </a>
           )
-        }{page < pageCount && <a href={withBase(`page/${page + 1}/`)}>下一页 →</a>}
+        }{
+          page < pageCount && (
+            <a
+              class="text-accent decoration-dashed underline-offset-4 hover:underline"
+              href={withBase(`page/${page + 1}/`)}
+            >
+              下一页 →
+            </a>
+          )
+        }
       </nav>
     </section>
   </main><Footer /></Base

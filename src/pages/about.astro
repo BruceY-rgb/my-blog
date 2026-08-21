@@ -9,10 +9,14 @@ if (!page) throw new Error("Migrated about page is missing.");
 const { Content } = await render(page);
 ---
 
-<Base title={`关于 | BruceY's Blog`} description={page.data.description}
-  ><Header /><main id="main-content">
-    <header class="shell article-header">
-      <span class="eyebrow">About</span><h1>{page.data.title}</h1>
-    </header><article class="shell article"><Content /></article>
-  </main><Footer /></Base
->
+<Base title={`关于 | BruceY's Blog`} description={page.data.description}>
+  <Header /><main id="main-content" class="app-layout flex-1">
+    <header class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">About</p><h1 class="page-title">
+        {page.data.title}
+      </h1>
+    </header><article class="article mx-auto max-w-3xl py-10 sm:py-14">
+      <Content />
+    </article>
+  </main><Footer />
+</Base>

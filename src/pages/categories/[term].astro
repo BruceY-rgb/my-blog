@@ -18,12 +18,16 @@ const { term, posts } = Astro.props;
 ---
 
 <Base title={`${term} | 分类 | BruceY's Blog`}
-  ><Header /><main id="main-content">
-    <section class="shell page-intro">
-      <span class="eyebrow">Category</span><h1>{term}</h1><p>
+  ><Header /><main id="main-content" class="app-layout flex-1">
+    <section class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">Category</p><h1
+        class="page-title"
+      >
+        {term}
+      </h1><p class="page-copy">
         {posts.length} 篇公开文章。
       </p>
-    </section><section class="shell content-section">
+    </section><section class="py-8 sm:py-10">
       <PostList posts={posts} />
     </section>
   </main><Footer /></Base

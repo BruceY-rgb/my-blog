@@ -11,20 +11,22 @@ const byYear = Map.groupBy(posts, (post) => String(post.data.date.getFullYear())
 
 <Base title="归档 | BruceY's Blog">
   <Header />
-  <main id="main-content">
-    <section class="shell page-intro">
-      <span class="eyebrow">Archive</span><h1>归档</h1><p>按年份回看全部公开记录。</p>
+  <main id="main-content" class="app-layout flex-1">
+    <section class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">Archive</p><h1 class="page-title">
+        归档
+      </h1><p class="page-copy">按年份回看全部公开记录。</p>
     </section>
-    <section class="shell content-section">
+    <section class="py-8 sm:py-10">
       {
         Array.from(byYear.entries())
           .sort(([a], [b]) => b.localeCompare(a))
           .map(([year, entries]) => (
-            <section>
+            <section class="mb-12">
               <>
-                <h2>
+                <h2 class="text-xl font-semibold">
                   {year}
-                  <small> · {entries.length}</small>
+                  <small class="text-muted-foreground"> · {entries.length}</small>
                 </h2>
                 <PostList posts={entries} />
               </>

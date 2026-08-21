@@ -1,0 +1,35 @@
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  .article {
+    @apply prose prose-lg max-w-none dark:prose-invert;
+  }
+  .article :is(h1, h2, h3, h4, th) {
+    @apply mb-3 text-foreground;
+  }
+  .article a {
+    @apply text-foreground decoration-dashed underline-offset-4 hover:text-accent;
+  }
+  .article img {
+    @apply border-border mx-auto border;
+  }
+  .article :not(pre) > code {
+    @apply bg-muted/75 text-foreground rounded p-1 break-words before:content-none after:content-none;
+  }
+  .article pre {
+    @apply border-border border;
+  }
+  .article blockquote {
+    @apply border-l-accent/80 opacity-80;
+  }
+  .article table {
+    @apply block overflow-x-auto;
+  }
+  .article th,
+  .article td {
+    @apply border-border border p-2;
+  }
+  .admonition {
+    @apply border-l-accent bg-muted/50 my-6 border-l-4 px-4 py-3;
+  }
+}

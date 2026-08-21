@@ -9,20 +9,25 @@ const pagefindUrl = withBase("pagefind/pagefind.js");
 
 <Base title="搜索 | BruceY's Blog" description="搜索 BruceY 的文章与笔记。">
   <Header />
-  <main id="main-content">
-    <section class="shell page-intro">
-      <span class="eyebrow">Search</span><h1>搜索</h1><p>
-        在文章标题与正文中查找内容。
-      </p>
-    </section><section class="shell content-section">
+  <main id="main-content" class="app-layout flex-1">
+    <section class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">Search</p><h1 class="page-title">
+        搜索
+      </h1><p class="page-copy">在文章标题与正文中查找内容。</p>
+    </section><section class="py-8 sm:py-10">
       <input
         id="search-input"
-        class="search-box"
+        class="border-border w-full border bg-transparent px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
         type="search"
         placeholder="输入关键词"
         autocomplete="off"
         data-pagefind-url={pagefindUrl}
-      /><ul id="search-results" class="search-results" aria-live="polite"></ul>
+      /><ul
+        id="search-results"
+        class="mt-5 list-none p-0 [&>li]:border-border [&>li]:border-b [&>li]:py-4 [&_a]:text-accent [&_a]:font-medium [&_a]:decoration-dashed [&_a]:underline-offset-4 [&_a:hover]:underline [&_p]:mt-2 [&_p]:text-sm [&_p]:leading-6"
+        aria-live="polite"
+      >
+      </ul>
     </section>
   </main>
   <Footer />

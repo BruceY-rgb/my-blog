@@ -52,11 +52,18 @@ const socialImage = new URL(image, Astro.site).href;
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light";
-      document.documentElement.dataset.theme = savedTheme ?? systemTheme;
+      const theme = savedTheme ?? systemTheme;
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.classList.toggle("dark", theme === "dark");
     </script>
   </head>
-  <body>
-    <a class="skip-link" href="#main-content">跳到正文</a>
+  <body
+    class="bg-background text-foreground flex min-h-svh flex-col font-sans selection:bg-accent/75 selection:text-accent-foreground"
+  >
+    <a
+      class="bg-background text-accent absolute left-4 -top-full z-50 px-3 py-2 transition-all focus:top-4"
+      href="#main-content">跳到正文</a
+    >
     <slot />
   </body>
 </html>

@@ -11,18 +11,22 @@ const categories = getTerms(posts, "categories");
 
 <Base title="分类 | BruceY's Blog">
   <Header />
-  <main id="main-content">
-    <section class="shell page-intro">
-      <span class="eyebrow">Topics</span><h1>分类</h1><p>按学习主题与内容脉络浏览。</p>
+  <main id="main-content" class="app-layout flex-1">
+    <section class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">Topics</p><h1 class="page-title">
+        分类
+      </h1><p class="page-copy">按学习主题与内容脉络浏览。</p>
     </section>
-    <section class="shell content-section">
-      <ul class="term-list">
+    <section class="py-8 sm:py-10">
+      <ul class="grid gap-x-12 sm:grid-cols-2">
         {
           categories.map((category) => (
-            <li>
+            <li class="border-border border-b py-3">
               <>
-                <a href={termPath("categories", category)}>{category}</a>
-                <small>
+                <a class="hover:text-accent" href={termPath("categories", category)}>
+                  {category}
+                </a>
+                <small class="text-muted-foreground">
                   {
                     posts.filter((post) => post.data.categories.includes(category))
                       .length

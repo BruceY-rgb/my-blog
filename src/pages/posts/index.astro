@@ -13,11 +13,13 @@ const allPosts = await getPublishedPosts();
   description="BruceY 的全部技术文章、课程笔记与研究记录。"
 >
   <Header />
-  <main id="main-content">
-    <section class="shell page-intro">
-      <span class="eyebrow">Writing</span><h1>全部文章</h1><p>按发布日期倒序排列。</p>
+  <main id="main-content" class="app-layout flex-1">
+    <section class="border-border border-b py-12 sm:py-16">
+      <p class="mb-3 text-sm font-medium text-accent">Writing</p><h1 class="page-title">
+        全部文章
+      </h1><p class="page-copy">按发布日期倒序排列。</p>
     </section>
-    <section class="shell content-section"><PostList posts={allPosts} /></section>
+    <section class="py-8 sm:py-10"><PostList posts={allPosts} /></section>
   </main>
   <Footer />
 </Base>

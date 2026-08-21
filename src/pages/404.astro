@@ -6,11 +6,14 @@ import { withBase } from "../utils/site";
 ---
 
 <Base title="页面未找到 | BruceY's Blog"
-  ><Header /><main id="main-content">
-    <section class="shell page-intro">
-      <span class="eyebrow">404</span><h1>这里没有文章。</h1><p>
-        链接可能已失效，或页面还未发布。
-      </p><a class="text-link" href={withBase()}>返回首页 →</a>
+  ><Header /><main id="main-content" class="app-layout flex-1">
+    <section class="py-20 sm:py-28">
+      <p class="mb-3 text-sm font-medium text-accent">404</p><h1 class="page-title">
+        这里没有文章。
+      </h1><p class="page-copy">链接可能已失效，或页面还未发布。</p><a
+        class="text-accent mt-6 inline-block font-medium decoration-dashed underline-offset-4 hover:underline"
+        href={withBase()}>返回首页 →</a
+      >
     </section>
   </main><Footer /></Base
 >
