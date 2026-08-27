@@ -181,3 +181,88 @@ n == matrix[i].length
 
 ![收缩边界](https://labuladong.online/images/algo/2d-array/7.png)
 
+按照这个思路，可以实现下面的代码：
+
+```python
+class Solution:
+    def spiralorder(self, matrix):
+        m, n = len(matrix), len(matrix[0])
+        upper_bound, lower_bound = 0, m - 1
+        left_bound, right_bound = 0, n - 1
+        res = []
+        # res.size() == m*n 则遍历完整个数组
+        while len(res) < m*n:
+            if upper_bound <= lower_bound:
+                # 在顶部从左向右遍历
+                for j in range(left_bound, right_bound + 1):
+                    res.append(matrix[upper_bound][j])
+
+                # 上边界下移
+                upper_bound += 1
+            
+            if left_bound <= right_bound:
+                # 在右侧从上向下遍历
+                for i in range(upper_bound, lower_bound + 1):
+                    res.append(matrix[i][right_bound])
+                # 右边界左移
+                right_bound -= 1
+            
+            if upper_bound <= lower_bound:
+                # 在底部从右向左遍历
+                for j in range(right_bound, left_bound - 1, -1):
+                    res.append(matrix[lower_bound][j])
+                # 下边界上移
+                lower_bound -= 1
+
+            if left_bound <= right_bound:
+                # 在左侧从下向上遍历
+                for i in range(lower_bound, upper_bound - 1, -1):
+                    res.append(matrix[i][left_bound])
+                # 左边界右移
+                left_bound += 1
+        return res
+```
+
+力扣第59题[螺旋矩阵II](https://leetcode.cn/problems/spiral-matrix-ii/description/)是一个类似的题目，按照螺旋的顺序生成矩阵
+
+```python
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        upper_bound, lower_bound = 0, n - 1
+        left_bound, right_bound = 0, n - 1
+        num = 1
+        # 先初始化n*n矩阵
+        res = [[0] * n for _ in range(n)]
+
+        while num <= n * n:
+            # 顶部从左向右，固定upper_bound行
+            if upper_bound <= lower_bound:
+                for i in range(left_bound, right_bound + 1):
+                    res[upper_bound][i] = num
+                    num += 1
+                upper_bound += 1
+            
+            # 右侧从上到下，固定right_bound列
+            if left_bound <= right_bound:
+                for j in range(upper_bound, lower_bound + 1):
+                    res[j][right_bound] = num
+                    num += 1
+                right_bound -= 1
+
+            # 底层从右到左，固定lower_bound行
+            if upper_bound <= lower_bound:
+                for i in range(right_bound, left_bound - 1, -1):
+                    res[lower_bound][i] = num
+                    num += 1
+                lower_bound -= 1
+
+            # 左侧从下到上，固定left_bound列
+            if left_bound <= right_bound:
+                for j in range(lower_bound, upper_bound - 1, -1):
+                    res[j][left_bound] = num
+                    num += 1
+                left_bound += 1
+            
+        return res
+```
+

@@ -431,3 +431,445 @@ class Solution:
 - 回文子串问题是让左右指着能从中心向两端扩展
 
 不过这种情况只有回文子串问题中会遇到，所以也作为一种左右指针的特殊情况掌握
+
+## 3. 数组双指针经典习题
+
+### 3.1 80. 删除有序数组中的重复项II
+
+[删除有序数组中的重复项II](https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/description/)
+
+```
+给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使得出现次数超过两次的元素只出现两次 ，返回删除后数组的新长度。
+
+不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+说明：
+
+为什么返回数值是整数，但输出的答案是数组呢？
+
+请注意，输入数组是以「引用」方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。
+
+你可以想象内部操作如下:
+
+// nums 是以“引用”方式传递的。也就是说，不对实参做任何拷贝
+int len = removeDuplicates(nums);
+
+// 在函数里修改输入数组对于调用者是可见的。
+// 根据你的函数返回的长度, 它会打印出数组中 该长度范围内 的所有元素。
+for (int i = 0; i < len; i++) {
+    print(nums[i]);
+}
+示例 1：
+
+输入：nums = [1,1,1,2,2,3]
+输出：5, nums = [1,1,2,2,3]
+解释：函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3。 不需要考虑数组中超出新长度后面的元素。
+示例 2：
+
+输入：nums = [0,0,1,1,1,1,2,3,3]
+输出：7, nums = [0,0,1,1,2,3,3]
+解释：函数应返回新长度 length = 7, 并且原数组的前七个元素被修改为 0, 0, 1, 1, 2, 3, 3。不需要考虑数组中超出新长度后面的元素。
+提示：
+
+1 <= nums.length <= 3 * 10^4
+-10^4 <= nums[i] <= 10^4
+nums 已按升序排列
+```
+
+**基本思路**
+
+这道题目和*26. 删除有序数组中的重复项*解法非常类似，只不过这道题说重复两次以上的元素才需要去重
+
+我们先拿`count`计数版本，`slow`从`0`开始，**`slow`代表的是下一个要写入的位置**，这是非常重要的。判断重复不能看`nums[slow]`，`slow`的位置是待写空位，里面是旧的垃圾值
+
+```python
+def removeDuplicates(self, nums: List([int])) -> int:
+    if not nums:
+        return 0
+    slow = 0 # slow:下一个待写位置，[0, slow - 1]是已经处理好的有效区域
+    fast = 0 
+    count = 0 # 当前数字已经保存了多少分
+    n = len(nums)
+    while fast < n:
+        # 判断是否和上一个保存的数字相同
+        if slow > 0 and nums[fast] == nums[slow - 1]:
+            count += 1
+        else:
+            # 新数字重置计数
+            count = 1
+        
+        if count <= 2:
+            nums[slow] = nums[fast]
+            slow += 1
+
+        fast += 1
+
+    return slow
+```
+
+### 3.2 125. 验证回文串
+
+[验证回文串](https://leetcode.cn/problems/valid-palindrome/description/)
+
+最简单的方法就是新开一个列表，把数字字母字符放进去然后判断就可以了
+
+```python
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        left, right = 0, len(s)-1
+        while left < right:
+            while left < right and not s[left].isalnum():
+                left += 1
+            while left < right and not s[right].isalnum():
+                right -=1
+            if s[left].lower() != s[right].lower():
+                return False
+            left +=1
+            right -=1
+        return True
+```
+
+但是我们也可以不去新开一个列表，直接在原字符串上操作：
+
+```python
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        left, right = 0, len(s)-1
+        while left < right:
+            while left < right and not s[left].isalnum():
+                left += 1
+            while left < right and not s[right].isalnum():
+                right -=1
+            if s[left].lower() != s[right].lower():
+                return False
+            left +=1
+            right -=1
+        return True
+```
+
+### 3.3 75. 颜色分类
+
+[颜色分类](https://leetcode.cn/problems/sort-colors/description/)
+
+这是一个很经典的荷兰国旗问题。最开始我遇到一个误区：只用`left`和`right`双指针，但是这种写法只能把2丢到右边，无法把0交换到左边
+
+**错误根源**
+
+- 遇到`0`只是直接跳过，**不会交换到左侧**
+- 数组中间残留的0永远无法归位
+
+正确的做法应该是使用三个指针
+
+- `left`:控制0区域的右边界，左边全是已经排好的0
+- `right`:2区域的左边界，右边全是排好的`2`
+- `cur`:当前遍历指针，负责扫描所有元素
+
+```python
+from typing import List
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        p0 = 0
+        p2 = len(nums)-1
+        curr = 0
+        while curr <= p2:
+            if nums[curr] == 0:
+                nums[curr], nums[p0] = nums[p0], nums[curr]
+                p0 += 1
+                curr += 1
+            elif nums[curr] == 2:
+                nums[curr], nums[p2] = nums[p2], nums[curr]
+                p2 -= 1
+            else:
+                curr += 1
+```
+
+### 3.4 88. 合并两个有序数组
+
+[合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/description/)
+
+```
+给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
+
+请你 合并 nums2 到 nums1 中，使合并后的数组同样按 非递减顺序 排列。
+
+注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。
+
+示例 1：
+
+输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+输出：[1,2,2,3,5,6]
+解释：需要合并 [1,2,3] 和 [2,5,6] 。
+合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。
+示例 2：
+
+输入：nums1 = [1], m = 1, nums2 = [], n = 0
+输出：[1]
+解释：需要合并 [1] 和 [] 。
+合并结果是 [1] 。
+示例 3：
+
+输入：nums1 = [0], m = 0, nums2 = [1], n = 1
+输出：[1]
+解释：需要合并的数组是 [] 和 [1] 。
+合并结果是 [1] 。
+注意，因为 m = 0 ，所以 nums1 中没有元素。nums1 中仅存的 0 仅仅是为了确保合并结果可以顺利存放到 nums1 中。
+提示：
+
+nums1.length == m + n
+nums2.length == n
+0 <= m, n <= 200
+1 <= m + n <= 200
+-10^9 <= nums1[i], nums2[j] <= 10^9
+进阶：你可以设计实现一个时间复杂度为 O(m + n) 的算法解决此问题吗？
+```
+
+**基本思路**
+
+这道题目很像链表的双指针技巧汇总中讲过的合并两个有序链表的思路，这里让我们合并有两个有序数组
+
+对于单链表来说，我们直接用双指针从头开始合并即可，但是对于数组会出现问题。因为题目让我们直接把结果存到`nums1`中，而`nums1`的开又有元素，如果我们无脑复制单链表的逻辑，会覆盖掉`nums1`的原始元素，导致错误
+
+但是`nums1`后面是空的，所以这道题目需要稍微变通一下：将双指针初始化在数组的尾部，然后从后向前进行合并，这样即使覆盖了`nums1`中的元素，这些元素也必然早就被用过了，不会影响答案的正确性
+
+```python
+class Solution:
+    def merge(self, nums1, m, nums, 2):
+        # 两个指针分别初始化在两个数组的最后一个元素
+        i, j = m - 1, n - 1
+        # 生成排序的结果
+        p = len(nums1) - 1
+        # 从后面向前生成结果数组，类似合并两个有序链表的逻辑
+        while i >= 0 and j >= 0:
+            if nums1[i] > nums2[j]:
+                nums1[p] = nums1[i]
+                i -= 1
+            else:
+                nums1[p] = nums2[j]
+                j -= 1
+            p -= 1
+
+        while j >= 0:
+            nums1[p] = nums2[j]
+            j -= 1
+            p -= 1
+```
+
+### 3.5 977. 有序数组的平方
+
+[有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/description/)
+
+```
+给你一个按 非递减顺序 排序的整数数组 nums，返回 每个数字的平方 组成的新数组，要求也按 非递减顺序 排序。
+
+ 
+
+示例 1：
+
+输入：nums = [-4,-1,0,3,10]
+输出：[0,1,9,16,100]
+解释：平方后，数组变为 [16,1,0,9,100]
+排序后，数组变为 [0,1,9,16,100]
+示例 2：
+
+输入：nums = [-7,-3,2,3,11]
+输出：[4,9,9,49,121]
+ 
+
+提示：
+
+1 <= nums.length <= 10^4
+-10^4 <= nums[i] <= 10^4
+nums 已按 非递减顺序 排序
+```
+
+**基本思路**
+
+平方的特点是会把负数变成正数，所以一个负数和一个整数平方后的大小要根据绝对值来比较
+
+可以把元素0作为分界线，0左侧的负数是一个有序数组`nums1`，0右侧的整数是另一个有序数组`nums2`，那么这道题目就和上一道题目合并有序链表的变体
+
+所以我们可以去寻找正负数的分界点，然后向左右扩展，执行合并有序数组的逻辑。
+
+但是还有一个更好的方法，不用找正负分界点，而是直接将双指针分别初始化在`nums`的开头和结尾，相当于合并两个从大到小排序的数组，这就和合并两个有序数组(88题)完全相同了
+
+```python
+class Solution:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        left, right = 0, len(nums) - 1
+        p = n - 1
+        res = [0] * n
+        while left <= right:
+            if abs(nums[left]) > abs(nums[right]):
+                res[p] = nums[left] ** 2
+                left += 1
+            else:
+                res[p] = nums[right] ** 2
+                right -= 1
+            p -= 1
+        return res
+```
+
+### 3.6 1329. 将矩阵按照对角线排序
+
+```
+矩阵对角线 是一条从矩阵最上面行或者最左侧列中的某个元素开始的对角线，沿右下方向一直到矩阵末尾的元素。例如，矩阵 mat 有 6 行 3 列，从 mat[2][0] 开始的 矩阵对角线 将会经过 mat[2][0]、mat[3][1] 和 mat[4][2] 。
+
+给你一个 m * n 的整数矩阵 mat ，请你将同一条 矩阵对角线 上的元素按升序排序后，返回排好序的矩阵。
+
+ 
+
+示例 1：
+
+
+
+输入：mat = [[3,3,1,1],[2,2,1,2],[1,1,1,2]]
+输出：[[1,1,1,1],[1,2,2,2],[1,2,3,3]]
+示例 2：
+
+输入：mat = [[11,25,66,1,69,7],[23,55,17,45,15,52],[75,31,36,44,58,8],[22,27,33,25,68,4],[84,28,14,11,5,50]]
+输出：[[5,17,4,1,52,7],[11,11,25,45,8,69],[14,23,25,44,58,15],[22,27,31,36,50,66],[84,28,75,33,55,68]]
+ 
+
+提示：
+
+m == mat.length
+n == mat[i].length
+1 <= m, n <= 100
+1 <= mat[i][j] <= 100
+```
+
+**基本思路**
+
+这题非常有意思，按照对角线操作二维数组是需要技巧的，即如何快速判断两个元素左边是否在同一个对角线上？
+
+**在同一个对角线上的元素，其横纵坐标之差是相同的**
+
+有了这个规律，这道题就很容易了，我们可以直接用一个哈希表把每个对角线元素存起来，想办法排序，最后放回二维矩阵上即可
+
+如何排序数组？借助标准库的排序函数即可
+
+```python
+class Solution:
+    def diagonalSort(self, mat: List[List[int]]) -> List[List[int]]:
+        m, n = len(mat), len(mat[0])
+        diagonals = {}
+
+        for i in range(m):
+            for j in range(n):
+                diagonalID = i - j
+                if diagonalID not in diagonals:
+                    diagonals[diagonalID] = []
+                diagonals[diagonalID].append(mat[i][j])
+
+        for diagonal in diagonals.values():
+            diagonal.sort(reverse = True)
+
+        for i in range(m):
+            for j in range(n):
+                diagonal = diagonals[i - j]
+                mat[i][j] = diagonal.pop()
+
+        return mat 
+```
+
+### 3.7 1260. 二维网格迁移
+
+```
+给你一个 m 行 n 列的二维网格 grid 和一个整数 k。你需要将 grid 迁移 k 次。
+
+每次「迁移」操作将会引发下述活动：
+
+位于 grid[i][j] 的元素将会移动到 grid[i][j + 1]。
+位于 grid[i][n - 1] 的元素将会移动到 grid[i + 1][0]。
+位于 grid[m - 1][n - 1] 的元素将会移动到 grid[0][0]。
+请你返回 k 次迁移操作后最终得到的 二维网格。
+
+ 
+
+示例 1：
+
+
+
+输入：grid = [[1,2,3],[4,5,6],[7,8,9]], k = 1
+输出：[[9,1,2],[3,4,5],[6,7,8]]
+示例 2：
+
+
+
+输入：grid = [[3,8,1,9],[19,7,2,5],[4,6,11,10],[12,0,21,13]], k = 4
+输出：[[12,0,21,13],[3,8,1,9],[19,7,2,5],[4,6,11,10]]
+示例 3：
+
+输入：grid = [[1,2,3],[4,5,6],[7,8,9]], k = 9
+输出：[[1,2,3],[4,5,6],[7,8,9]]
+ 
+
+提示：
+
+m == grid.length
+n == grid[i].length
+1 <= m <= 50
+1 <= n <= 50
+-1000 <= grid[i][j] <= 1000
+0 <= k <= 100
+```
+
+**基本思路**
+
+这道题的思路是用一个`get`方法和`set`方法把二维数组抽象成一维数组，然后题目就变成了讲一个一维的数组平移k位，相当于把前`mn - k`元素的位置和后`k`个元素的位置对调，也可以分别反转前`mn - k`个元素和后`k`个元素，最后反转所有元素，得到的结果就是题目想要的
+
+这就和我们之前提到的那个谷歌的那道反转字符串的很像，把后面的字符交换到前面。使用的技巧就是先反转后面的那部分，再反转前面的那部分，再反转整个
+
+```python
+def shiftGrid(self, grid, k):
+    # 把二维 grid 抽象成一维数组
+    m, n = len(grid), len(grid[0])
+    mn = m * n
+    k = k % mn
+
+    self.reverse(grid, mn - k, mn - 1)
+    self.reverse(grid, 0, mn - k - 1)
+
+    self.reverse(grid, 0, mn - 1)
+
+    return grid
+
+def get(self, grid, index):
+    row = index // len(grid[0])
+    col = index % len(grid[0])
+    return grid[row][col]
+
+def set(self, grid, index, val):
+    row = index // len(grid[0])
+    col = index % len(grid[0])
+    grid[row][col] = val
+
+def reverse(grid, grid, start, end):
+    while i < j:
+        temp = self.get(grid, i)
+        self.set(grid, i, self.get(grid, j))
+        self.set(grid, j, temp)
+        i += 1
+        j -= 1
+```
+
+### 3.8 867. 转置矩阵
+
+[转置矩阵](https://leetcode.cn/problems/transpose-matrix/description/)
+
+!!! warning
+这里最重要的就是创建结果数组的时候，一定要`result = [[0] * m for _ in range(n)]`,如果直接创建`[[0]*m]*n`只是创建了`n`个列表引用但是指向同一个列表对象
+!!!
+
+```python
+class Solution:
+    def transpose(self, matrix: List[List[int]]) -> List[List[int]]:
+        m, n = len(matrix), len(matrix[0])
+        result = [[0]*m for _ in range(n)]
+        for i in range(m):
+            for j in range(n):
+                result[j][i] = matrix[i][j]
+
+        return result
+```

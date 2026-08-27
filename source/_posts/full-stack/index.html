@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .container {
+                text-align: center;
+                margin-top: 40px;
+                font-family: sans-serif;
+            }
+            .counter {
+                font-size: 50px;
+                color: #333;
+                margin: 20px 0;
+            }
+            button {
+                font-size: 20px;
+                padding: 10px 20px;
+                margin: 5px;
+                cursor: pointer;
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 4px 12px; /*左上右下：4px 右上左下：12px*/
+            }
+            button:hover {
+                background-color: #45a049;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>简单计数器</h1>
+            <div class="counter" id="count">0</div>
+            <button onclick="increment()">增加</button>
+            <button onclick="decrement()">减少</button>
+            <button onclick="reset()">重置</button>
+        </div>
+        
+
+        <script>
+            let count = 0;
+
+            function increment() {
+                count++;
+                updateDisplay();
+            }
+
+            function decrement() {
+                if(count == 0) {
+                    return;
+                }
+                count--;
+                updateDisplay();
+            }
+
+            function reset() {
+                count = 0;
+                updateDisplay();
+            }
+
+            function updateDisplay(){
+                document.getElementById('count').textContent = count;
+            }
+        </script>
+    </body>
+</html>
