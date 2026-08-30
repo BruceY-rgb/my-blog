@@ -1,5 +1,5 @@
 ---
-title: 实现动态数组
+title: 哈希表原理
 date: 2026-08-26 17:00
 categories:
     - LeetCode刷题
